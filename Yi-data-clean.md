@@ -14,8 +14,6 @@ All Group Member Collaboration
 \##Import data from NHANES
 
 ``` r
-file_path = list.files(path = "data", pattern = "\\.XPT$", full.names = TRUE)
-
 import_df= function(path){
   read_xpt(path)
 }
