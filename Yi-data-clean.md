@@ -24,14 +24,15 @@ obesity=
   full_join((import_df(path='data/P_DEMO.XPT')), by='SEQN') |>
   full_join((import_df(path='data/P_PAQ.XPT')), by='SEQN')|>
   full_join ((import_df(path='data/P_DBQ.XPT')), by='SEQN') |> 
-  select (SEQN,RIAGENDR,RIDAGEYR,DMDMARTZ,INDFMPIR,RIDRETH3,DMDEDUC2,PAD680,BMXBMI,DBD900) |> 
+  select (SEQN,RIAGENDR,RIDAGEYR,DMDMARTZ,INDFMPIR,RIDRETH3,DMDEDUC2,PAD680,BMXBMI,DBD900,DBD910) |> 
   filter(
     !(DMDMARTZ %in% c('77','99','.') ),
     !(INDFMPIR == '.'),
     !(DMDEDUC2 %in% c('7','9','.') ),
     !(PAD680 %in% c('7777', '9999', '.')),
     !(BMXBMI =='.'),
-    !(DBD900 %in% c('7777', '9999', '.'))
+    !(DBD900 %in% c('7777', '9999', '.')),
+    !(DBD910 %in% c('7777', '9999', '.'))
   ) |> 
   rename(
     gender=RIAGENDR,
@@ -42,7 +43,8 @@ obesity=
     education=DMDEDUC2,
     sedentary_activity=PAD680,
     bmi=BMXBMI,
-    freq_fast_food=DBD900
+    freq_fast_food=DBD900,
+    freq_frozen=DBD910
   ) |> 
   mutate(
     gender = case_match(
@@ -76,11 +78,6 @@ obesity=
    bmi =case_when(
     bmi<30 ~ 'normal',
     bmi>=30 ~'obese'
-  ),
-  freq_fast_food= case_match(
-    freq_fast_food,
-    5555~'more than 21 meals')
   )
-  
-view(obesity)
+  )
 ```
