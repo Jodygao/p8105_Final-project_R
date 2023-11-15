@@ -116,6 +116,12 @@ ggplot(subset(obesity, bmi == "obese"), aes(x = age)) +
 
 ### Box Plot of Income to Poverty Ratio for Obese Individuals
 ```{r}
-
+ggplot(subset(obesity, bmi == "obese"), aes(y = income_to_poverty, x = "", fill = bmi)) +
+  geom_boxplot() +
+  scale_fill_manual(values = c("pink")) +
+  labs(title = "Income to Poverty Ratio Among Obese Individuals",
+       x = "",
+       y = "Income to Poverty Ratio") +
+  theme_minimal()
 ```
 
