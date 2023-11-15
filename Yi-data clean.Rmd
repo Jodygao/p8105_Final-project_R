@@ -103,3 +103,14 @@ ggplot(obesity, aes(x = race, fill = gender)) +
   theme_minimal()
 ```
 
+### Histogram of Age Distribution Among Obese Individuals
+```{r}
+ggplot(subset(obesity, bmi == "obese"), aes(x = age)) +
+  geom_histogram(binwidth = 1, fill = "pink", color = "lightblue") +
+  labs(title = "Age Distribution of Obese Individuals",
+       x = "Age",
+       y = "Count") +
+  theme_minimal()
+```
+
+
