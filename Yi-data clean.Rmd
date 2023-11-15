@@ -8,6 +8,9 @@ output: github_document
 ```{r setup, include=FALSE}
 library(haven)
 library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(reshape2)
 ```
 
 ### Group Members
@@ -89,11 +92,6 @@ obesity=
 
 
 ## Graphs
-```{r setup, include=FALSE}
-library(ggplot2)
-library(dplyr)
-library(reshape2)
-```
 
 ### Bar Chart of Obesity Prevalence by Race and Gender
 ```{r}
@@ -107,6 +105,7 @@ ggplot(obesity_race_filtered, aes(x = race, fill = gender)) +
        y = "Count") +
   theme_minimal()
 ```
+
 Interpretation: The bar chart displays the prevalence of obesity across different racial categories, differentiated by gender. It shows that the White population has the highest count of obesity cases, with a notable number of cases in both genders. The Black population follows, with females being higher than males, whereas the "Other Hispanic" categories have the lowest count of obesity cases.
 
 ### Histogram of Age Distribution Among Obese Individuals
@@ -118,6 +117,7 @@ ggplot(subset(obesity, bmi == "obese"), aes(x = age)) +
        y = "Count") +
   theme_minimal()
 ```
+
 Interpretation: The histogram indicates that obesity is present across all age groups, with a relatively uniform distribution from young adulthood to late middle age. There's a significant peak in obesity cases among individuals in their late 50s to early 60s. After this peak, the number of obese individuals declines sharply for those in the older age groups.
 
 ### Box Plot of Income to Poverty Ratio for Obese Individuals
@@ -130,6 +130,7 @@ ggplot(subset(obesity, bmi == "obese"), aes(y = income_to_poverty, x = "", fill 
        y = "Income to Poverty Ratio") +
   theme_minimal()
 ```
+
 Interpretation: The box plot shows the distribution of the income to poverty ratio among obese individuals. The data is spread across a range of ratios, mostly concentrated between 1 and 4, with the median around 2. This suggests that individuals with obesity come from a range of economic backgrounds, but there's a tendency towards lower income to poverty ratios.
 
 ### Scatter Plot of BMI vs. Sedentary Activity
@@ -144,6 +145,7 @@ ggplot(obesity_sedentary_activity_filtered, aes(x = sedentary_activity, y = bmi,
        y = "BMI") +
   theme_minimal()
 ```
+
 Interpretation: The scatter plot presents a comparison of sedentary activity (in minutes) with BMI categories (normal and obese). Points are relatively evenly distributed across the range of sedentary activity for both BMI categories, suggesting no clear or immediate correlation between the amount of sedentary activity and BMI category within this dataset. It indicates that individuals classified as obese and those with a normal BMI report similar patterns of sedentary behavior.
 
 ### Heat Map of Fast Food and Frozen Meal Consumption
@@ -164,4 +166,5 @@ ggplot(melted_data, aes(x = age, y = variable, fill = value)) +
        fill = "Average Consumption") +
   theme_minimal()
 ```
+
 Interpretation：The heat map shows the average consumption of fast food and frozen meals across different ages. Consumption levels are indicated by the color intensity, with darker shades of pink representing higher consumption. From the visualization, it appears that there are specific age groups that consume fast food and frozen meals more frequently, as indicated by the vertical pink bars, which suggest peaks in consumption at those ages.

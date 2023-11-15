@@ -11,7 +11,7 @@ All Group Member Collaboration
 - Ruohan Hong (rh3132)
 - Shiqi Wu (sw3737)
 
-\##Import data from NHANES
+## Import data from NHANES
 
 ``` r
 import_df= function(path){
@@ -79,3 +79,128 @@ obesity=
   )
   )
 ```
+
+## Graphs
+
+### Bar Chart of Obesity Prevalence by Race and Gender
+
+``` r
+obesity_race_filtered <- obesity %>% filter(!is.na(race) & race != "NA")
+
+ggplot(obesity_race_filtered, aes(x = race, fill = gender)) +
+  geom_bar(position = "dodge") +
+  scale_fill_manual(values = c("pink", "lightblue")) +
+  labs(title = "Obesity Prevalence by Race and Gender",
+       x = "Race",
+       y = "Count") +
+  theme_minimal()
+```
+
+![](Yi-data-clean_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+
+Interpretation: The bar chart displays the prevalence of obesity across
+different racial categories, differentiated by gender. It shows that the
+White population has the highest count of obesity cases, with a notable
+number of cases in both genders. The Black population follows, with
+females being higher than males, whereas the “Other Hispanic” categories
+have the lowest count of obesity cases.
+
+### Histogram of Age Distribution Among Obese Individuals
+
+``` r
+ggplot(subset(obesity, bmi == "obese"), aes(x = age)) +
+  geom_histogram(binwidth = 1, fill = "pink", color = "lightblue") +
+  labs(title = "Age Distribution of Obese Individuals",
+       x = "Age",
+       y = "Count") +
+  theme_minimal()
+```
+
+![](Yi-data-clean_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+
+Interpretation: The histogram indicates that obesity is present across
+all age groups, with a relatively uniform distribution from young
+adulthood to late middle age. There’s a significant peak in obesity
+cases among individuals in their late 50s to early 60s. After this peak,
+the number of obese individuals declines sharply for those in the older
+age groups.
+
+### Box Plot of Income to Poverty Ratio for Obese Individuals
+
+``` r
+ggplot(subset(obesity, bmi == "obese"), aes(y = income_to_poverty, x = "", fill = bmi)) +
+  geom_boxplot() +
+  scale_fill_manual(values = c("pink")) +
+  labs(title = "Income to Poverty Ratio Among Obese Individuals",
+       x = "",
+       y = "Income to Poverty Ratio") +
+  theme_minimal()
+```
+
+![](Yi-data-clean_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+
+Interpretation: The box plot shows the distribution of the income to
+poverty ratio among obese individuals. The data is spread across a range
+of ratios, mostly concentrated between 1 and 4, with the median around
+2. This suggests that individuals with obesity come from a range of
+economic backgrounds, but there’s a tendency towards lower income to
+poverty ratios.
+
+### Scatter Plot of BMI vs. Sedentary Activity
+
+``` r
+obesity_sedentary_activity_filtered <- obesity %>% filter(!is.na(sedentary_activity))
+
+ggplot(obesity_sedentary_activity_filtered, aes(x = sedentary_activity, y = bmi, color = bmi)) +
+  geom_point() +
+  scale_color_manual(values = c("normal" = "lightblue", "obese" = "pink")) +
+  labs(title = "BMI vs. Sedentary Activity",
+       x = "Sedentary Activity (minutes)",
+       y = "BMI") +
+  theme_minimal()
+```
+
+![](Yi-data-clean_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+
+Interpretation: The scatter plot presents a comparison of sedentary
+activity (in minutes) with BMI categories (normal and obese). Points are
+relatively evenly distributed across the range of sedentary activity for
+both BMI categories, suggesting no clear or immediate correlation
+between the amount of sedentary activity and BMI category within this
+dataset. It indicates that individuals classified as obese and those
+with a normal BMI report similar patterns of sedentary behavior.
+
+### Heat Map of Fast Food and Frozen Meal Consumption
+
+``` r
+aggregated_data <- obesity %>%
+  group_by(age, gender) %>%
+  summarize(avg_fast_food = mean(freq_fast_food, na.rm = TRUE),
+            avg_frozen_food = mean(freq_frozen, na.rm = TRUE))
+```
+
+    ## `summarise()` has grouped output by 'age'. You can override using the `.groups`
+    ## argument.
+
+``` r
+melted_data <- melt(aggregated_data, id.vars = c("age", "gender"))
+
+ggplot(melted_data, aes(x = age, y = variable, fill = value)) +
+  geom_tile() +
+  scale_fill_gradient(low = "lightblue", high = "pink") +
+  labs(title = "Heat Map of Fast Food and Frozen Meal Consumption",
+       x = "Age",
+       y = "Food Type",
+       fill = "Average Consumption") +
+  theme_minimal()
+```
+
+![](Yi-data-clean_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+Interpretation：The heat map shows the average consumption of fast food
+and frozen meals across different ages. Consumption levels are indicated
+by the color intensity, with darker shades of pink representing higher
+consumption. From the visualization, it appears that there are specific
+age groups that consume fast food and frozen meals more frequently, as
+indicated by the vertical pink bars, which suggest peaks in consumption
+at those ages.
