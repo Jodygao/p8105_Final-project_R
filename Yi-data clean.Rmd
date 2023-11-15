@@ -142,6 +142,7 @@ ggplot(obesity, aes(x = sedentary_activity, y = bmi, color = bmi)) +
        y = "BMI") +
   theme_minimal()
 ```
+Interpretation: The scatter plot presents a comparison of sedentary activity (in minutes) with BMI categories (normal and obese). Points are relatively evenly distributed across the range of sedentary activity for both BMI categories, suggesting no clear or immediate correlation between the amount of sedentary activity and BMI category within this dataset. It indicates that individuals classified as obese and those with a normal BMI report similar patterns of sedentary behavior.
 
 ### Heat Map of Fast Food and Frozen Meal Consumption
 ```{r}
