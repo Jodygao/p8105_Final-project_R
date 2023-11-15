@@ -97,7 +97,9 @@ library(reshape2)
 
 ### Bar Chart of Obesity Prevalence by Race and Gender
 ```{r}
-ggplot(obesity, aes(x = race, fill = gender)) +
+obesity_race_filtered <- obesity %>% filter(!is.na(race) & race != "NA")
+
+ggplot(obesity_race_filtered, aes(x = race, fill = gender)) +
   geom_bar(position = "dodge") +
   scale_fill_manual(values = c("pink", "lightblue")) +
   labs(title = "Obesity Prevalence by Race and Gender",
@@ -105,6 +107,7 @@ ggplot(obesity, aes(x = race, fill = gender)) +
        y = "Count") +
   theme_minimal()
 ```
+Interpretation: The bar chart displays the prevalence of obesity across different racial categories, differentiated by gender. It shows that the White population has the highest count of obesity cases, with a notable number of cases in both genders. The Black population follows, with females being a little higher than males, whereas the "Other Hispanic" categories have the lowest count of obesity cases.
 
 ### Histogram of Age Distribution Among Obese Individuals
 ```{r}
