@@ -91,6 +91,8 @@ obesity=
 ## Graphs
 ```{r setup, include=FALSE}
 library(ggplot2)
+library(dplyr)
+library(reshape2)
 ```
 
 ### Bar Chart of Obesity Prevalence by Race and Gender
@@ -133,6 +135,25 @@ ggplot(obesity, aes(x = sedentary_activity, y = bmi, color = bmi)) +
   labs(title = "BMI vs. Sedentary Activity",
        x = "Sedentary Activity (minutes)",
        y = "BMI") +
+  theme_minimal()
+```
+
+### Heat Map of Fast Food and Frozen Meal Consumption
+```{r}
+aggregated_data <- obesity %>%
+  group_by(age, gender) %>%
+  summarize(avg_fast_food = mean(freq_fast_food, na.rm = TRUE),
+            avg_frozen_food = mean(freq_frozen, na.rm = TRUE))
+
+melted_data <- melt(aggregated_data, id.vars = c("age", "gender"))
+
+ggplot(melted_data, aes(x = age, y = variable, fill = value)) +
+  geom_tile() +
+  scale_fill_gradient(low = "lightblue", high = "pink") +
+  labs(title = "Heat Map of Fast Food and Frozen Meal Consumption",
+       x = "Age",
+       y = "Food Type",
+       fill = "Average Consumption") +
   theme_minimal()
 ```
 
