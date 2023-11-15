@@ -18,7 +18,7 @@ library(tidyverse)
 - Ruohan Hong (rh3132)
 - Shiqi Wu (sw3737)
 
-##Import data from NHANES
+## Import data from NHANES
 ```{r}
 import_df= function(path){
   read_xpt(path)
@@ -87,4 +87,19 @@ obesity=
   
 ```
 
+
+## Graphs
+```{r setup, include=FALSE}
+library(ggplot2)
+```
+
+### Bar Chart of Obesity Prevalence by Race and Gender
+```{r}
+ggplot(obesity, aes(x = race, fill = gender)) +
+  geom_bar(position = "dodge") +
+  labs(title = "Obesity Prevalence by Race and Gender",
+       x = "Race",
+       y = "Count") +
+  theme_minimal()
+```
 
