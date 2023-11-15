@@ -97,6 +97,7 @@ library(ggplot2)
 ```{r}
 ggplot(obesity, aes(x = race, fill = gender)) +
   geom_bar(position = "dodge") +
+  scale_fill_manual(values = c("pink", "lightblue")) +
   labs(title = "Obesity Prevalence by Race and Gender",
        x = "Race",
        y = "Count") +
@@ -113,4 +114,8 @@ ggplot(subset(obesity, bmi == "obese"), aes(x = age)) +
   theme_minimal()
 ```
 
+### Box Plot of Income to Poverty Ratio for Obese Individuals
+```{r}
+
+```
 
