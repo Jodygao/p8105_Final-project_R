@@ -125,3 +125,14 @@ ggplot(subset(obesity, bmi == "obese"), aes(y = income_to_poverty, x = "", fill 
   theme_minimal()
 ```
 
+### Scatter Plot of BMI vs. Sedentary Activity
+```{r}
+ggplot(obesity, aes(x = sedentary_activity, y = bmi, color = bmi)) +
+  geom_point() +
+  scale_color_manual(values = c("normal" = "lightblue", "obese" = "pink")) +
+  labs(title = "BMI vs. Sedentary Activity",
+       x = "Sedentary Activity (minutes)",
+       y = "BMI") +
+  theme_minimal()
+```
+
