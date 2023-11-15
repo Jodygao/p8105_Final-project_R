@@ -107,7 +107,7 @@ ggplot(obesity_race_filtered, aes(x = race, fill = gender)) +
        y = "Count") +
   theme_minimal()
 ```
-Interpretation: The bar chart displays the prevalence of obesity across different racial categories, differentiated by gender. It shows that the White population has the highest count of obesity cases, with a notable number of cases in both genders. The Black population follows, with females being a little higher than males, whereas the "Other Hispanic" categories have the lowest count of obesity cases.
+Interpretation: The bar chart displays the prevalence of obesity across different racial categories, differentiated by gender. It shows that the White population has the highest count of obesity cases, with a notable number of cases in both genders. The Black population follows, with females being higher than males, whereas the "Other Hispanic" categories have the lowest count of obesity cases.
 
 ### Histogram of Age Distribution Among Obese Individuals
 ```{r}
@@ -118,6 +118,7 @@ ggplot(subset(obesity, bmi == "obese"), aes(x = age)) +
        y = "Count") +
   theme_minimal()
 ```
+Interpretation: The histogram indicates that obesity is present across all age groups, with a relatively uniform distribution from young adulthood to late middle age. There's a significant peak in obesity cases among individuals in their late 50s to early 60s. After this peak, the number of obese individuals declines sharply for those in the older age groups.
 
 ### Box Plot of Income to Poverty Ratio for Obese Individuals
 ```{r}
