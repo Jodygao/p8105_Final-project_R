@@ -134,7 +134,9 @@ Interpretation: The box plot shows the distribution of the income to poverty rat
 
 ### Scatter Plot of BMI vs. Sedentary Activity
 ```{r}
-ggplot(obesity, aes(x = sedentary_activity, y = bmi, color = bmi)) +
+obesity_sedentary_activity_filtered <- obesity %>% filter(!is.na(sedentary_activity))
+
+ggplot(obesity_sedentary_activity_filtered, aes(x = sedentary_activity, y = bmi, color = bmi)) +
   geom_point() +
   scale_color_manual(values = c("normal" = "lightblue", "obese" = "pink")) +
   labs(title = "BMI vs. Sedentary Activity",
@@ -162,4 +164,4 @@ ggplot(melted_data, aes(x = age, y = variable, fill = value)) +
        fill = "Average Consumption") +
   theme_minimal()
 ```
-
+Interpretation：The heat map shows the average consumption of fast food and frozen meals across different ages. Consumption levels are indicated by the color intensity, with darker shades of pink representing higher consumption. From the visualization, it appears that there are specific age groups that consume fast food and frozen meals more frequently, as indicated by the vertical pink bars, which suggest peaks in consumption at those ages.
