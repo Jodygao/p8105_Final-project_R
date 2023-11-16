@@ -191,3 +191,61 @@ marital_status_summary <- obesity %>%
 print(marital_status_summary)
 ```
 
+```{r age}
+age_summary <- obesity %>%
+  summarise(
+    Count = n(),
+    Unique = n_distinct(age),
+    Mean = mean(age, na.rm = TRUE),
+    Std_Dev = sd(age, na.rm = TRUE),
+    Min = min(age, na.rm = TRUE),
+    `25th_Pctl` = quantile(age, 0.25, na.rm = TRUE),
+    Median = median(age, na.rm = TRUE),
+    `75th_Pctl` = quantile(age, 0.75, na.rm = TRUE),
+    Max = max(age, na.rm = TRUE)
+  )
+
+print(age_summary)
+```
+
+```{r income}
+income_to_poverty_summary <- obesity %>%
+  summarise(
+    Count = n(),
+    Unique = n_distinct(income_to_poverty),
+    Mean = mean(income_to_poverty, na.rm = TRUE),
+    Std_Dev = sd(income_to_poverty, na.rm = TRUE),
+    Min = min(income_to_poverty, na.rm = TRUE),
+    `25th_Pctl` = quantile(income_to_poverty, 0.25, na.rm = TRUE),
+    Median = median(income_to_poverty, na.rm = TRUE),
+    `75th_Pctl` = quantile(income_to_poverty, 0.75, na.rm = TRUE),
+    Max = max(income_to_poverty, na.rm = TRUE)
+  )
+
+print(income_to_poverty_summary)
+```
+
+```{r education}
+education_summary <- obesity %>%
+  count(education) %>%
+  mutate(Percentage = n / sum(n) * 100)
+
+print(education_summary)
+```
+
+
+```{r race}
+
+race_summary <- obesity %>%
+  count(race) %>%
+  mutate(Percentage = n / sum(n) * 100)
+
+print(race_summary)
+```
+
+
+What's left for baseline: 
+sedentary_activit, BMI, freq_fast_food, freq_frozen
+
+
+

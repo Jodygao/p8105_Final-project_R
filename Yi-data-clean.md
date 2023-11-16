@@ -240,3 +240,85 @@ print(marital_status_summary)
     ## 2 Never married               1360       11.9
     ## 3 Widowed/Divorced/Separated  1599       14.0
     ## 4 <NA>                        4213       37.0
+
+``` r
+age_summary <- obesity %>%
+  summarise(
+    Count = n(),
+    Unique = n_distinct(age),
+    Mean = mean(age, na.rm = TRUE),
+    Std_Dev = sd(age, na.rm = TRUE),
+    Min = min(age, na.rm = TRUE),
+    `25th_Pctl` = quantile(age, 0.25, na.rm = TRUE),
+    Median = median(age, na.rm = TRUE),
+    `75th_Pctl` = quantile(age, 0.75, na.rm = TRUE),
+    Max = max(age, na.rm = TRUE)
+  )
+
+print(age_summary)
+```
+
+    ## # A tibble: 1 × 9
+    ##   Count Unique  Mean Std_Dev   Min `25th_Pctl` Median `75th_Pctl`   Max
+    ##   <int>  <int> <dbl>   <dbl> <dbl>       <dbl>  <dbl>       <dbl> <dbl>
+    ## 1 11388     79  35.6    24.2     2          13     33          57    80
+
+``` r
+income_to_poverty_summary <- obesity %>%
+  summarise(
+    Count = n(),
+    Unique = n_distinct(income_to_poverty),
+    Mean = mean(income_to_poverty, na.rm = TRUE),
+    Std_Dev = sd(income_to_poverty, na.rm = TRUE),
+    Min = min(income_to_poverty, na.rm = TRUE),
+    `25th_Pctl` = quantile(income_to_poverty, 0.25, na.rm = TRUE),
+    Median = median(income_to_poverty, na.rm = TRUE),
+    `75th_Pctl` = quantile(income_to_poverty, 0.75, na.rm = TRUE),
+    Max = max(income_to_poverty, na.rm = TRUE)
+  )
+
+print(income_to_poverty_summary)
+```
+
+    ## # A tibble: 1 × 9
+    ##   Count Unique  Mean Std_Dev   Min `25th_Pctl` Median `75th_Pctl`   Max
+    ##   <int>  <int> <dbl>   <dbl> <dbl>       <dbl>  <dbl>       <dbl> <dbl>
+    ## 1 11388    472  2.42    1.63     0        1.04   1.99        3.90     5
+
+``` r
+education_summary <- obesity %>%
+  count(education) %>%
+  mutate(Percentage = n / sum(n) * 100)
+
+print(education_summary)
+```
+
+    ## # A tibble: 5 × 3
+    ##   education                     n Percentage
+    ##   <chr>                     <int>      <dbl>
+    ## 1 9-11th grade                763       6.70
+    ## 2 High school graduate       1722      15.1 
+    ## 3 Less than 9th grade         475       4.17
+    ## 4 Some college or AA degree  2406      21.1 
+    ## 5 <NA>                       6022      52.9
+
+``` r
+race_summary <- obesity %>%
+  count(race) %>%
+  mutate(Percentage = n / sum(n) * 100)
+
+print(race_summary)
+```
+
+    ## # A tibble: 6 × 3
+    ##   race                 n Percentage
+    ##   <chr>            <int>      <dbl>
+    ## 1 Black             2970      26.1 
+    ## 2 Mexican American  1397      12.3 
+    ## 3 Other             1217      10.7 
+    ## 4 Other Hispanic    1050       9.22
+    ## 5 White             3995      35.1 
+    ## 6 <NA>               759       6.66
+
+What’s left for baseline: sedentary_activit, BMI, freq_fast_food,
+freq_frozen
