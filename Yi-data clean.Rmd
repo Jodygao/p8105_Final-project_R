@@ -247,5 +247,42 @@ print(race_summary)
 What's left for baseline: 
 sedentary_activit, BMI, freq_fast_food, freq_frozen
 
+```{r sedentary_activity}
+
+sedentary_activity_summary <- obesity %>%
+  summarise(
+    Count = n(),
+    Mean = mean(sedentary_activity, na.rm = TRUE),
+    Std_Dev = sd(sedentary_activity, na.rm = TRUE),
+    Min = min(sedentary_activity, na.rm = TRUE),
+    `25th_Pctl` = quantile(sedentary_activity, 0.25, na.rm = TRUE),
+    Median = median(sedentary_activity, na.rm = TRUE),
+    `75th_Pctl` = quantile(sedentary_activity, 0.75, na.rm = TRUE),
+    Max = max(sedentary_activity, na.rm = TRUE)
+  )
+print(sedentary_activity_summary)
+```
+
+```{r BMI}
+
+bmi_summary <- obesity %>%
+  count(bmi) %>%
+  mutate(Percentage = n / sum(n) * 100)
+print(bmi_summary)
+```
+
+```{r fast_food}
+fast_food_summary <- obesity %>%
+  group_by(gender, age) %>%
+  summarise(Avg_Fast_Food = mean(freq_fast_food, na.rm = TRUE))
+print(fast_food_summary)
+```
+
+```{r frozen_food}
+frozen_food_summary <- obesity %>%
+  group_by(gender, age) %>%
+  summarise(Avg_Frozen_Food = mean(freq_frozen, na.rm = TRUE))
+print(frozen_food_summary)
+```
 
 

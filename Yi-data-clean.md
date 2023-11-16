@@ -322,3 +322,94 @@ print(race_summary)
 
 What’s left for baseline: sedentary_activit, BMI, freq_fast_food,
 freq_frozen
+
+``` r
+sedentary_activity_summary <- obesity %>%
+  summarise(
+    Count = n(),
+    Mean = mean(sedentary_activity, na.rm = TRUE),
+    Std_Dev = sd(sedentary_activity, na.rm = TRUE),
+    Min = min(sedentary_activity, na.rm = TRUE),
+    `25th_Pctl` = quantile(sedentary_activity, 0.25, na.rm = TRUE),
+    Median = median(sedentary_activity, na.rm = TRUE),
+    `75th_Pctl` = quantile(sedentary_activity, 0.75, na.rm = TRUE),
+    Max = max(sedentary_activity, na.rm = TRUE)
+  )
+print(sedentary_activity_summary)
+```
+
+    ## # A tibble: 1 × 8
+    ##   Count  Mean Std_Dev   Min `25th_Pctl` Median `75th_Pctl`   Max
+    ##   <int> <dbl>   <dbl> <dbl>       <dbl>  <dbl>       <dbl> <dbl>
+    ## 1 11388  338.    203.     0         180    300         480  1320
+
+``` r
+bmi_summary <- obesity %>%
+  count(bmi) %>%
+  mutate(Percentage = n / sum(n) * 100)
+print(bmi_summary)
+```
+
+    ## # A tibble: 2 × 3
+    ##   bmi        n Percentage
+    ##   <chr>  <int>      <dbl>
+    ## 1 normal  7922       69.6
+    ## 2 obese   3466       30.4
+
+``` r
+fast_food_summary <- obesity %>%
+  group_by(gender, age) %>%
+  summarise(Avg_Fast_Food = mean(freq_fast_food, na.rm = TRUE))
+```
+
+    ## `summarise()` has grouped output by 'gender'. You can override using the
+    ## `.groups` argument.
+
+``` r
+print(fast_food_summary)
+```
+
+    ## # A tibble: 158 × 3
+    ## # Groups:   gender [2]
+    ##    gender   age Avg_Fast_Food
+    ##    <fct>  <dbl>         <dbl>
+    ##  1 Female     2          1.66
+    ##  2 Female     3          1.78
+    ##  3 Female     4          1.40
+    ##  4 Female     5          1.42
+    ##  5 Female     6          1.79
+    ##  6 Female     7          1.67
+    ##  7 Female     8          1.77
+    ##  8 Female     9          1.81
+    ##  9 Female    10          2.01
+    ## 10 Female    11          1.70
+    ## # ℹ 148 more rows
+
+``` r
+frozen_food_summary <- obesity %>%
+  group_by(gender, age) %>%
+  summarise(Avg_Frozen_Food = mean(freq_frozen, na.rm = TRUE))
+```
+
+    ## `summarise()` has grouped output by 'gender'. You can override using the
+    ## `.groups` argument.
+
+``` r
+print(frozen_food_summary)
+```
+
+    ## # A tibble: 158 × 3
+    ## # Groups:   gender [2]
+    ##    gender   age Avg_Frozen_Food
+    ##    <fct>  <dbl>           <dbl>
+    ##  1 Female     2            2.48
+    ##  2 Female     3            2.32
+    ##  3 Female     4            2.70
+    ##  4 Female     5            2.96
+    ##  5 Female     6            2.44
+    ##  6 Female     7            2.37
+    ##  7 Female     8            2.51
+    ##  8 Female     9           52.0 
+    ##  9 Female    10            2.08
+    ## 10 Female    11            3.02
+    ## # ℹ 148 more rows
