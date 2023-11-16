@@ -204,3 +204,39 @@ consumption. From the visualization, it appears that there are specific
 age groups that consume fast food and frozen meals more frequently, as
 indicated by the vertical pink bars, which suggest peaks in consumption
 at those ages.
+
+### Baseline characterics
+
+``` r
+library(dplyr)
+library(readxl)
+```
+
+``` r
+gender_summary <- obesity %>%
+  count(gender) %>%
+  mutate(Percentage = n / sum(n) * 100)
+
+print(gender_summary)
+```
+
+    ## # A tibble: 2 × 3
+    ##   gender     n Percentage
+    ##   <fct>  <int>      <dbl>
+    ## 1 Female  5800       50.9
+    ## 2 Male    5588       49.1
+
+``` r
+marital_status_summary <- obesity %>%
+  count(marital_status) %>%
+  mutate(Percentage = n / sum(n) * 100)
+print(marital_status_summary)
+```
+
+    ## # A tibble: 4 × 3
+    ##   marital_status                 n Percentage
+    ##   <chr>                      <int>      <dbl>
+    ## 1 Married                     4216       37.0
+    ## 2 Never married               1360       11.9
+    ## 3 Widowed/Divorced/Separated  1599       14.0
+    ## 4 <NA>                        4213       37.0

@@ -168,3 +168,26 @@ ggplot(melted_data, aes(x = age, y = variable, fill = value)) +
 ```
 
 Interpretation：The heat map shows the average consumption of fast food and frozen meals across different ages. Consumption levels are indicated by the color intensity, with darker shades of pink representing higher consumption. From the visualization, it appears that there are specific age groups that consume fast food and frozen meals more frequently, as indicated by the vertical pink bars, which suggest peaks in consumption at those ages.
+
+
+### Baseline characterics
+```{r}
+library(dplyr)
+library(readxl)
+```
+
+```{r gender}
+gender_summary <- obesity %>%
+  count(gender) %>%
+  mutate(Percentage = n / sum(n) * 100)
+
+print(gender_summary)
+```
+
+```{r marital_status}
+marital_status_summary <- obesity %>%
+  count(marital_status) %>%
+  mutate(Percentage = n / sum(n) * 100)
+print(marital_status_summary)
+```
+
