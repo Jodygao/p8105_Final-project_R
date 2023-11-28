@@ -11,6 +11,7 @@ library(tidyverse)
 library(tidyr)
 library(dplyr)
 library(maps) 
+library(sf)
 ```
 
 # Data Import
@@ -22,6 +23,7 @@ white <- read_csv("data/BRFSS/2022-white.csv")
 hispanic <- read_csv("data/BRFSS/2022-hispanic.csv")
 
 states_map <- map_data("state")
+states_sf <- st_as_sf(maps::map("state", plot = FALSE, fill = TRUE))
 ```
 
 # Maps
@@ -59,10 +61,60 @@ ggplot(data = overall_map) +
 
 ## Maps: Obesity by Race/Ethnicity - Non-Hispanic Asian Adults
 ```{r}
+asian <- asian %>%
+  mutate(State = tolower(State))
 
+asian_map <- left_join(states_sf, asian, by = c("ID" = "State"))
+
+ggplot(data = asian_map) +
+  geom_sf(aes(fill = Prevalence), color = "white") +
+  scale_fill_gradient(
+    name = "Obesity Prevalence (%)",
+    low = "red", high = "darkred", na.value = "grey"
+  ) +
+  coord_fixed(1.3) +
+  theme_minimal() +
+  labs(title = "Obesity Prevalence in Non-Hispanic Asian Adults by State in 2022") +
+  theme(legend.position = "right",
+        panel.grid.major = element_blank(),  
+        panel.grid.minor = element_blank(), 
+        axis.text.x = element_blank(), 
+        axis.text.y = element_blank(),  
+        axis.ticks = element_blank(),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank())
 ```
 
 ## Maps: Obesity by Race/Ethnicity - Non-Hispanic Black Adults
+```{r}
+black <- black %>%
+  mutate(State = tolower(State))
+black_map <- left_join(states_map, black, by = c("region" = "State"))
+black_map <- black_map %>%
+  mutate(Prevalence = as.numeric(as.character(Prevalence)))
+
+breaks <- c(0, 20, 25, 30, 35, 40, 45, 50)
+ggplot(data = black_map) +
+  geom_polygon(aes(x = long, y = lat, group = group, fill = Prevalence), color = "white") +
+  scale_fill_continuous(
+    name = "Obesity Prevalence (%)",
+    breaks = breaks, 
+    labels = c("<20%", "20%-<25%", "25%-<30%", "30%-<35%", 
+               "35%-<40%", "40%-<45%", "45%-<50%", "50%+"),
+    low = "red", high = "darkred", na.value = "grey"
+  ) +
+  coord_fixed(1.3) +
+  theme_minimal() +
+  labs(title = "Obesity Prevalence in Non-Hispanic Black Adults by State in 2022") +
+  theme(legend.position = "right",
+        panel.grid.major = element_blank(),  
+        panel.grid.minor = element_blank(), 
+        axis.text.x = element_blank(), 
+        axis.text.y = element_blank(),  
+        axis.ticks = element_blank(),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank())
+```
 
 ## Maps: Obesity by Race/Ethnicity - Non-Hispanic White Adults
 
