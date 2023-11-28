@@ -63,13 +63,18 @@ ggplot(data = overall_map) +
 ```{r}
 asian <- asian %>%
   mutate(State = tolower(State))
+asian_map <- left_join(states_map, asian, by = c("region" = "State"))
+asian_map <- asian_map %>%
+  mutate(Prevalence = as.numeric(as.character(Prevalence)))
 
-asian_map <- left_join(states_sf, asian, by = c("ID" = "State"))
-
+breaks <- c(0, 20, 25, 30, 35, 40, 45, 50)
 ggplot(data = asian_map) +
-  geom_sf(aes(fill = Prevalence), color = "white") +
-  scale_fill_gradient(
+  geom_polygon(aes(x = long, y = lat, group = group, fill = Prevalence), color = "white") +
+  scale_fill_continuous(
     name = "Obesity Prevalence (%)",
+    breaks = breaks, 
+    labels = c("<20%", "20%-<25%", "25%-<30%", "30%-<35%", 
+               "35%-<40%", "40%-<45%", "45%-<50%", "50%+"),
     low = "red", high = "darkred", na.value = "grey"
   ) +
   coord_fixed(1.3) +
