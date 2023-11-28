@@ -68,7 +68,6 @@ hispanic <- read_csv("data/BRFSS/2022-hispanic.csv")
 
 ``` r
 states_map <- map_data("state")
-states_sf <- st_as_sf(maps::map("state", plot = FALSE, fill = TRUE))
 ```
 
 # Maps

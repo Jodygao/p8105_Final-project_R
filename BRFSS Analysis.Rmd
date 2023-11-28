@@ -11,7 +11,6 @@ library(tidyverse)
 library(tidyr)
 library(dplyr)
 library(maps) 
-library(sf)
 ```
 
 # Data Import
@@ -23,7 +22,6 @@ white <- read_csv("data/BRFSS/2022-white.csv")
 hispanic <- read_csv("data/BRFSS/2022-hispanic.csv")
 
 states_map <- map_data("state")
-states_sf <- st_as_sf(maps::map("state", plot = FALSE, fill = TRUE))
 ```
 
 # Maps
@@ -159,7 +157,7 @@ hispanic <- hispanic %>%
 hispanic_map <- left_join(states_map, hispanic, by = c("region" = "State"))
 hispanic_map <- hispanic_map %>%
   mutate(Prevalence = as.numeric(as.character(Prevalence)))
-
+ 
 breaks <- c(0, 20, 25, 30, 35, 40, 45, 50)
 ggplot(data = hispanic_map) +
   geom_polygon(aes(x = long, y = lat, group = group, fill = Prevalence), color = "white") +
