@@ -24,6 +24,48 @@ hispanic <- read_csv("data/BRFSS/2022-hispanic.csv")
 states_map <- map_data("state")
 ```
 
+# Maps
 
+## Overall Obesity
+```{r}
+overall <- overall %>%
+  mutate(State = tolower(State))
+
+overall_map <- left_join(states_map, overall, by = c("region" = "State"))
+
+breaks <- c(0, 20, 25, 30, 35, 40, 45, 50)
+
+ggplot(data = overall_map) +
+  geom_polygon(aes(x = long, y = lat, group = group, fill = Prevalence), color = "white") +
+  scale_fill_continuous(
+    name = "Obesity Prevalence (%)",
+    breaks = breaks, 
+    labels = c("<20%", "20%-<25%", "25%-<30%", "30%-<35%", 
+               "35%-<40%", "40%-<45%", "45%-<50%", "50%+"),
+    low = "red", high = "darkred", na.value = "grey"
+  ) +
+  coord_fixed(1.3) +
+  theme_minimal() +
+  labs(title = "Obesity Prevalence by State in 2022") +
+  theme(legend.position = "right",
+        panel.grid.major = element_blank(),  
+        panel.grid.minor = element_blank(), 
+        axis.text.x = element_blank(), 
+        axis.text.y = element_blank(),  
+        axis.ticks = element_blank(),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank())
+```
+
+## Maps: Obesity by Race/Ethnicity - Non-Hispanic Asian Adults
+```{r}
+
+```
+
+## Maps: Obesity by Race/Ethnicity - Non-Hispanic Black Adults
+
+## Maps: Obesity by Race/Ethnicity - Non-Hispanic White Adults
+
+## Maps: Obesity by Race/Ethnicity - Hispanic Adults
 
 
