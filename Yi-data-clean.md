@@ -85,7 +85,8 @@ obesity=
 ### Bar Chart of Obesity Prevalence by Race and Gender
 
 ``` r
-obesity_race_filtered <- obesity %>% filter(!is.na(race) & race != "NA")
+obesity_race_filtered = obesity |>  
+  filter(!is.na(race) & race != "NA")
 
 ggplot(obesity_race_filtered, aes(x = race, fill = gender)) +
   geom_bar(position = "dodge") +
@@ -149,7 +150,8 @@ poverty ratios.
 ### Scatter Plot of BMI vs. Sedentary Activity
 
 ``` r
-obesity_sedentary_activity_filtered <- obesity %>% filter(!is.na(sedentary_activity))
+obesity_sedentary_activity_filtered = obesity |> 
+  filter(!is.na(sedentary_activity))
 
 ggplot(obesity_sedentary_activity_filtered, aes(x = sedentary_activity, y = bmi, color = bmi)) +
   geom_point() +
@@ -173,8 +175,8 @@ with a normal BMI report similar patterns of sedentary behavior.
 ### Heat Map of Fast Food and Frozen Meal Consumption
 
 ``` r
-aggregated_data <- obesity %>%
-  group_by(age, gender) %>%
+aggregated_data = obesity |> 
+  group_by(age, gender) |> 
   summarize(avg_fast_food = mean(freq_fast_food, na.rm = TRUE),
             avg_frozen_food = mean(freq_frozen, na.rm = TRUE))
 ```
@@ -183,7 +185,7 @@ aggregated_data <- obesity %>%
     ## argument.
 
 ``` r
-melted_data <- melt(aggregated_data, id.vars = c("age", "gender"))
+melted_data = melt(aggregated_data, id.vars = c("age", "gender"))
 
 ggplot(melted_data, aes(x = age, y = variable, fill = value)) +
   geom_tile() +
