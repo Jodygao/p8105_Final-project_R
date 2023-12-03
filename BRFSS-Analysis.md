@@ -6,7 +6,7 @@ All Group Member Collaboration
 # Data Import
 
 ``` r
-overall <- read_csv("data/BRFSS/2022-overall-prevalence.csv")
+overall = read_csv("data/BRFSS/2022-overall-prevalence.csv")
 ```
 
     ## Rows: 54 Columns: 3
@@ -19,7 +19,7 @@ overall <- read_csv("data/BRFSS/2022-overall-prevalence.csv")
     ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
 ``` r
-asian <- read_csv("data/BRFSS/2022-asian.csv")
+asian = read_csv("data/BRFSS/2022-asian.csv")
 ```
 
     ## Rows: 54 Columns: 3
@@ -31,7 +31,7 @@ asian <- read_csv("data/BRFSS/2022-asian.csv")
     ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
 ``` r
-black <- read_csv("data/BRFSS/2022-black.csv")
+black = read_csv("data/BRFSS/2022-black.csv")
 ```
 
     ## Rows: 54 Columns: 3
@@ -43,7 +43,7 @@ black <- read_csv("data/BRFSS/2022-black.csv")
     ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
 ``` r
-white <- read_csv("data/BRFSS/2022-white.csv")
+white = read_csv("data/BRFSS/2022-white.csv")
 ```
 
     ## Rows: 54 Columns: 3
@@ -55,7 +55,7 @@ white <- read_csv("data/BRFSS/2022-white.csv")
     ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
 ``` r
-hispanic <- read_csv("data/BRFSS/2022-hispanic.csv")
+hispanic = read_csv("data/BRFSS/2022-hispanic.csv")
 ```
 
     ## Rows: 54 Columns: 3
@@ -67,7 +67,7 @@ hispanic <- read_csv("data/BRFSS/2022-hispanic.csv")
     ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
 ``` r
-states_map <- map_data("state")
+states_map = map_data("state")
 ```
 
 # Maps
@@ -75,12 +75,12 @@ states_map <- map_data("state")
 ## Overall Obesity
 
 ``` r
-overall <- overall %>%
+overall = overall |>
   mutate(State = tolower(State))
 
-overall_map <- left_join(states_map, overall, by = c("region" = "State"))
+overall_map = left_join(states_map, overall, by = c("region" = "State"))
 
-breaks <- c(0, 20, 25, 30, 35, 40, 45, 50)
+breaks = c(0, 20, 25, 30, 35, 40, 45, 50)
 
 ggplot(data = overall_map) +
   geom_polygon(aes(x = long, y = lat, group = group, fill = Prevalence), color = "white") +
@@ -109,10 +109,10 @@ ggplot(data = overall_map) +
 ## Maps: Obesity by Race/Ethnicity - Non-Hispanic Asian Adults
 
 ``` r
-asian <- asian %>%
+asian = asian |>
   mutate(State = tolower(State))
-asian_map <- left_join(states_map, asian, by = c("region" = "State"))
-asian_map <- asian_map %>%
+asian_map = left_join(states_map, asian, by = c("region" = "State"))
+asian_map = asian_map |>
   mutate(Prevalence = as.numeric(as.character(Prevalence)))
 ```
 
@@ -122,7 +122,7 @@ asian_map <- asian_map %>%
     ## ! NAs introduced by coercion
 
 ``` r
-breaks <- c(0, 20, 25, 30, 35, 40, 45, 50)
+breaks = c(0, 20, 25, 30, 35, 40, 45, 50)
 ggplot(data = asian_map) +
   geom_polygon(aes(x = long, y = lat, group = group, fill = Prevalence), color = "white") +
   scale_fill_continuous(
@@ -150,10 +150,10 @@ ggplot(data = asian_map) +
 ## Maps: Obesity by Race/Ethnicity - Non-Hispanic Black Adults
 
 ``` r
-black <- black %>%
+black = black |>
   mutate(State = tolower(State))
-black_map <- left_join(states_map, black, by = c("region" = "State"))
-black_map <- black_map %>%
+black_map = left_join(states_map, black, by = c("region" = "State"))
+black_map = black_map |>
   mutate(Prevalence = as.numeric(as.character(Prevalence)))
 ```
 
@@ -163,7 +163,7 @@ black_map <- black_map %>%
     ## ! NAs introduced by coercion
 
 ``` r
-breaks <- c(0, 20, 25, 30, 35, 40, 45, 50)
+breaks = c(0, 20, 25, 30, 35, 40, 45, 50)
 ggplot(data = black_map) +
   geom_polygon(aes(x = long, y = lat, group = group, fill = Prevalence), color = "white") +
   scale_fill_continuous(
@@ -191,10 +191,10 @@ ggplot(data = black_map) +
 ## Maps: Obesity by Race/Ethnicity - Non-Hispanic White Adults
 
 ``` r
-white <- white %>%
+white = white |>
   mutate(State = tolower(State))
-white_map <- left_join(states_map, white, by = c("region" = "State"))
-white_map <- white_map %>%
+white_map = left_join(states_map, white, by = c("region" = "State"))
+white_map = white_map %>%
   mutate(Prevalence = as.numeric(as.character(Prevalence)))
 ```
 
@@ -204,7 +204,7 @@ white_map <- white_map %>%
     ## ! NAs introduced by coercion
 
 ``` r
-breaks <- c(0, 20, 25, 30, 35, 40, 45, 50)
+breaks = c(0, 20, 25, 30, 35, 40, 45, 50)
 ggplot(data = white_map) +
   geom_polygon(aes(x = long, y = lat, group = group, fill = Prevalence), color = "white") +
   scale_fill_continuous(
@@ -232,10 +232,10 @@ ggplot(data = white_map) +
 ## Maps: Obesity by Race/Ethnicity - Hispanic Adults
 
 ``` r
-hispanic <- hispanic %>%
+hispanic = hispanic |>
   mutate(State = tolower(State))
-hispanic_map <- left_join(states_map, hispanic, by = c("region" = "State"))
-hispanic_map <- hispanic_map %>%
+hispanic_map = left_join(states_map, hispanic, by = c("region" = "State"))
+hispanic_map = hispanic_map |>
   mutate(Prevalence = as.numeric(as.character(Prevalence)))
 ```
 
@@ -245,7 +245,7 @@ hispanic_map <- hispanic_map %>%
     ## ! NAs introduced by coercion
 
 ``` r
-breaks <- c(0, 20, 25, 30, 35, 40, 45, 50)
+breaks = c(0, 20, 25, 30, 35, 40, 45, 50)
 ggplot(data = hispanic_map) +
   geom_polygon(aes(x = long, y = lat, group = group, fill = Prevalence), color = "white") +
   scale_fill_continuous(
