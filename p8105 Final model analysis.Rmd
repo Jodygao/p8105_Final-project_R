@@ -1,0 +1,151 @@
+---
+title: "P8105 Fall 2023 Final Project Proposal"
+date: "2023-11-10"
+author: "All Group Member Collaboration"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+library(haven)
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(reshape2)
+library(modelr)
+```
+
+### Group Members
+
+- Yuandi Gao (yg2907) 
+- Yi Li (yl5214)
+- Yingting Zhang (yz4434)
+- Ruohan Hong (rh3132)
+- Shiqi Wu (sw3737)
+
+## Import data from NHANES
+```{r}
+import_df= function(path){
+  read_xpt(path)
+}
+obesity=
+  import_df(path='data/P_BMX.XPT') |> 
+  full_join((import_df(path='data/P_DEMO.XPT')), by='SEQN') |>
+  full_join((import_df(path='data/P_PAQ.XPT')), by='SEQN')|>
+  full_join ((import_df(path='data/P_DBQ.XPT')), by='SEQN') |> 
+  select (SEQN,RIAGENDR,RIDAGEYR,DMDMARTZ,INDFMPIR,RIDRETH3,DMDEDUC2,PAD680,BMXBMI,DBD900,DBD910) |> 
+  filter(
+    !(DMDMARTZ %in% c('77','99','.') ),
+    !(INDFMPIR == '.'),
+    !(DMDEDUC2 %in% c('7','9','.') ),
+    !(PAD680 %in% c('7777', '9999', '.')),
+    !(BMXBMI =='.'),
+    !(DBD900 %in% c('7777', '9999', '.')),
+    !(DBD910 %in% c('7777', '9999', '.'))
+  ) |> 
+  rename(
+    gender=RIAGENDR,
+    age=RIDAGEYR,
+    marital_status=DMDMARTZ,
+    income_to_poverty=INDFMPIR,
+    race=RIDRETH3,
+    education=DMDEDUC2,
+    sedentary_activity=PAD680,
+    bmi=BMXBMI,
+    freq_fast_food=DBD900,
+    freq_frozen=DBD910
+  ) |> 
+  mutate(
+    gender = case_match(
+      gender,
+      1~"Male",
+      2~"Female"),
+    gender = as.factor(gender),
+  marital_status= case_match(
+    marital_status,
+      1~"Married",
+      2~"Widowed/Divorced/Separated",
+      3~"Never married"
+  ),
+    race= case_match(
+    race,
+      1~"Mexican American",
+      2~"Other Hispanic",
+      3~"White",
+      4~"Black",
+      5~"Asian",
+      6~"Other"
+     ),
+      education= case_match(
+    education,
+      1~"Less than 9th grade",
+      2~"9-11th grade",
+      3~"High school graduate" ,
+      4~"Some college or AA degree",
+      6~"College graduate or above"
+     ),
+   obese =case_when(
+    bmi<30 ~ 'normal',
+    bmi>=30 ~'obese'
+  )
+  )
+  
+```
+
+## compare the three models for predictor fast food frequency 
+```{r}
+cv_df = 
+  obesity |> 
+  crossv_mc(n = 100) |> 
+  mutate(
+    train = map(train, as_tibble),
+    test = map(test, as_tibble)
+  )
+cv_results =
+  cv_df |> 
+  mutate(
+    model_fast_crude = map(train, \(df) lm(bmi ~ freq_fast_food, data = df) ),
+    model_fast_adjusted = map(train, \(df) lm(bmi ~ freq_fast_food+age+gender+marital_status+ race+education+income_to_poverty, data = df)),
+    model_fast_inter = map(train, \(df) lm(bmi ~ freq_fast_food*education+freq_fast_food*income_to_poverty+freq_fast_food+age+gender+marital_status+ race+education+income_to_poverty, data = df))
+  ) |> 
+  mutate(
+    rmse_fast_crude = map2_dbl(model_fast_crude, test, \(mod, df) rmse(mod, df)),
+    rmse_fast_adjusted = map2_dbl(model_fast_adjusted, test, \(mod, df) rmse(mod, df)),
+    rmse_fast_inter = map2_dbl(model_fast_inter, test, \(mod, df) rmse(mod, df))
+  )
+```
+
+# plot and compare the three models
+```{r}
+cv_results |> 
+  select(starts_with("rmse")) |> 
+  pivot_longer(
+    everything(),
+    names_to = "model_type",
+    values_to = "rmse",
+    names_prefix = "rmse_"
+  ) |> 
+  group_by(model_type) |> 
+  summarize(m_rmse = mean(rmse))
+
+cv_results |> 
+  select(starts_with("rmse")) |> 
+  pivot_longer(
+    everything(),
+    names_to = "model_type",
+    values_to = "rmse",
+    names_prefix = "rmse_"
+  ) |> 
+  ggplot(aes(x = model_type, y = rmse)) +
+  geom_violin()
+```
+
+## Interpretion:
+fast_adjusted has a lower median with most of its data concentrated at the lower end of the rmse scale, which suggests better predictive performance for most of its predictions compared to the other models.
+fast_crude has a wider spread of values, indicating less consistency in predictive performance.
+fast_inter has most of its data concentrated at the low end like fast_adjusted, but the long tail indicates there are also quite a few cases where its predictions are much worse.
+Considering this, fast_adjusted seems to be the best model overall due to its concentration of lower rmse values, although fast_inter may also perform similarly well for the majority of predictions but has some predictions with high error. 
+
+## Interpretation of fast food variable:
+For one unit increase in number of meals from fast food or pizza place, the bmi will decrease by 0.0026 kg/m^2, while adjusting for all other covariate in the model.
+
+
