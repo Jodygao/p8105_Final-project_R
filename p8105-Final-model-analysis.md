@@ -122,9 +122,9 @@ cv_results |>
     ## # A tibble: 3 × 2
     ##   model_type    m_rmse
     ##   <chr>          <dbl>
-    ## 1 fast_adjusted   11.3
-    ## 2 fast_crude      15.2
-    ## 3 fast_inter      11.8
+    ## 1 fast_adjusted   11.1
+    ## 2 fast_crude      14.6
+    ## 3 fast_inter      12.2
 
 ``` r
 cv_results |> 
@@ -221,9 +221,9 @@ cv_results_sedentary |>
     ## # A tibble: 3 × 2
     ##   model_type m_rmse
     ##   <chr>       <dbl>
-    ## 1 adjusted     7.64
+    ## 1 adjusted     7.65
     ## 2 crude        7.60
-    ## 3 inter        7.64
+    ## 3 inter        7.65
 
 In the context of these models, a lower RMSE indicates a more accurate
 prediction of BMI from the predictors used in the model.
@@ -265,19 +265,19 @@ print(summary_crude_example)
     ## 
     ## Residuals:
     ##     Min      1Q  Median      3Q     Max 
-    ## -17.286  -5.177  -1.222   3.796  61.032 
+    ## -17.172  -5.244  -1.281   3.840  52.476 
     ## 
     ## Coefficients:
     ##                     Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)        2.818e+01  1.895e-01   148.7   <2e-16 ***
-    ## sedentary_activity 5.151e-03  4.814e-04    10.7   <2e-16 ***
+    ## (Intercept)        2.840e+01  1.898e-01 149.600   <2e-16 ***
+    ## sedentary_activity 4.684e-03  4.802e-04   9.754   <2e-16 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 7.542 on 5971 degrees of freedom
-    ##   (3137 observations deleted due to missingness)
-    ## Multiple R-squared:  0.01881,    Adjusted R-squared:  0.01865 
-    ## F-statistic: 114.5 on 1 and 5971 DF,  p-value: < 2.2e-16
+    ## Residual standard error: 7.57 on 5990 degrees of freedom
+    ##   (3118 observations deleted due to missingness)
+    ## Multiple R-squared:  0.01563,    Adjusted R-squared:  0.01547 
+    ## F-statistic: 95.14 on 1 and 5990 DF,  p-value: < 2.2e-16
 
 ## Interpretation of the crude model (activity)
 

@@ -244,7 +244,6 @@ The F-statistic is 93.32 with a p-value of less than 2.2e-16, indicating that th
 
 # Residual plot
 ```{r}
-
 crude_model_first_fold = cv_results_sedentary$model_sed_crude[[1]]
 
 # Calculate residuals for the first fold's model
