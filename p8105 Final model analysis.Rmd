@@ -12,6 +12,7 @@ library(ggplot2)
 library(dplyr)
 library(reshape2)
 library(modelr)
+library (broom)
 ```
 
 ### Group Members
@@ -147,5 +148,119 @@ Considering this, fast_adjusted seems to be the best model overall due to its co
 
 ## Interpretation of fast food variable:
 For one unit increase in number of meals from fast food or pizza place, the bmi will decrease by 0.0026 kg/m^2, while adjusting for all other covariate in the model.
+
+
+## BMI and predictor sendendary activity
+
+# Step 1: model building
+```{r model building sendendary activity}
+cv_df_sedentary = 
+  obesity |> 
+  crossv_mc(n = 100) |> 
+  mutate(
+    train = map(train, as_tibble),
+    test = map(test, as_tibble)
+  )
+
+cv_results_sedentary =
+  cv_df_sedentary |> 
+  mutate(
+    model_sed_crude = map(train, \(df) lm(bmi ~ sedentary_activity, data = df)),
+    model_sed_adjusted = map(train, \(df) lm(bmi ~ sedentary_activity+age+gender+marital_status+race+education+income_to_poverty, data = df)),
+    model_sed_inter = map(train, \(df) lm(bmi ~ sedentary_activity*education+sedentary_activity*income_to_poverty+sedentary_activity+age+gender+marital_status+race+education+income_to_poverty, data = df))
+  ) |> 
+  mutate(
+    rmse_sed_crude = map2_dbl(model_sed_crude, test, \(mod, df) rmse(mod, df)),
+    rmse_sed_adjusted = map2_dbl(model_sed_adjusted, test, \(mod, df) rmse(mod, df)),
+    rmse_sed_inter = map2_dbl(model_sed_inter, test, \(mod, df) rmse(mod, df))
+  )
+```
+
+
+```{r cross validation comparison}
+cv_results_sedentary |> 
+  select(starts_with("rmse_sed")) |> 
+  pivot_longer(
+    everything(),
+    names_to = "model_type",
+    values_to = "rmse",
+    names_prefix = "rmse_sed_"
+  ) |> 
+  ggplot(aes(x = model_type, y = rmse)) +
+  geom_violin()
+```
+
+
+# Summary of Cross validation Results- sendendary activity
+```{r}
+cv_results_sedentary |> 
+  select(starts_with("rmse_sed")) |> 
+  pivot_longer(
+    everything(),
+    names_to = "model_type",
+    values_to = "rmse",
+    names_prefix = "rmse_sed_"
+  ) |> 
+  group_by(model_type) |> 
+  summarize(m_rmse = mean(rmse))
+```
+
+In the context of these models, a lower RMSE indicates a more accurate prediction of BMI from the predictors used in the model.
+
+The results indicate that the `crude model`, despite its simplicity and use of only sedentary activity as a predictor, provided a marginally better prediction of BMI (with the lowest RMSE of 7.58) compared to the more complex adjusted and interaction models, which both had a mean RMSE of 7.63. This suggests that the additional variables and interactions introduced in the adjusted and interaction models did not significantly improve the model's predictive accuracy for BMI.
+
+It is noteworthy, however, that the differences in RMSE between the models are minimal, suggesting that the inclusion of additional covariates and interactions did not detract significantly from the model's performance but also did not provide a substantial benefit in this particular case.
+
+# Best model stats
+```{r}
+# Extract model summaries for all folds
+model_summaries =
+  cv_results_sedentary |> 
+  mutate(
+    summaries_crude = map(model_sed_crude, summary)
+  )
+
+# View summaries for one fold as an example
+summary_crude_example = model_summaries$summaries_crude[[1]]
+
+# Print the summaries to the console
+print(summary_crude_example)
+```
+
+
+## Interpretation of the crude model (activity)
+`Coefficients`
+The intercept is approximately 28.31, which represents the estimated BMI when the sedentary activity is zero. The intercept's large t-value and the corresponding p-value (practically zero) indicate that this estimate is highly statistically significant.
+The coefficient for sedentary activity is approximately 0.004687, which means that for each one-unit increase in sedentary activity, BMI is expected to increase by this value, holding all else constant. This effect is also statistically significant, with a t-value of 9.66 and a p-value much less than 0.05.
+
+`Residuals`
+The residuals, which are the differences between observed and predicted BMI values, range from -16.645 to 61.180. The median is -1.232, indicating that half of the residuals are less than this value. The interquartile range (from the 1st to the 3rd quartile) shows that the middle 50% of the residuals are between -5.218 and 3.805, suggesting that most predictions are within approximately ±5 BMI units of the actual values.
+
+`Model Fit`
+The residual standard error (RSE) is 7.665, which can be interpreted as the average distance that the observed values fall from the regression line. In the context of BMI, this means the typical prediction error is about 7.665 BMI units.
+The R-squared is 0.0153, meaning that approximately 1.53% of the variance in BMI can be explained by the sedentary activity alone.
+The F-statistic is 93.32 with a p-value of less than 2.2e-16, indicating that the model is statistically significant. This suggests that sedentary activity is a significant predictor of BMI when no other variables are included in the model.
+
+
+# Residual plot
+```{r}
+
+crude_model_first_fold = cv_results_sedentary$model_sed_crude[[1]]
+
+# Calculate residuals for the first fold's model
+residuals_first_fold = residuals(crude_model_first_fold)
+fitted_values_first_fold = fitted(crude_model_first_fold)
+
+# Create a basic residuals plot
+plot(fitted_values_first_fold, residuals_first_fold,
+     xlab = "Fitted Values", ylab = "Residuals",
+     main = "Residuals vs Fitted Values for the First Fold's Crude Model")
+abline(h = 0, col = "red") # Add a horizontal line at 0 for reference
+
+# If you want to add a smoother to help visualize any trends, you can use:
+# Lowess smoothing (locally weighted scatterplot smoothing)
+lines(lowess(fitted_values_first_fold, residuals_first_fold), col = "blue")
+
+```
 
 
