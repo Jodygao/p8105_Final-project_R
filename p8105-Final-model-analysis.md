@@ -102,6 +102,14 @@ cv_results =
     rmse_fast_adjusted = map2_dbl(model_fast_adjusted, test, \(mod, df) rmse(mod, df)),
     rmse_fast_inter = map2_dbl(model_fast_inter, test, \(mod, df) rmse(mod, df))
   )
+cv_results =
+  cv_df |> 
+  mutate(
+    model_frozen = map(train, \(df) lm(bmi ~ freq_frozen*education + freq_frozen*income_to_poverty + freq_frozen + age + gender + marital_status + race + education + income_to_poverty, data = df))
+  ) |> 
+  mutate(
+    rmse_frozen = map2_dbl(model_frozen, test, \(mod, df) rmse(mod, df))
+  )
 ```
 
 # plot and compare the three models
@@ -119,12 +127,10 @@ cv_results |>
   summarize(m_rmse = mean(rmse))
 ```
 
-    ## # A tibble: 3 × 2
-    ##   model_type    m_rmse
-    ##   <chr>          <dbl>
-    ## 1 fast_adjusted   11.1
-    ## 2 fast_crude      14.6
-    ## 3 fast_inter      12.2
+    ## # A tibble: 1 × 2
+    ##   model_type m_rmse
+    ##   <chr>       <dbl>
+    ## 1 frozen       9.82
 
 ``` r
 cv_results |> 
@@ -221,9 +227,9 @@ cv_results_sedentary |>
     ## # A tibble: 3 × 2
     ##   model_type m_rmse
     ##   <chr>       <dbl>
-    ## 1 adjusted     7.65
-    ## 2 crude        7.60
-    ## 3 inter        7.65
+    ## 1 adjusted     7.64
+    ## 2 crude        7.59
+    ## 3 inter        7.64
 
 In the context of these models, a lower RMSE indicates a more accurate
 prediction of BMI from the predictors used in the model.
@@ -265,19 +271,19 @@ print(summary_crude_example)
     ## 
     ## Residuals:
     ##     Min      1Q  Median      3Q     Max 
-    ## -17.172  -5.244  -1.281   3.840  52.476 
+    ## -17.094  -5.135  -1.277   3.813  61.185 
     ## 
     ## Coefficients:
     ##                     Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)        2.840e+01  1.898e-01 149.600   <2e-16 ***
-    ## sedentary_activity 4.684e-03  4.802e-04   9.754   <2e-16 ***
+    ## (Intercept)        2.822e+01  1.888e-01  149.44   <2e-16 ***
+    ## sedentary_activity 4.827e-03  4.783e-04   10.09   <2e-16 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 7.57 on 5990 degrees of freedom
-    ##   (3118 observations deleted due to missingness)
-    ## Multiple R-squared:  0.01563,    Adjusted R-squared:  0.01547 
-    ## F-statistic: 95.14 on 1 and 5990 DF,  p-value: < 2.2e-16
+    ## Residual standard error: 7.522 on 5966 degrees of freedom
+    ##   (3142 observations deleted due to missingness)
+    ## Multiple R-squared:  0.01678,    Adjusted R-squared:  0.01662 
+    ## F-statistic: 101.8 on 1 and 5966 DF,  p-value: < 2.2e-16
 
 ## Interpretation of the crude model (activity)
 

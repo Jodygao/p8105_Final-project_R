@@ -113,6 +113,15 @@ cv_results =
     rmse_fast_adjusted = map2_dbl(model_fast_adjusted, test, \(mod, df) rmse(mod, df)),
     rmse_fast_inter = map2_dbl(model_fast_inter, test, \(mod, df) rmse(mod, df))
   )
+cv_results =
+  cv_df |> 
+  mutate(
+    model_frozen = map(train, \(df) lm(bmi ~ freq_frozen*education + freq_frozen*income_to_poverty + freq_frozen + age + gender + marital_status + race + education + income_to_poverty, data = df))
+  ) |> 
+  mutate(
+    rmse_frozen = map2_dbl(model_frozen, test, \(mod, df) rmse(mod, df))
+  )
+
 ```
 
 # plot and compare the three models
