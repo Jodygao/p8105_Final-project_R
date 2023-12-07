@@ -272,3 +272,39 @@ lines(lowess(fitted_values_first_fold, residuals_first_fold), col = "blue")
 ```
 
 
+# Regression Models and Diagnostics
+
+Model1: log(BMI)=freq_fast
+```{r}
+
+# Crude model for freq_fast_food
+freq_fast_crude = lm(log(bmi) ~ freq_fast_food, data = obesity)
+
+obesity |> modelr::add_residuals(freq_fast_crude) |> 
+  ggplot(aes(sample = resid))+stat_qq()+stat_qq_line()
+
+
+```
+
+Model2: log(BMI)=sedentary activity
+```{r}
+
+# Crude model for inactivity
+inactivity_crude = lm(log(bmi) ~ sedentary_activity, data = obesity)
+
+obesity |> modelr::add_residuals(inactivity_crude) |> 
+  ggplot(aes(sample = resid))+stat_qq()+stat_qq_line()
+```
+
+Model3: log(BMI)=freqence of frozen
+```{r}
+
+# Crude model for freq_frozen
+freq_frozen_crude = lm(log(bmi) ~ freq_frozen, data = obesity)
+
+
+obesity |> modelr::add_residuals(freq_frozen_crude) |> 
+  ggplot(aes(sample = resid))+stat_qq()+stat_qq_line()
+
+```
+

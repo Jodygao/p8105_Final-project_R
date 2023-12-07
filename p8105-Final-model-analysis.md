@@ -130,7 +130,7 @@ cv_results |>
     ## # A tibble: 1 × 2
     ##   model_type m_rmse
     ##   <chr>       <dbl>
-    ## 1 frozen       9.82
+    ## 1 frozen       10.1
 
 ``` r
 cv_results |> 
@@ -227,9 +227,9 @@ cv_results_sedentary |>
     ## # A tibble: 3 × 2
     ##   model_type m_rmse
     ##   <chr>       <dbl>
-    ## 1 adjusted     7.64
-    ## 2 crude        7.59
-    ## 3 inter        7.64
+    ## 1 adjusted     7.61
+    ## 2 crude        7.58
+    ## 3 inter        7.61
 
 In the context of these models, a lower RMSE indicates a more accurate
 prediction of BMI from the predictors used in the model.
@@ -271,19 +271,19 @@ print(summary_crude_example)
     ## 
     ## Residuals:
     ##     Min      1Q  Median      3Q     Max 
-    ## -17.094  -5.135  -1.277   3.813  61.185 
+    ## -17.227  -5.193  -1.231   3.788  61.054 
     ## 
     ## Coefficients:
     ##                     Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)        2.822e+01  1.888e-01  149.44   <2e-16 ***
-    ## sedentary_activity 4.827e-03  4.783e-04   10.09   <2e-16 ***
+    ## (Intercept)        2.834e+01  1.914e-01  148.10   <2e-16 ***
+    ## sedentary_activity 4.842e-03  4.852e-04    9.98   <2e-16 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 7.522 on 5966 degrees of freedom
-    ##   (3142 observations deleted due to missingness)
-    ## Multiple R-squared:  0.01678,    Adjusted R-squared:  0.01662 
-    ## F-statistic: 101.8 on 1 and 5966 DF,  p-value: < 2.2e-16
+    ## Residual standard error: 7.602 on 5994 degrees of freedom
+    ##   (3114 observations deleted due to missingness)
+    ## Multiple R-squared:  0.01634,    Adjusted R-squared:  0.01618 
+    ## F-statistic: 99.59 on 1 and 5994 DF,  p-value: < 2.2e-16
 
 ## Interpretation of the crude model (activity)
 
@@ -336,3 +336,54 @@ lines(lowess(fitted_values_first_fold, residuals_first_fold), col = "blue")
 ```
 
 ![](p8105-Final-model-analysis_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+# Regression Models and Diagnostics
+
+Model1: log(BMI)=freq_fast
+
+``` r
+# Crude model for freq_fast_food
+freq_fast_crude = lm(log(bmi) ~ freq_fast_food, data = obesity)
+
+obesity |> modelr::add_residuals(freq_fast_crude) |> 
+  ggplot(aes(sample = resid))+stat_qq()+stat_qq_line()
+```
+
+    ## Warning: Removed 2345 rows containing non-finite values (`stat_qq()`).
+
+    ## Warning: Removed 2345 rows containing non-finite values (`stat_qq_line()`).
+
+![](p8105-Final-model-analysis_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+Model2: log(BMI)=sedentary activity
+
+``` r
+# Crude model for inactivity
+inactivity_crude = lm(log(bmi) ~ sedentary_activity, data = obesity)
+
+obesity |> modelr::add_residuals(inactivity_crude) |> 
+  ggplot(aes(sample = resid))+stat_qq()+stat_qq_line()
+```
+
+    ## Warning: Removed 3879 rows containing non-finite values (`stat_qq()`).
+
+    ## Warning: Removed 3879 rows containing non-finite values (`stat_qq_line()`).
+
+![](p8105-Final-model-analysis_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+
+Model3: log(BMI)=freqence of frozen
+
+``` r
+# Crude model for freq_frozen
+freq_frozen_crude = lm(log(bmi) ~ freq_frozen, data = obesity)
+
+
+obesity |> modelr::add_residuals(freq_frozen_crude) |> 
+  ggplot(aes(sample = resid))+stat_qq()+stat_qq_line()
+```
+
+    ## Warning: Removed 38 rows containing non-finite values (`stat_qq()`).
+
+    ## Warning: Removed 38 rows containing non-finite values (`stat_qq_line()`).
+
+![](p8105-Final-model-analysis_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
