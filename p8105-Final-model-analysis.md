@@ -172,9 +172,9 @@ cv_results |>
     ## # A tibble: 3 × 2
     ##   model_type    m_rmse
     ##   <chr>          <dbl>
-    ## 1 fast_adjusted  0.347
-    ## 2 fast_crude     0.550
-    ## 3 fast_inter     0.395
+    ## 1 fast_adjusted  0.323
+    ## 2 fast_crude     0.498
+    ## 3 fast_inter     0.344
 
 ``` r
 cv_results |> 
@@ -356,24 +356,24 @@ print(best_model_summary)
     ## 
     ## Residuals:
     ##      Min       1Q   Median       3Q      Max 
-    ## -0.72494 -0.15281 -0.00969  0.14830  1.13099 
+    ## -0.74286 -0.15466 -0.00925  0.14627  1.12170 
     ## 
     ## Coefficients:
     ##                                            Estimate Std. Error t value Pr(>|t|)
-    ## (Intercept)                               3.362e+00  1.857e-02 180.990  < 2e-16
-    ## sedentary_activity                        2.007e-04  1.887e-05  10.635  < 2e-16
-    ## age                                       3.282e-04  2.400e-04   1.368  0.17142
-    ## genderMale                               -3.959e-02  7.440e-03  -5.320 1.09e-07
-    ## marital_statusNever married              -3.063e-02  1.054e-02  -2.906  0.00368
-    ## marital_statusWidowed/Divorced/Separated -3.017e-02  9.449e-03  -3.193  0.00142
-    ## raceMexican American                      2.973e-03  1.289e-02   0.231  0.81755
-    ## raceOther                                -1.690e-01  1.512e-02 -11.178  < 2e-16
-    ## raceOther Hispanic                       -1.690e-02  1.322e-02  -1.278  0.20118
-    ## raceWhite                                -4.643e-02  9.215e-03  -5.039 4.90e-07
-    ## educationHigh school graduate             4.930e-03  1.177e-02   0.419  0.67522
-    ## educationLess than 9th grade             -4.696e-03  1.594e-02  -0.295  0.76824
-    ## educationSome college or AA degree        9.473e-03  1.166e-02   0.813  0.41653
-    ## income_to_poverty                         4.742e-04  2.707e-03   0.175  0.86097
+    ## (Intercept)                               3.373e+00  1.875e-02 179.910  < 2e-16
+    ## sedentary_activity                        1.753e-04  1.902e-05   9.215  < 2e-16
+    ## age                                       2.542e-04  2.428e-04   1.047 0.295121
+    ## genderMale                               -4.675e-02  7.506e-03  -6.228 5.19e-10
+    ## marital_statusNever married              -2.834e-02  1.058e-02  -2.679 0.007423
+    ## marital_statusWidowed/Divorced/Separated -2.961e-02  9.662e-03  -3.064 0.002195
+    ## raceMexican American                     -1.085e-02  1.269e-02  -0.855 0.392727
+    ## raceOther                                -1.664e-01  1.519e-02 -10.953  < 2e-16
+    ## raceOther Hispanic                       -1.945e-02  1.339e-02  -1.453 0.146268
+    ## raceWhite                                -3.598e-02  9.357e-03  -3.845 0.000122
+    ## educationHigh school graduate             1.718e-02  1.191e-02   1.442 0.149283
+    ## educationLess than 9th grade              5.379e-03  1.608e-02   0.335 0.737935
+    ## educationSome college or AA degree        2.145e-02  1.173e-02   1.829 0.067442
+    ## income_to_poverty                        -1.433e-03  2.723e-03  -0.526 0.598765
     ##                                             
     ## (Intercept)                              ***
     ## sedentary_activity                       ***
@@ -387,15 +387,15 @@ print(best_model_summary)
     ## raceWhite                                ***
     ## educationHigh school graduate               
     ## educationLess than 9th grade                
-    ## educationSome college or AA degree          
+    ## educationSome college or AA degree       .  
     ## income_to_poverty                           
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 0.2322 on 4023 degrees of freedom
-    ##   (5073 observations deleted due to missingness)
-    ## Multiple R-squared:  0.06665,    Adjusted R-squared:  0.06363 
-    ## F-statistic:  22.1 on 13 and 4023 DF,  p-value: < 2.2e-16
+    ## Residual standard error: 0.2347 on 4048 degrees of freedom
+    ##   (5048 observations deleted due to missingness)
+    ## Multiple R-squared:  0.06094,    Adjusted R-squared:  0.05793 
+    ## F-statistic: 20.21 on 13 and 4048 DF,  p-value: < 2.2e-16
 
 ``` r
 # Plotting the 'adjusted' model's fitted values vs. residuals
@@ -463,17 +463,213 @@ response variable is log-transformed, the interpretation is in terms of
 percentage change (for continuous predictors) or relative percentage
 difference (for categorical predictors) in BMI.
 
-# Cross-Validation and Model Comparison for Predicting BMI Based on Frozen Fast Food Frequency
+# Cross-Validation and Model Buildup for Predicting BMI Based on Frozen Fast Food Frequency
 
 ``` r
-cv_results =
-  cv_df |> 
+cv_df_frozen = 
+  obesity |> 
+  crossv_mc(n = 100) |> 
   mutate(
-    model_frozen = map(train, \(df) lm(log(bmi) ~ freq_frozen*education + freq_frozen*income_to_poverty + freq_frozen + age + gender + marital_status + race + education + income_to_poverty, data = df))
+    train = map(train, as_tibble),
+    test = map(test, as_tibble)
+  )
+```
+
+# Model building for frozen fast food with log(BMI)
+
+``` r
+cv_results_frozen =
+  cv_df_frozen |> 
+  mutate(
+    model_frozen_crude = map(train, \(df) lm(log(bmi) ~ freq_frozen, data = df)),
+    model_frozen_adjusted = map(train, \(df) lm(log(bmi) ~ freq_frozen + age + gender + marital_status + race + education + income_to_poverty, data = df)),
+    model_frozen_inter = map(train, \(df) lm(log(bmi) ~ freq_frozen * education + freq_frozen * income_to_poverty + freq_frozen + age + gender + marital_status + race + education + income_to_poverty, data = df))
   ) |> 
   mutate(
-    rmse_frozen = map2_dbl(model_frozen, test, \(mod, df) rmse(mod, df)))
+    rmse_frozen_crude = map2_dbl(model_frozen_crude, test, \(mod, df) rmse(mod, df)),
+    rmse_frozen_adjusted = map2_dbl(model_frozen_adjusted, test, \(mod, df) rmse(mod, df)),
+    rmse_frozen_inter = map2_dbl(model_frozen_inter, test, \(mod, df) rmse(mod, df))
+  )
 ```
+
+# Cross-validation comparison
+
+``` r
+cv_results_frozen |> 
+  select(starts_with("rmse_frozen")) |> 
+  pivot_longer(
+    everything(),
+    names_to = "model_type",
+    values_to = "rmse",
+    names_prefix = "rmse_frozen_"
+  ) |> 
+  ggplot(aes(x = model_type, y = rmse)) +
+  geom_violin()
+```
+
+![](p8105-Final-model-analysis_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+
+# Summary of Cross-Validation Results
+
+``` r
+cv_results_frozen |> 
+  select(starts_with("rmse_frozen")) |> 
+  pivot_longer(
+    everything(),
+    names_to = "model_type",
+    values_to = "rmse",
+    names_prefix = "rmse_frozen_"
+  ) |> 
+  group_by(model_type) |> 
+  summarize(m_rmse = mean(rmse))
+```
+
+    ## # A tibble: 3 × 2
+    ##   model_type m_rmse
+    ##   <chr>       <dbl>
+    ## 1 adjusted    0.243
+    ## 2 crude       0.309
+    ## 3 inter       0.336
+
+# Model Plot for Adjusted Model
+
+# Generate new data for plotting
+
+``` r
+obesity$marital_status <- factor(obesity$marital_status)
+obesity$race <- factor(obesity$race)
+obesity$education <- factor(obesity$education)
+
+new_data_frozen <- expand.grid(
+  freq_frozen = seq(min(obesity$freq_frozen, na.rm = TRUE), max(obesity$freq_frozen, na.rm = TRUE), length.out = 100),
+  age = mean(obesity$age, na.rm = TRUE),
+  gender = levels(obesity$gender)[1],
+  marital_status = levels(obesity$marital_status)[1],
+  race = levels(obesity$race)[1],
+  education = levels(obesity$education)[1],
+  income_to_poverty = mean(obesity$income_to_poverty, na.rm = TRUE)
+)
+
+str(new_data_frozen)
+```
+
+    ## 'data.frame':    100 obs. of  7 variables:
+    ##  $ freq_frozen      : num  0 67.3 134.7 202 269.3 ...
+    ##  $ age              : num  35.6 35.6 35.6 35.6 35.6 ...
+    ##  $ gender           : Factor w/ 1 level "Female": 1 1 1 1 1 1 1 1 1 1 ...
+    ##  $ marital_status   : Factor w/ 1 level "Married": 1 1 1 1 1 1 1 1 1 1 ...
+    ##  $ race             : Factor w/ 1 level "Black": 1 1 1 1 1 1 1 1 1 1 ...
+    ##  $ education        : Factor w/ 1 level "9-11th grade": 1 1 1 1 1 1 1 1 1 1 ...
+    ##  $ income_to_poverty: num  2.42 2.42 2.42 2.42 2.42 ...
+    ##  - attr(*, "out.attrs")=List of 2
+    ##   ..$ dim     : Named int [1:7] 100 1 1 1 1 1 1
+    ##   .. ..- attr(*, "names")= chr [1:7] "freq_frozen" "age" "gender" "marital_status" ...
+    ##   ..$ dimnames:List of 7
+    ##   .. ..$ freq_frozen      : chr [1:100] "freq_frozen=   0.00000" "freq_frozen=  67.33333" "freq_frozen= 134.66667" "freq_frozen= 202.00000" ...
+    ##   .. ..$ age              : chr "age=35.62302"
+    ##   .. ..$ gender           : chr "gender=Female"
+    ##   .. ..$ marital_status   : chr "marital_status=Married"
+    ##   .. ..$ race             : chr "race=Black"
+    ##   .. ..$ education        : chr "education=9-11th grade"
+    ##   .. ..$ income_to_poverty: chr "income_to_poverty=2.42299"
+
+# Predict log(BMI) using the adjusted model and the new data
+
+``` r
+adjusted_model_frozen <- cv_results_frozen$model_frozen_adjusted[[1]]
+new_data_frozen$log_bmi_pred <- predict(adjusted_model_frozen, newdata = new_data_frozen)
+
+# Plot the predicted values
+ggplot(new_data_frozen, aes(x = freq_frozen, y = log_bmi_pred)) +
+  geom_line(color = "purple") +
+  labs(title = "Predicted Log BMI vs Frozen Fast Food Frequency",
+       x = "Frozen Fast Food Frequency",
+       y = "Predicted Log BMI") +
+  theme_minimal()
+```
+
+![](p8105-Final-model-analysis_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+\# Summary of the best ‘adjusted’ model from cross-validation
+
+``` r
+best_adjusted_model_summary <- cv_results_frozen$model_frozen_adjusted[[1]] %>% summary()
+
+# Print the summary which includes coefficients, R-squared, p-values...
+print(best_adjusted_model_summary)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = log(bmi) ~ freq_frozen + age + gender + marital_status + 
+    ##     race + education + income_to_poverty, data = df)
+    ## 
+    ## Residuals:
+    ##      Min       1Q   Median       3Q      Max 
+    ## -0.77008 -0.15912 -0.00805  0.14561  1.10981 
+    ## 
+    ## Coefficients:
+    ##                                            Estimate Std. Error t value Pr(>|t|)
+    ## (Intercept)                               3.409e+00  1.828e-02 186.500  < 2e-16
+    ## freq_frozen                              -4.291e-06  2.510e-05  -0.171  0.86427
+    ## age                                       1.858e-04  2.437e-04   0.762  0.44584
+    ## genderMale                               -3.741e-02  7.543e-03  -4.960 7.34e-07
+    ## marital_statusNever married              -2.461e-02  1.067e-02  -2.308  0.02106
+    ## marital_statusWidowed/Divorced/Separated -2.941e-02  9.630e-03  -3.054  0.00227
+    ## raceMexican American                      3.671e-03  1.288e-02   0.285  0.77574
+    ## raceOther                                -1.553e-01  1.553e-02  -9.999  < 2e-16
+    ## raceOther Hispanic                       -2.401e-02  1.316e-02  -1.824  0.06818
+    ## raceWhite                                -2.382e-02  9.382e-03  -2.539  0.01117
+    ## educationHigh school graduate             1.253e-02  1.190e-02   1.053  0.29238
+    ## educationLess than 9th grade              6.078e-03  1.628e-02   0.373  0.70897
+    ## educationSome college or AA degree        2.402e-02  1.176e-02   2.042  0.04123
+    ## income_to_poverty                         2.054e-03  2.742e-03   0.749  0.45381
+    ##                                             
+    ## (Intercept)                              ***
+    ## freq_frozen                                 
+    ## age                                         
+    ## genderMale                               ***
+    ## marital_statusNever married              *  
+    ## marital_statusWidowed/Divorced/Separated ** 
+    ## raceMexican American                        
+    ## raceOther                                ***
+    ## raceOther Hispanic                       .  
+    ## raceWhite                                *  
+    ## educationHigh school graduate               
+    ## educationLess than 9th grade                
+    ## educationSome college or AA degree       *  
+    ## income_to_poverty                           
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 0.2363 on 4049 degrees of freedom
+    ##   (5047 observations deleted due to missingness)
+    ## Multiple R-squared:  0.03455,    Adjusted R-squared:  0.03146 
+    ## F-statistic: 11.15 on 13 and 4049 DF,  p-value: < 2.2e-16
+
+# Create a residuals plot for the ‘adjusted’ model
+
+``` r
+adjusted_model <- cv_results_frozen$model_frozen_adjusted[[1]]
+adjusted_model_residuals <- resid(adjusted_model)
+adjusted_model_fitted <- fitted(adjusted_model)
+
+# Plot the residuals against the fitted values
+residual_plot <- ggplot() +
+  geom_point(aes(x = adjusted_model_fitted, y = adjusted_model_residuals)) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
+  labs(title = "Residuals vs Fitted Values for Adjusted Model",
+       x = "Fitted Values",
+       y = "Residuals") +
+  theme_minimal() +
+  geom_smooth(aes(x = adjusted_model_fitted, y = adjusted_model_residuals), method = "loess", se = FALSE)
+
+# Print the residual plot
+print(residual_plot)
+```
+
+    ## `geom_smooth()` using formula = 'y ~ x'
+
+![](p8105-Final-model-analysis_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
 # Regression Models and Diagnostics
 
@@ -491,7 +687,7 @@ obesity |> modelr::add_residuals(freq_fast_crude) |>
 
     ## Warning: Removed 2345 rows containing non-finite values (`stat_qq_line()`).
 
-![](p8105-Final-model-analysis_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+![](p8105-Final-model-analysis_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
 Model2: log(BMI)=sedentary activity
 
@@ -507,7 +703,7 @@ obesity |> modelr::add_residuals(inactivity_crude) |>
 
     ## Warning: Removed 3879 rows containing non-finite values (`stat_qq_line()`).
 
-![](p8105-Final-model-analysis_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+![](p8105-Final-model-analysis_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
 Model3: log(BMI)=freqence of frozen
 
@@ -524,4 +720,4 @@ obesity |> modelr::add_residuals(freq_frozen_crude) |>
 
     ## Warning: Removed 38 rows containing non-finite values (`stat_qq_line()`).
 
-![](p8105-Final-model-analysis_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](p8105-Final-model-analysis_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->

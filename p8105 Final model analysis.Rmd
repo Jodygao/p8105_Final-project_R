@@ -330,19 +330,124 @@ Overall Interpretation:
 The significant predictors in the model, like `sedentary activity` and `gender`, indicate factors that are associated with `BMI`. However, the small R-squared value suggests that many other factors not included in the model also influence `BMI`.
 Given that the response variable is log-transformed, the interpretation is in terms of percentage change (for continuous predictors) or relative percentage difference (for categorical predictors) in BMI.
 
-# Cross-Validation and Model Comparison for Predicting BMI Based on Frozen Fast Food Frequency
+
+# Cross-Validation and Model Buildup  for Predicting BMI Based on Frozen Fast Food Frequency
 ```{r}
-cv_results =
-  cv_df |> 
+cv_df_frozen = 
+  obesity |> 
+  crossv_mc(n = 100) |> 
   mutate(
-    model_frozen = map(train, \(df) lm(log(bmi) ~ freq_frozen*education + freq_frozen*income_to_poverty + freq_frozen + age + gender + marital_status + race + education + income_to_poverty, data = df))
-  ) |> 
-  mutate(
-    rmse_frozen = map2_dbl(model_frozen, test, \(mod, df) rmse(mod, df)))
+    train = map(train, as_tibble),
+    test = map(test, as_tibble)
+  )
+
 ```
 
+# Model building for frozen fast food with log(BMI)
+```{r}
+cv_results_frozen =
+  cv_df_frozen |> 
+  mutate(
+    model_frozen_crude = map(train, \(df) lm(log(bmi) ~ freq_frozen, data = df)),
+    model_frozen_adjusted = map(train, \(df) lm(log(bmi) ~ freq_frozen + age + gender + marital_status + race + education + income_to_poverty, data = df)),
+    model_frozen_inter = map(train, \(df) lm(log(bmi) ~ freq_frozen * education + freq_frozen * income_to_poverty + freq_frozen + age + gender + marital_status + race + education + income_to_poverty, data = df))
+  ) |> 
+  mutate(
+    rmse_frozen_crude = map2_dbl(model_frozen_crude, test, \(mod, df) rmse(mod, df)),
+    rmse_frozen_adjusted = map2_dbl(model_frozen_adjusted, test, \(mod, df) rmse(mod, df)),
+    rmse_frozen_inter = map2_dbl(model_frozen_inter, test, \(mod, df) rmse(mod, df))
+  )
+```
+
+# Cross-validation comparison
+```{r}
+cv_results_frozen |> 
+  select(starts_with("rmse_frozen")) |> 
+  pivot_longer(
+    everything(),
+    names_to = "model_type",
+    values_to = "rmse",
+    names_prefix = "rmse_frozen_"
+  ) |> 
+  ggplot(aes(x = model_type, y = rmse)) +
+  geom_violin()
+```
+
+# Summary of Cross-Validation Results
+```{r}
+cv_results_frozen |> 
+  select(starts_with("rmse_frozen")) |> 
+  pivot_longer(
+    everything(),
+    names_to = "model_type",
+    values_to = "rmse",
+    names_prefix = "rmse_frozen_"
+  ) |> 
+  group_by(model_type) |> 
+  summarize(m_rmse = mean(rmse))
+```
+# Model Plot for Adjusted Model
+# Generate new data for plotting
+```{r}
+obesity$marital_status <- factor(obesity$marital_status)
+obesity$race <- factor(obesity$race)
+obesity$education <- factor(obesity$education)
+
+new_data_frozen <- expand.grid(
+  freq_frozen = seq(min(obesity$freq_frozen, na.rm = TRUE), max(obesity$freq_frozen, na.rm = TRUE), length.out = 100),
+  age = mean(obesity$age, na.rm = TRUE),
+  gender = levels(obesity$gender)[1],
+  marital_status = levels(obesity$marital_status)[1],
+  race = levels(obesity$race)[1],
+  education = levels(obesity$education)[1],
+  income_to_poverty = mean(obesity$income_to_poverty, na.rm = TRUE)
+)
+
+str(new_data_frozen)
 
 
+```
+# Predict log(BMI) using the adjusted model and the new data
+```{r}
+
+adjusted_model_frozen <- cv_results_frozen$model_frozen_adjusted[[1]]
+new_data_frozen$log_bmi_pred <- predict(adjusted_model_frozen, newdata = new_data_frozen)
+
+# Plot the predicted values
+ggplot(new_data_frozen, aes(x = freq_frozen, y = log_bmi_pred)) +
+  geom_line(color = "purple") +
+  labs(title = "Predicted Log BMI vs Frozen Fast Food Frequency",
+       x = "Frozen Fast Food Frequency",
+       y = "Predicted Log BMI") +
+  theme_minimal()
+```
+# Summary of the best 'adjusted' model from cross-validation
+```{r}
+best_adjusted_model_summary <- cv_results_frozen$model_frozen_adjusted[[1]] %>% summary()
+
+# Print the summary which includes coefficients, R-squared, p-values...
+print(best_adjusted_model_summary)
+```
+# Create a residuals plot for the 'adjusted' model
+```{r}
+adjusted_model <- cv_results_frozen$model_frozen_adjusted[[1]]
+adjusted_model_residuals <- resid(adjusted_model)
+adjusted_model_fitted <- fitted(adjusted_model)
+
+# Plot the residuals against the fitted values
+residual_plot <- ggplot() +
+  geom_point(aes(x = adjusted_model_fitted, y = adjusted_model_residuals)) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
+  labs(title = "Residuals vs Fitted Values for Adjusted Model",
+       x = "Fitted Values",
+       y = "Residuals") +
+  theme_minimal() +
+  geom_smooth(aes(x = adjusted_model_fitted, y = adjusted_model_residuals), method = "loess", se = FALSE)
+
+# Print the residual plot
+print(residual_plot)
+
+```
 
 # Regression Models and Diagnostics
 
