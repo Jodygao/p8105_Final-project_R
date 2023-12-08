@@ -172,9 +172,9 @@ cv_results |>
     ## # A tibble: 3 × 2
     ##   model_type    m_rmse
     ##   <chr>          <dbl>
-    ## 1 fast_adjusted  0.315
-    ## 2 fast_crude     0.481
-    ## 3 fast_inter     0.346
+    ## 1 fast_adjusted  0.347
+    ## 2 fast_crude     0.550
+    ## 3 fast_inter     0.395
 
 ``` r
 cv_results |> 
@@ -229,8 +229,6 @@ ggplot(obesity, aes(x = sedentary_activity)) +
 ![](p8105-Final-model-analysis_files/figure-gfm/distribution-1.png)<!-- -->
 
 # Step 1: Model building for sedentary activity with log(BMI)
-
-# Step 1: model building
 
 ``` r
 cv_df_sedentary = 
@@ -317,6 +315,33 @@ make the model more complex and harder to interpret. We proceed the
 model statitics in adjusted model for sedentary activity.
 
 ``` r
+# Step 1: Generate new data for plotting
+new_data <- with(obesity, expand.grid(
+  sedentary_activity = seq(min(sedentary_activity, na.rm = TRUE), max(sedentary_activity, na.rm = TRUE), length.out = 100),
+  age = mean(age, na.rm = TRUE),
+  gender = "Female", 
+  marital_status = "Married", 
+  race = "White", 
+  education = "Less than 9th grade", 
+  income_to_poverty = mean(income_to_poverty, na.rm = TRUE)
+))
+
+# Step 2: Predict log(BMI) using the adjusted model and the new data
+adjusted_model <- cv_results_sedentary$model_sed_adjusted[[1]]
+new_data$log_bmi_pred <- predict(adjusted_model, newdata = new_data)
+
+# Step 3: Create the plot
+ggplot(new_data, aes(x = sedentary_activity, y = log_bmi_pred)) +
+  geom_line(color = "blue") +
+  labs(title = "Predicted Log BMI vs Sedentary Activity",
+       x = "Sedentary Activity",
+       y = "Predicted Log BMI") +
+  theme_minimal()
+```
+
+![](p8105-Final-model-analysis_files/figure-gfm/model%20plot%20for%20adjusted%20model-1.png)<!-- -->
+
+``` r
 # Extract the summary of the 'adjusted' model
 best_model_summary <- cv_results_sedentary$model_sed_adjusted[[1]] %>% summary()
 
@@ -331,31 +356,31 @@ print(best_model_summary)
     ## 
     ## Residuals:
     ##      Min       1Q   Median       3Q      Max 
-    ## -0.73644 -0.15414 -0.00622  0.14595  1.11803 
+    ## -0.72494 -0.15281 -0.00969  0.14830  1.13099 
     ## 
     ## Coefficients:
     ##                                            Estimate Std. Error t value Pr(>|t|)
-    ## (Intercept)                               3.374e+00  1.862e-02 181.146  < 2e-16
-    ## sedentary_activity                        1.842e-04  1.864e-05   9.885  < 2e-16
-    ## age                                       1.891e-04  2.405e-04   0.786 0.431702
-    ## genderMale                               -4.631e-02  7.431e-03  -6.232 5.07e-10
-    ## marital_statusNever married              -2.312e-02  1.052e-02  -2.198 0.027973
-    ## marital_statusWidowed/Divorced/Separated -3.660e-02  9.523e-03  -3.843 0.000123
-    ## raceMexican American                     -6.484e-04  1.254e-02  -0.052 0.958764
-    ## raceOther                                -1.733e-01  1.516e-02 -11.436  < 2e-16
-    ## raceOther Hispanic                       -1.563e-02  1.320e-02  -1.184 0.236561
-    ## raceWhite                                -3.790e-02  9.231e-03  -4.106 4.11e-05
-    ## educationHigh school graduate             1.279e-02  1.178e-02   1.085 0.277905
-    ## educationLess than 9th grade              5.585e-03  1.597e-02   0.350 0.726555
-    ## educationSome college or AA degree        1.585e-02  1.169e-02   1.356 0.175310
-    ## income_to_poverty                         3.923e-04  2.694e-03   0.146 0.884240
+    ## (Intercept)                               3.362e+00  1.857e-02 180.990  < 2e-16
+    ## sedentary_activity                        2.007e-04  1.887e-05  10.635  < 2e-16
+    ## age                                       3.282e-04  2.400e-04   1.368  0.17142
+    ## genderMale                               -3.959e-02  7.440e-03  -5.320 1.09e-07
+    ## marital_statusNever married              -3.063e-02  1.054e-02  -2.906  0.00368
+    ## marital_statusWidowed/Divorced/Separated -3.017e-02  9.449e-03  -3.193  0.00142
+    ## raceMexican American                      2.973e-03  1.289e-02   0.231  0.81755
+    ## raceOther                                -1.690e-01  1.512e-02 -11.178  < 2e-16
+    ## raceOther Hispanic                       -1.690e-02  1.322e-02  -1.278  0.20118
+    ## raceWhite                                -4.643e-02  9.215e-03  -5.039 4.90e-07
+    ## educationHigh school graduate             4.930e-03  1.177e-02   0.419  0.67522
+    ## educationLess than 9th grade             -4.696e-03  1.594e-02  -0.295  0.76824
+    ## educationSome college or AA degree        9.473e-03  1.166e-02   0.813  0.41653
+    ## income_to_poverty                         4.742e-04  2.707e-03   0.175  0.86097
     ##                                             
     ## (Intercept)                              ***
     ## sedentary_activity                       ***
     ## age                                         
     ## genderMale                               ***
-    ## marital_statusNever married              *  
-    ## marital_statusWidowed/Divorced/Separated ***
+    ## marital_statusNever married              ** 
+    ## marital_statusWidowed/Divorced/Separated ** 
     ## raceMexican American                        
     ## raceOther                                ***
     ## raceOther Hispanic                          
@@ -367,10 +392,10 @@ print(best_model_summary)
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 0.234 on 4096 degrees of freedom
-    ##   (5000 observations deleted due to missingness)
-    ## Multiple R-squared:  0.06637,    Adjusted R-squared:  0.0634 
-    ## F-statistic:  22.4 on 13 and 4096 DF,  p-value: < 2.2e-16
+    ## Residual standard error: 0.2322 on 4023 degrees of freedom
+    ##   (5073 observations deleted due to missingness)
+    ## Multiple R-squared:  0.06665,    Adjusted R-squared:  0.06363 
+    ## F-statistic:  22.1 on 13 and 4023 DF,  p-value: < 2.2e-16
 
 ``` r
 # Plotting the 'adjusted' model's fitted values vs. residuals

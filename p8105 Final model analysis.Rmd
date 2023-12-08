@@ -195,7 +195,7 @@ ggplot(obesity, aes(x = sedentary_activity)) +
 ```
 
 # Step 1: Model building for sedentary activity with log(BMI)
-# Step 1: model building
+
 ```{r model building}
 cv_df_sedentary = 
   obesity |> 
@@ -257,6 +257,31 @@ A valid reason we choose the adjusted model over the inter model, despite having
 Moreover, while interaction terms in the inter model may capture the combined effects of sedentary activity with other variables, they can make the model more complex and harder to interpret.
 We proceed the model statitics in adjusted model for sedentary activity.
 
+
+```{r model plot for adjusted model}
+# Step 1: Generate new data for plotting
+new_data <- with(obesity, expand.grid(
+  sedentary_activity = seq(min(sedentary_activity, na.rm = TRUE), max(sedentary_activity, na.rm = TRUE), length.out = 100),
+  age = mean(age, na.rm = TRUE),
+  gender = "Female", 
+  marital_status = "Married", 
+  race = "White", 
+  education = "Less than 9th grade", 
+  income_to_poverty = mean(income_to_poverty, na.rm = TRUE)
+))
+
+# Step 2: Predict log(BMI) using the adjusted model and the new data
+adjusted_model <- cv_results_sedentary$model_sed_adjusted[[1]]
+new_data$log_bmi_pred <- predict(adjusted_model, newdata = new_data)
+
+# Step 3: Create the plot
+ggplot(new_data, aes(x = sedentary_activity, y = log_bmi_pred)) +
+  geom_line(color = "blue") +
+  labs(title = "Predicted Log BMI vs Sedentary Activity",
+       x = "Sedentary Activity",
+       y = "Predicted Log BMI") +
+  theme_minimal()
+```
 
 ```{r}
 # Extract the summary of the 'adjusted' model
