@@ -172,9 +172,9 @@ cv_results |>
     ## # A tibble: 3 × 2
     ##   model_type    m_rmse
     ##   <chr>          <dbl>
-    ## 1 fast_adjusted  0.328
-    ## 2 fast_crude     0.511
-    ## 3 fast_inter     0.349
+    ## 1 fast_adjusted  0.315
+    ## 2 fast_crude     0.481
+    ## 3 fast_inter     0.346
 
 ``` r
 cv_results |> 
@@ -288,9 +288,9 @@ cv_results_sedentary |>
     ## # A tibble: 3 × 2
     ##   model_type m_rmse
     ##   <chr>       <dbl>
-    ## 1 adjusted    0.234
+    ## 1 adjusted    0.235
     ## 2 crude       0.237
-    ## 3 inter       0.234
+    ## 3 inter       0.235
 
 In the context of these models, a lower RMSE indicates a more accurate
 prediction of BMI from the predictors used in the model.
@@ -331,31 +331,31 @@ print(best_model_summary)
     ## 
     ## Residuals:
     ##      Min       1Q   Median       3Q      Max 
-    ## -0.73985 -0.15583 -0.00707  0.14567  1.12498 
+    ## -0.73644 -0.15414 -0.00622  0.14595  1.11803 
     ## 
     ## Coefficients:
     ##                                            Estimate Std. Error t value Pr(>|t|)
-    ## (Intercept)                               3.381e+00  1.881e-02 179.710  < 2e-16
-    ## sedentary_activity                        1.841e-04  1.919e-05   9.595  < 2e-16
-    ## age                                       1.306e-04  2.426e-04   0.538  0.59043
-    ## genderMale                               -4.650e-02  7.510e-03  -6.192 6.52e-10
-    ## marital_statusNever married              -2.829e-02  1.059e-02  -2.672  0.00757
-    ## marital_statusWidowed/Divorced/Separated -3.038e-02  9.583e-03  -3.171  0.00153
-    ## raceMexican American                      6.086e-04  1.274e-02   0.048  0.96190
-    ## raceOther                                -1.795e-01  1.559e-02 -11.513  < 2e-16
-    ## raceOther Hispanic                       -1.480e-02  1.342e-02  -1.103  0.27010
-    ## raceWhite                                -3.800e-02  9.305e-03  -4.084 4.52e-05
-    ## educationHigh school graduate             1.037e-02  1.191e-02   0.871  0.38405
-    ## educationLess than 9th grade              2.548e-03  1.610e-02   0.158  0.87429
-    ## educationSome college or AA degree        1.225e-02  1.180e-02   1.039  0.29904
-    ## income_to_poverty                        -1.051e-03  2.741e-03  -0.383  0.70144
+    ## (Intercept)                               3.374e+00  1.862e-02 181.146  < 2e-16
+    ## sedentary_activity                        1.842e-04  1.864e-05   9.885  < 2e-16
+    ## age                                       1.891e-04  2.405e-04   0.786 0.431702
+    ## genderMale                               -4.631e-02  7.431e-03  -6.232 5.07e-10
+    ## marital_statusNever married              -2.312e-02  1.052e-02  -2.198 0.027973
+    ## marital_statusWidowed/Divorced/Separated -3.660e-02  9.523e-03  -3.843 0.000123
+    ## raceMexican American                     -6.484e-04  1.254e-02  -0.052 0.958764
+    ## raceOther                                -1.733e-01  1.516e-02 -11.436  < 2e-16
+    ## raceOther Hispanic                       -1.563e-02  1.320e-02  -1.184 0.236561
+    ## raceWhite                                -3.790e-02  9.231e-03  -4.106 4.11e-05
+    ## educationHigh school graduate             1.279e-02  1.178e-02   1.085 0.277905
+    ## educationLess than 9th grade              5.585e-03  1.597e-02   0.350 0.726555
+    ## educationSome college or AA degree        1.585e-02  1.169e-02   1.356 0.175310
+    ## income_to_poverty                         3.923e-04  2.694e-03   0.146 0.884240
     ##                                             
     ## (Intercept)                              ***
     ## sedentary_activity                       ***
     ## age                                         
     ## genderMale                               ***
-    ## marital_statusNever married              ** 
-    ## marital_statusWidowed/Divorced/Separated ** 
+    ## marital_statusNever married              *  
+    ## marital_statusWidowed/Divorced/Separated ***
     ## raceMexican American                        
     ## raceOther                                ***
     ## raceOther Hispanic                          
@@ -367,10 +367,10 @@ print(best_model_summary)
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: 0.2355 on 4060 degrees of freedom
-    ##   (5036 observations deleted due to missingness)
-    ## Multiple R-squared:  0.06434,    Adjusted R-squared:  0.06134 
-    ## F-statistic: 21.47 on 13 and 4060 DF,  p-value: < 2.2e-16
+    ## Residual standard error: 0.234 on 4096 degrees of freedom
+    ##   (5000 observations deleted due to missingness)
+    ## Multiple R-squared:  0.06637,    Adjusted R-squared:  0.0634 
+    ## F-statistic:  22.4 on 13 and 4096 DF,  p-value: < 2.2e-16
 
 ``` r
 # Plotting the 'adjusted' model's fitted values vs. residuals
@@ -394,7 +394,7 @@ print(residual_plot)
 
     ## `geom_smooth()` using formula = 'y ~ x'
 
-![](p8105-Final-model-analysis_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+![](p8105-Final-model-analysis_files/figure-gfm/residual%20plot%20for%20activity-1.png)<!-- -->
 
 ## Interpretation of the Adjusted model (activity)
 
