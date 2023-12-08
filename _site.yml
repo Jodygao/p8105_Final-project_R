@@ -1,0 +1,17 @@
+name: "BMI"
+output_dir: "."
+navbar:
+  title: "Home"
+  right:
+    - text: "Prevalence US Map"
+      href: BRFSS Analysis.html
+    - text: "Preliminary Analysis"
+      href: Yi-data clean.html
+    - text: "Exploratory Analysis"
+      href: p8105 Final model analysis.html
+    - icon: fa-github fa-lg
+      href: https://github.com/Jodygao/p8105_Final-project_R.git
+
+output:
+  html_document:
+    theme: cerulean

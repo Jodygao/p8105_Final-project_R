@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="All Group Member Collaboration" />
+
+<meta name="date" content="2023-11-10" />
+
+<title>P8105 Fall 2023 Final Project Proposal</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="Problem-2.html">Problem 2</a>
+</li>
+<li>
+  <a href="mailto:&lt;sw3737@cumc.columbia.edu&gt;">
+    <span class="fa fa-envelope fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="http://github.com/Olivia575757/">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://linkedin.com/in/shiqi-wu-014191273">
+    <span class="fa fa-brands fa-linkedin"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">P8105 Fall 2023 Final Project Proposal</h1>
+<h4 class="author">All Group Member Collaboration</h4>
+<h4 class="date">2023-11-10</h4>
+
+</div>
+
+
+<div id="group-members" class="section level3">
+<h3>Group Members</h3>
+<ul>
+<li>Yuandi Gao (yg2907)</li>
+<li>Yi Li (yl5214)</li>
+<li>Yingting Zhang (yz4434)</li>
+<li>Ruohan Hong (rh3132)</li>
+<li>Shiqi Wu (sw3737)</li>
+</ul>
+</div>
+<div id="import-data-from-nhanes" class="section level2">
+<h2>Import data from NHANES</h2>
+<pre class="r"><code>import_df= function(path){
+  read_xpt(path)
+}
+obesity=
+  import_df(path=&#39;data/P_BMX.XPT&#39;) |&gt; 
+  full_join((import_df(path=&#39;data/P_DEMO.XPT&#39;)), by=&#39;SEQN&#39;) |&gt;
+  full_join((import_df(path=&#39;data/P_PAQ.XPT&#39;)), by=&#39;SEQN&#39;)|&gt;
+  full_join ((import_df(path=&#39;data/P_DBQ.XPT&#39;)), by=&#39;SEQN&#39;) |&gt; 
+  select (SEQN,RIAGENDR,RIDAGEYR,DMDMARTZ,INDFMPIR,RIDRETH3,DMDEDUC2,PAD680,BMXBMI,DBD900,DBD910) |&gt; 
+  filter(
+    !(DMDMARTZ %in% c(&#39;77&#39;,&#39;99&#39;,&#39;.&#39;) ),
+    !(INDFMPIR == &#39;.&#39;),
+    !(DMDEDUC2 %in% c(&#39;7&#39;,&#39;9&#39;,&#39;.&#39;) ),
+    !(PAD680 %in% c(&#39;7777&#39;, &#39;9999&#39;, &#39;.&#39;)),
+    !(BMXBMI ==&#39;.&#39;),
+    !(DBD900 %in% c(&#39;7777&#39;, &#39;9999&#39;, &#39;.&#39;)),
+    !(DBD910 %in% c(&#39;7777&#39;, &#39;9999&#39;, &#39;.&#39;))
+  ) |&gt; 
+  rename(
+    gender=RIAGENDR,
+    age=RIDAGEYR,
+    marital_status=DMDMARTZ,
+    income_to_poverty=INDFMPIR,
+    race=RIDRETH3,
+    education=DMDEDUC2,
+    sedentary_activity=PAD680,
+    bmi=BMXBMI,
+    freq_fast_food=DBD900,
+    freq_frozen=DBD910
+  ) |&gt; 
+  mutate(
+    gender = case_match(
+      gender,
+      1~&quot;Male&quot;,
+      2~&quot;Female&quot;),
+    gender = as.factor(gender),
+  marital_status= case_match(
+    marital_status,
+      1~&quot;Married&quot;,
+      2~&quot;Widowed/Divorced/Separated&quot;,
+      3~&quot;Never married&quot;
+  ),
+    race= case_match(
+    race,
+      1~&quot;Mexican American&quot;,
+      2~&quot;Other Hispanic&quot;,
+      3~&quot;White&quot;,
+      4~&quot;Black&quot;,
+      5~&quot;Asian&quot;,
+      6~&quot;Other&quot;
+     ),
+      education= case_match(
+    education,
+      1~&quot;Less than 9th grade&quot;,
+      2~&quot;9-11th grade&quot;,
+      3~&quot;High school graduate&quot; ,
+      4~&quot;Some college or AA degree&quot;,
+      6~&quot;College graduate or above&quot;
+     ),
+   bmi =case_when(
+    bmi&lt;30 ~ &#39;normal&#39;,
+    bmi&gt;=30 ~&#39;obese&#39;
+  )
+  )</code></pre>
+</div>
+<div id="graphs" class="section level2">
+<h2>Graphs</h2>
+<div id="bar-chart-of-obesity-prevalence-by-race-and-gender"
+class="section level3">
+<h3>Bar Chart of Obesity Prevalence by Race and Gender</h3>
+<pre class="r"><code>obesity_race_filtered = obesity |&gt;  
+  filter(!is.na(race) &amp; race != &quot;NA&quot;)
+
+ggplot(obesity_race_filtered, aes(x = race, fill = gender)) +
+  geom_bar(position = &quot;dodge&quot;) +
+  scale_fill_manual(values = c(&quot;pink&quot;, &quot;lightblue&quot;)) +
+  labs(title = &quot;Obesity Prevalence by Race and Gender&quot;,
+       x = &quot;Race&quot;,
+       y = &quot;Count&quot;) +
+  theme_minimal()</code></pre>
+<p><img src="Yi-data-clean_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>Interpretation: The bar chart displays the prevalence of obesity
+across different racial categories, differentiated by gender. It shows
+that the White population has the highest count of obesity cases, with a
+notable number of cases in both genders. The Black population follows,
+with females being higher than males, whereas the “Other Hispanic”
+categories have the lowest count of obesity cases.</p>
+</div>
+<div id="histogram-of-age-distribution-among-obese-individuals"
+class="section level3">
+<h3>Histogram of Age Distribution Among Obese Individuals</h3>
+<pre class="r"><code>ggplot(subset(obesity, bmi == &quot;obese&quot;), aes(x = age)) +
+  geom_histogram(binwidth = 1, fill = &quot;pink&quot;, color = &quot;lightblue&quot;) +
+  labs(title = &quot;Age Distribution of Obese Individuals&quot;,
+       x = &quot;Age&quot;,
+       y = &quot;Count&quot;) +
+  theme_minimal()</code></pre>
+<p><img src="Yi-data-clean_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>Interpretation: The histogram indicates that obesity is present
+across all age groups, with a relatively uniform distribution from young
+adulthood to late middle age. There’s a significant peak in obesity
+cases among individuals in their late 50s to early 60s. After this peak,
+the number of obese individuals declines sharply for those in the older
+age groups.</p>
+</div>
+<div id="box-plot-of-income-to-poverty-ratio-for-obese-individuals"
+class="section level3">
+<h3>Box Plot of Income to Poverty Ratio for Obese Individuals</h3>
+<pre class="r"><code>ggplot(subset(obesity, bmi == &quot;obese&quot;), aes(y = income_to_poverty, x = &quot;&quot;, fill = bmi)) +
+  geom_boxplot() +
+  scale_fill_manual(values = c(&quot;pink&quot;)) +
+  labs(title = &quot;Income to Poverty Ratio Among Obese Individuals&quot;,
+       x = &quot;&quot;,
+       y = &quot;Income to Poverty Ratio&quot;) +
+  theme_minimal()</code></pre>
+<p><img src="Yi-data-clean_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>Interpretation: The box plot shows the distribution of the income to
+poverty ratio among obese individuals. The data is spread across a range
+of ratios, mostly concentrated between 1 and 4, with the median around
+2. This suggests that individuals with obesity come from a range of
+economic backgrounds, but there’s a tendency towards lower income to
+poverty ratios.</p>
+</div>
+<div id="scatter-plot-of-bmi-vs.-sedentary-activity"
+class="section level3">
+<h3>Scatter Plot of BMI vs. Sedentary Activity</h3>
+<pre class="r"><code>obesity_sedentary_activity_filtered = obesity |&gt; 
+  filter(!is.na(sedentary_activity))
+
+ggplot(obesity_sedentary_activity_filtered, aes(x = sedentary_activity, y = bmi, color = bmi)) +
+  geom_point() +
+  scale_color_manual(values = c(&quot;normal&quot; = &quot;lightblue&quot;, &quot;obese&quot; = &quot;pink&quot;)) +
+  labs(title = &quot;BMI vs. Sedentary Activity&quot;,
+       x = &quot;Sedentary Activity (minutes)&quot;,
+       y = &quot;BMI&quot;) +
+  theme_minimal()</code></pre>
+<p><img src="Yi-data-clean_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>Interpretation: The scatter plot presents a comparison of sedentary
+activity (in minutes) with BMI categories (normal and obese). Points are
+relatively evenly distributed across the range of sedentary activity for
+both BMI categories, suggesting no clear or immediate correlation
+between the amount of sedentary activity and BMI category within this
+dataset. It indicates that individuals classified as obese and those
+with a normal BMI report similar patterns of sedentary behavior.</p>
+</div>
+<div id="heat-map-of-fast-food-and-frozen-meal-consumption"
+class="section level3">
+<h3>Heat Map of Fast Food and Frozen Meal Consumption</h3>
+<pre class="r"><code>aggregated_data = obesity |&gt; 
+  group_by(age, gender) |&gt; 
+  summarize(avg_fast_food = mean(freq_fast_food, na.rm = TRUE),
+            avg_frozen_food = mean(freq_frozen, na.rm = TRUE))</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;age&#39;. You can override using the `.groups`
+## argument.</code></pre>
+<pre class="r"><code>melted_data = melt(aggregated_data, id.vars = c(&quot;age&quot;, &quot;gender&quot;))
+
+ggplot(melted_data, aes(x = age, y = variable, fill = value)) +
+  geom_tile() +
+  scale_fill_gradient(low = &quot;lightblue&quot;, high = &quot;pink&quot;) +
+  labs(title = &quot;Heat Map of Fast Food and Frozen Meal Consumption&quot;,
+       x = &quot;Age&quot;,
+       y = &quot;Food Type&quot;,
+       fill = &quot;Average Consumption&quot;) +
+  theme_minimal()</code></pre>
+<p><img src="Yi-data-clean_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>Interpretation：The heat map shows the average consumption of fast
+food and frozen meals across different ages. Consumption levels are
+indicated by the color intensity, with darker shades of pink
+representing higher consumption. From the visualization, it appears that
+there are specific age groups that consume fast food and frozen meals
+more frequently, as indicated by the vertical pink bars, which suggest
+peaks in consumption at those ages.</p>
+</div>
+<div id="baseline-characterics" class="section level3">
+<h3>Baseline characterics</h3>
+<pre class="r"><code>library(dplyr)
+library(readxl)</code></pre>
+<pre class="r"><code>gender_summary &lt;- obesity %&gt;%
+  count(gender) %&gt;%
+  mutate(Percentage = n / sum(n) * 100)
+
+print(gender_summary)</code></pre>
+<pre><code>## # A tibble: 2 × 3
+##   gender     n Percentage
+##   &lt;fct&gt;  &lt;int&gt;      &lt;dbl&gt;
+## 1 Female  5800       50.9
+## 2 Male    5588       49.1</code></pre>
+<pre class="r"><code>marital_status_summary &lt;- obesity %&gt;%
+  count(marital_status) %&gt;%
+  mutate(Percentage = n / sum(n) * 100)
+print(marital_status_summary)</code></pre>
+<pre><code>## # A tibble: 4 × 3
+##   marital_status                 n Percentage
+##   &lt;chr&gt;                      &lt;int&gt;      &lt;dbl&gt;
+## 1 Married                     4216       37.0
+## 2 Never married               1360       11.9
+## 3 Widowed/Divorced/Separated  1599       14.0
+## 4 &lt;NA&gt;                        4213       37.0</code></pre>
+<pre class="r"><code>age_summary &lt;- obesity %&gt;%
+  summarise(
+    Count = n(),
+    Unique = n_distinct(age),
+    Mean = mean(age, na.rm = TRUE),
+    Std_Dev = sd(age, na.rm = TRUE),
+    Min = min(age, na.rm = TRUE),
+    `25th_Pctl` = quantile(age, 0.25, na.rm = TRUE),
+    Median = median(age, na.rm = TRUE),
+    `75th_Pctl` = quantile(age, 0.75, na.rm = TRUE),
+    Max = max(age, na.rm = TRUE)
+  )
+
+print(age_summary)</code></pre>
+<pre><code>## # A tibble: 1 × 9
+##   Count Unique  Mean Std_Dev   Min `25th_Pctl` Median `75th_Pctl`   Max
+##   &lt;int&gt;  &lt;int&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;       &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;
+## 1 11388     79  35.6    24.2     2          13     33          57    80</code></pre>
+<pre class="r"><code>income_to_poverty_summary &lt;- obesity %&gt;%
+  summarise(
+    Count = n(),
+    Unique = n_distinct(income_to_poverty),
+    Mean = mean(income_to_poverty, na.rm = TRUE),
+    Std_Dev = sd(income_to_poverty, na.rm = TRUE),
+    Min = min(income_to_poverty, na.rm = TRUE),
+    `25th_Pctl` = quantile(income_to_poverty, 0.25, na.rm = TRUE),
+    Median = median(income_to_poverty, na.rm = TRUE),
+    `75th_Pctl` = quantile(income_to_poverty, 0.75, na.rm = TRUE),
+    Max = max(income_to_poverty, na.rm = TRUE)
+  )
+
+print(income_to_poverty_summary)</code></pre>
+<pre><code>## # A tibble: 1 × 9
+##   Count Unique  Mean Std_Dev   Min `25th_Pctl` Median `75th_Pctl`   Max
+##   &lt;int&gt;  &lt;int&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;       &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;
+## 1 11388    472  2.42    1.63     0        1.04   1.99        3.90     5</code></pre>
+<pre class="r"><code>education_summary &lt;- obesity %&gt;%
+  count(education) %&gt;%
+  mutate(Percentage = n / sum(n) * 100)
+
+print(education_summary)</code></pre>
+<pre><code>## # A tibble: 5 × 3
+##   education                     n Percentage
+##   &lt;chr&gt;                     &lt;int&gt;      &lt;dbl&gt;
+## 1 9-11th grade                763       6.70
+## 2 High school graduate       1722      15.1 
+## 3 Less than 9th grade         475       4.17
+## 4 Some college or AA degree  2406      21.1 
+## 5 &lt;NA&gt;                       6022      52.9</code></pre>
+<pre class="r"><code>race_summary &lt;- obesity %&gt;%
+  count(race) %&gt;%
+  mutate(Percentage = n / sum(n) * 100)
+
+print(race_summary)</code></pre>
+<pre><code>## # A tibble: 6 × 3
+##   race                 n Percentage
+##   &lt;chr&gt;            &lt;int&gt;      &lt;dbl&gt;
+## 1 Black             2970      26.1 
+## 2 Mexican American  1397      12.3 
+## 3 Other             1217      10.7 
+## 4 Other Hispanic    1050       9.22
+## 5 White             3995      35.1 
+## 6 &lt;NA&gt;               759       6.66</code></pre>
+<p>What’s left for baseline: sedentary_activit, BMI, freq_fast_food,
+freq_frozen</p>
+<pre class="r"><code>sedentary_activity_summary &lt;- obesity %&gt;%
+  summarise(
+    Count = n(),
+    Mean = mean(sedentary_activity, na.rm = TRUE),
+    Std_Dev = sd(sedentary_activity, na.rm = TRUE),
+    Min = min(sedentary_activity, na.rm = TRUE),
+    `25th_Pctl` = quantile(sedentary_activity, 0.25, na.rm = TRUE),
+    Median = median(sedentary_activity, na.rm = TRUE),
+    `75th_Pctl` = quantile(sedentary_activity, 0.75, na.rm = TRUE),
+    Max = max(sedentary_activity, na.rm = TRUE)
+  )
+print(sedentary_activity_summary)</code></pre>
+<pre><code>## # A tibble: 1 × 8
+##   Count  Mean Std_Dev   Min `25th_Pctl` Median `75th_Pctl`   Max
+##   &lt;int&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;       &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;
+## 1 11388  338.    203.     0         180    300         480  1320</code></pre>
+<pre class="r"><code>bmi_summary &lt;- obesity %&gt;%
+  count(bmi) %&gt;%
+  mutate(Percentage = n / sum(n) * 100)
+print(bmi_summary)</code></pre>
+<pre><code>## # A tibble: 2 × 3
+##   bmi        n Percentage
+##   &lt;chr&gt;  &lt;int&gt;      &lt;dbl&gt;
+## 1 normal  7922       69.6
+## 2 obese   3466       30.4</code></pre>
+<pre class="r"><code>fast_food_summary &lt;- obesity %&gt;%
+  group_by(gender, age) %&gt;%
+  summarise(Avg_Fast_Food = mean(freq_fast_food, na.rm = TRUE))</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;gender&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre class="r"><code>print(fast_food_summary)</code></pre>
+<pre><code>## # A tibble: 158 × 3
+## # Groups:   gender [2]
+##    gender   age Avg_Fast_Food
+##    &lt;fct&gt;  &lt;dbl&gt;         &lt;dbl&gt;
+##  1 Female     2          1.66
+##  2 Female     3          1.78
+##  3 Female     4          1.40
+##  4 Female     5          1.42
+##  5 Female     6          1.79
+##  6 Female     7          1.67
+##  7 Female     8          1.77
+##  8 Female     9          1.81
+##  9 Female    10          2.01
+## 10 Female    11          1.70
+## # ℹ 148 more rows</code></pre>
+<pre class="r"><code>frozen_food_summary &lt;- obesity %&gt;%
+  group_by(gender, age) %&gt;%
+  summarise(Avg_Frozen_Food = mean(freq_frozen, na.rm = TRUE))</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;gender&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre class="r"><code>print(frozen_food_summary)</code></pre>
+<pre><code>## # A tibble: 158 × 3
+## # Groups:   gender [2]
+##    gender   age Avg_Frozen_Food
+##    &lt;fct&gt;  &lt;dbl&gt;           &lt;dbl&gt;
+##  1 Female     2            2.48
+##  2 Female     3            2.32
+##  3 Female     4            2.70
+##  4 Female     5            2.96
+##  5 Female     6            2.44
+##  6 Female     7            2.37
+##  7 Female     8            2.51
+##  8 Female     9           52.0 
+##  9 Female    10            2.08
+## 10 Female    11            3.02
+## # ℹ 148 more rows</code></pre>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
