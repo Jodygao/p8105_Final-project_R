@@ -2,7 +2,7 @@
 title: "BRFSS Analysis"
 author: "All Group Member Collaboration"
 date: "2023-11-28"
-output: github_document
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
