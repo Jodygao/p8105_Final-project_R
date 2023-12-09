@@ -59,13 +59,15 @@ ggplot(data = overall_map) +
         axis.title.y = element_blank())
 ```
 
-## Non-Hispanic Asian Adults
+## Asian Adults
 ```{r}
-asian = asian |>
+asian = suppressWarnings(
+  asian |>
   mutate(State = tolower(State))
+)
 asian_map = left_join(states_map, asian, by = c("region" = "State"))
-asian_map = asian_map |>
-  mutate(Prevalence = as.numeric(as.character(Prevalence)))
+asian_map = suppressWarnings(asian_map |>
+  mutate(Prevalence = as.numeric(as.character(Prevalence))))
 
 breaks = c(0, 20, 25, 30, 35, 40, 45, 50)
 ggplot(data = asian_map) +
@@ -90,13 +92,15 @@ ggplot(data = asian_map) +
         axis.title.y = element_blank())
 ```
 
-## Non-Hispanic Black Adults
+## Black Adults
 ```{r}
-black = black |>
+black = suppressWarnings(
+  black |>
   mutate(State = tolower(State))
+)
 black_map = left_join(states_map, black, by = c("region" = "State"))
-black_map = black_map |>
-  mutate(Prevalence = as.numeric(as.character(Prevalence)))
+black_map = suppressWarnings(black_map |>
+  mutate(Prevalence = as.numeric(as.character(Prevalence))))
 
 breaks = c(0, 20, 25, 30, 35, 40, 45, 50)
 ggplot(data = black_map) +
@@ -121,13 +125,14 @@ ggplot(data = black_map) +
         axis.title.y = element_blank())
 ```
 
-## Non-Hispanic White Adults
+## White Adults
 ```{r}
-white = white |>
+white = suppressWarnings(white |>
   mutate(State = tolower(State))
+)
 white_map = left_join(states_map, white, by = c("region" = "State"))
-white_map = white_map %>%
-  mutate(Prevalence = as.numeric(as.character(Prevalence)))
+white_map = suppressWarnings(white_map |>
+  mutate(Prevalence = as.numeric(as.character(Prevalence))))
 
 breaks = c(0, 20, 25, 30, 35, 40, 45, 50)
 ggplot(data = white_map) +
@@ -154,11 +159,12 @@ ggplot(data = white_map) +
 
 ## Hispanic Adults
 ```{r}
-hispanic = hispanic |>
+hispanic = suppressWarnings(hispanic |>
   mutate(State = tolower(State))
+)
 hispanic_map = left_join(states_map, hispanic, by = c("region" = "State"))
-hispanic_map = hispanic_map |>
-  mutate(Prevalence = as.numeric(as.character(Prevalence)))
+hispanic_map = suppressWarnings(hispanic_map |>
+  mutate(Prevalence = as.numeric(as.character(Prevalence))))
  
 breaks = c(0, 20, 25, 30, 35, 40, 45, 50)
 ggplot(data = hispanic_map) +

@@ -7,11 +7,12 @@ output:
     toc_float: true
 ---
 
-# Data Source
-## Description
-The 2017–March 2020 Pre-Pandemic Data Files for this study are sourced from the National Health and Nutrition Examination Survey (NHANES), which is an ongoing series of studies designed to assess the health and nutritional status of the civilian noninstitutionalized U.S. population. The NHANES data collection involves interviews and physical examinations, covering a wide range of health and nutrition-related topics. The data is critical for the assessment of public health and nutrition and aids in the development of health policies and research. Special weighting measures have been applied to the combined dataset to ensure that it reflects the population and health trends accurately for nationally representative estimates.
+# Data Description
+The 2017–March 2020 Pre-Pandemic Data Files for this study are sourced from the National Health and Nutrition Examination Survey ([NHANES](https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?Cycle=2017-2020)), which is an ongoing series of studies designed to assess the health and nutritional status of the civilian noninstitutionalized U.S. population. The NHANES data collection involves interviews and physical examinations, covering a wide range of health and nutrition-related topics. The data is critical for the assessment of public health and nutrition and aids in the development of health policies and research. Special weighting measures have been applied to the combined dataset to ensure that it reflects the population and health trends accurately for nationally representative estimates.
 
-## Data Collection Methodology
+
+# Data Collection Methodology
+
 ### Primary Sampling Units (PSUs)
 The survey utilizes a multistage probabilistic sampling design. In the first stage, PSUs are selected based on stratification by various health and demographic characteristics. Each PSU is typically a county or a group of contiguous counties.
 
@@ -24,10 +25,10 @@ The 2017-2018 and 2019-March 2020 cycles were based on different 4-year sample d
 ### Representativeness
 The 2017-March 2020 pre-pandemic data file includes PSUs from the 2017-2018 cycle and 2019-March 2020 data collection. The combined dataset was calibrated to ensure national representativeness according to the 2015-2018 sample design, accounting for changes in population size and other characteristics that determine major stratum membership.
 
-# Data Cleaning:
-We first import three files by creating the data import function (import_df) that reads the data from an .XPT file format. The four datasets that were merged were: Demographic Variables and Sample Weights (P_DEMO), Body Measures (P_BMX), Physical Activity (P_PAQ) andDiet Behavior & Nutrition (P_DBQ). Using a full join on the ‘SEQN’ column to merge the datasets. Then, we select the specific column that are meaningful in the process of analysis: SEQN, RIAGENDR, RIDAGEYR, DMDMARTZ, INDFMPIR, RIDRETH3, DMDEDUC2, PAD680, BMXBMI, DBD900, and DBD910.
+# Data Cleaning
+We first import three files by creating the data import function (import_df) that reads the data from an .XPT file format. The four datasets that were merged were: Demographic Variables and Sample Weights (`P_DEMO`), Body Measures (`P_BMX`), Physical Activity (`P_PAQ`) andDiet Behavior & Nutrition (`P_DBQ`). Using a full join on the ‘SEQN’ column to merge the datasets. Then, we select the specific column that are meaningful in the process of analysis: `SEQN`, `RIAGENDR`, `RIDAGEYR`, `DMDMARTZ`, `INDFMPIR`, `RIDRETH3`, `DMDEDUC2`, `PAD680`, `BMXBMI`, `DBD900`, and `DBD910`.
 
-Next, we did the data filtering by filter out specific values from various column (e.g., '77', '99', '.', '7777', '9999'). This step removed the missing, unknown, and null value from the dataset and only keep those meaningful values in the dataset.
+Next, we did the data filtering by filter out specific values from various column (e.g., `77`, `99`, `.`, `7777`, `9999`). This step removed the missing, unknown, and null value from the dataset and only keep those meaningful values in the dataset.
 
 Furthermore, we rename the columns to more descriptive names like 'gender', 'age', 'marital_status', etc. After this step, we use the mutate function to transform and categorize several columns:
 

@@ -415,16 +415,15 @@ ggplot(data = overall_map) +
 </div>
 <div id="non-hispanic-asian-adults" class="section level2">
 <h2>Non-Hispanic Asian Adults</h2>
-<pre class="r"><code>asian = asian |&gt;
+<pre class="r"><code>asian = suppressWarnings(
+  asian |&gt;
   mutate(State = tolower(State))
+)
 asian_map = left_join(states_map, asian, by = c(&quot;region&quot; = &quot;State&quot;))
-asian_map = asian_map |&gt;
-  mutate(Prevalence = as.numeric(as.character(Prevalence)))</code></pre>
-<pre><code>## Warning: There was 1 warning in `mutate()`.
-## ℹ In argument: `Prevalence = as.numeric(as.character(Prevalence))`.
-## Caused by warning:
-## ! NAs introduced by coercion</code></pre>
-<pre class="r"><code>breaks = c(0, 20, 25, 30, 35, 40, 45, 50)
+asian_map = suppressWarnings(asian_map |&gt;
+  mutate(Prevalence = as.numeric(as.character(Prevalence))))
+
+breaks = c(0, 20, 25, 30, 35, 40, 45, 50)
 ggplot(data = asian_map) +
   geom_polygon(aes(x = long, y = lat, group = group, fill = Prevalence), color = &quot;white&quot;) +
   scale_fill_continuous(
@@ -449,16 +448,15 @@ ggplot(data = asian_map) +
 </div>
 <div id="non-hispanic-black-adults" class="section level2">
 <h2>Non-Hispanic Black Adults</h2>
-<pre class="r"><code>black = black |&gt;
+<pre class="r"><code>black = suppressWarnings(
+  black |&gt;
   mutate(State = tolower(State))
+)
 black_map = left_join(states_map, black, by = c(&quot;region&quot; = &quot;State&quot;))
-black_map = black_map |&gt;
-  mutate(Prevalence = as.numeric(as.character(Prevalence)))</code></pre>
-<pre><code>## Warning: There was 1 warning in `mutate()`.
-## ℹ In argument: `Prevalence = as.numeric(as.character(Prevalence))`.
-## Caused by warning:
-## ! NAs introduced by coercion</code></pre>
-<pre class="r"><code>breaks = c(0, 20, 25, 30, 35, 40, 45, 50)
+black_map = suppressWarnings(black_map |&gt;
+  mutate(Prevalence = as.numeric(as.character(Prevalence))))
+
+breaks = c(0, 20, 25, 30, 35, 40, 45, 50)
 ggplot(data = black_map) +
   geom_polygon(aes(x = long, y = lat, group = group, fill = Prevalence), color = &quot;white&quot;) +
   scale_fill_continuous(
@@ -483,16 +481,14 @@ ggplot(data = black_map) +
 </div>
 <div id="non-hispanic-white-adults" class="section level2">
 <h2>Non-Hispanic White Adults</h2>
-<pre class="r"><code>white = white |&gt;
+<pre class="r"><code>white = suppressWarnings(white |&gt;
   mutate(State = tolower(State))
+)
 white_map = left_join(states_map, white, by = c(&quot;region&quot; = &quot;State&quot;))
-white_map = white_map %&gt;%
-  mutate(Prevalence = as.numeric(as.character(Prevalence)))</code></pre>
-<pre><code>## Warning: There was 1 warning in `mutate()`.
-## ℹ In argument: `Prevalence = as.numeric(as.character(Prevalence))`.
-## Caused by warning:
-## ! NAs introduced by coercion</code></pre>
-<pre class="r"><code>breaks = c(0, 20, 25, 30, 35, 40, 45, 50)
+white_map = suppressWarnings(white_map |&gt;
+  mutate(Prevalence = as.numeric(as.character(Prevalence))))
+
+breaks = c(0, 20, 25, 30, 35, 40, 45, 50)
 ggplot(data = white_map) +
   geom_polygon(aes(x = long, y = lat, group = group, fill = Prevalence), color = &quot;white&quot;) +
   scale_fill_continuous(
@@ -517,16 +513,14 @@ ggplot(data = white_map) +
 </div>
 <div id="hispanic-adults" class="section level2">
 <h2>Hispanic Adults</h2>
-<pre class="r"><code>hispanic = hispanic |&gt;
+<pre class="r"><code>hispanic = suppressWarnings(hispanic |&gt;
   mutate(State = tolower(State))
+)
 hispanic_map = left_join(states_map, hispanic, by = c(&quot;region&quot; = &quot;State&quot;))
-hispanic_map = hispanic_map |&gt;
-  mutate(Prevalence = as.numeric(as.character(Prevalence)))</code></pre>
-<pre><code>## Warning: There was 1 warning in `mutate()`.
-## ℹ In argument: `Prevalence = as.numeric(as.character(Prevalence))`.
-## Caused by warning:
-## ! NAs introduced by coercion</code></pre>
-<pre class="r"><code>breaks = c(0, 20, 25, 30, 35, 40, 45, 50)
+hispanic_map = suppressWarnings(hispanic_map |&gt;
+  mutate(Prevalence = as.numeric(as.character(Prevalence))))
+ 
+breaks = c(0, 20, 25, 30, 35, 40, 45, 50)
 ggplot(data = hispanic_map) +
   geom_polygon(aes(x = long, y = lat, group = group, fill = Prevalence), color = &quot;white&quot;) +
   scale_fill_continuous(

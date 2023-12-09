@@ -16,7 +16,7 @@
 <script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -29,7 +29,11 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
@@ -218,7 +222,73 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
 
 
 
@@ -228,6 +298,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -248,7 +328,7 @@ $(document).ready(function () {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="BRFSS-Analysis.html">Prevalence US Map</a>
+  <a href="BRFSS-Analysis.html">US Overview</a>
 </li>
 <li>
   <a href="Data-Sources.html">Data Sources</a>
@@ -258,6 +338,9 @@ $(document).ready(function () {
 </li>
 <li>
   <a href="p8105-Final-model-analysis.html">Exploratory Analysis</a>
+</li>
+<li>
+  <a href="Conclusion.html">Conclusion</a>
 </li>
 <li>
   <a href="https://github.com/Jodygao/p8105_Final-project_R.git">
@@ -272,6 +355,14 @@ $(document).ready(function () {
 
 <div id="header">
 
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">Data Sources</h1>
@@ -279,15 +370,14 @@ $(document).ready(function () {
 </div>
 
 
-<div id="data-source" class="section level1">
-<h1>Data Source</h1>
-<div id="description" class="section level2">
-<h2>Description</h2>
+<div id="description" class="section level1">
+<h1>Description</h1>
 <p>The 2017–March 2020 Pre-Pandemic Data Files for this study are
-sourced from the National Health and Nutrition Examination Survey
-(NHANES), which is an ongoing series of studies designed to assess the
-health and nutritional status of the civilian noninstitutionalized U.S.
-population. The NHANES data collection involves interviews and physical
+sourced from the National Health and Nutrition Examination Survey (<a
+href="https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?Cycle=2017-2020">NHANES</a>),
+which is an ongoing series of studies designed to assess the health and
+nutritional status of the civilian noninstitutionalized U.S. population.
+The NHANES data collection involves interviews and physical
 examinations, covering a wide range of health and nutrition-related
 topics. The data is critical for the assessment of public health and
 nutrition and aids in the development of health policies and research.
@@ -295,8 +385,8 @@ Special weighting measures have been applied to the combined dataset to
 ensure that it reflects the population and health trends accurately for
 nationally representative estimates.</p>
 </div>
-<div id="data-collection-methodology" class="section level2">
-<h2>Data Collection Methodology</h2>
+<div id="data-collection-methodology" class="section level1">
+<h1>Data Collection Methodology</h1>
 <div id="primary-sampling-units-psus" class="section level3">
 <h3>Primary Sampling Units (PSUs)</h3>
 <p>The survey utilizes a multistage probabilistic sampling design. In
@@ -327,22 +417,24 @@ size and other characteristics that determine major stratum
 membership.</p>
 </div>
 </div>
-</div>
 <div id="data-cleaning" class="section level1">
-<h1>Data Cleaning:</h1>
+<h1>Data Cleaning</h1>
 <p>We first import three files by creating the data import function
 (import_df) that reads the data from an .XPT file format. The four
 datasets that were merged were: Demographic Variables and Sample Weights
-(P_DEMO), Body Measures (P_BMX), Physical Activity (P_PAQ) andDiet
-Behavior &amp; Nutrition (P_DBQ). Using a full join on the ‘SEQN’ column
-to merge the datasets. Then, we select the specific column that are
-meaningful in the process of analysis: SEQN, RIAGENDR, RIDAGEYR,
-DMDMARTZ, INDFMPIR, RIDRETH3, DMDEDUC2, PAD680, BMXBMI, DBD900, and
-DBD910.</p>
+(<code>P_DEMO</code>), Body Measures (<code>P_BMX</code>), Physical
+Activity (<code>P_PAQ</code>) andDiet Behavior &amp; Nutrition
+(<code>P_DBQ</code>). Using a full join on the ‘SEQN’ column to merge
+the datasets. Then, we select the specific column that are meaningful in
+the process of analysis: <code>SEQN</code>, <code>RIAGENDR</code>,
+<code>RIDAGEYR</code>, <code>DMDMARTZ</code>, <code>INDFMPIR</code>,
+<code>RIDRETH3</code>, <code>DMDEDUC2</code>, <code>PAD680</code>,
+<code>BMXBMI</code>, <code>DBD900</code>, and <code>DBD910</code>.</p>
 <p>Next, we did the data filtering by filter out specific values from
-various column (e.g., ‘77’, ‘99’, ‘.’, ‘7777’, ‘9999’). This step
-removed the missing, unknown, and null value from the dataset and only
-keep those meaningful values in the dataset.</p>
+various column (e.g., <code>77</code>, <code>99</code>, <code>.</code>,
+<code>7777</code>, <code>9999</code>). This step removed the missing,
+unknown, and null value from the dataset and only keep those meaningful
+values in the dataset.</p>
 <p>Furthermore, we rename the columns to more descriptive names like
 ‘gender’, ‘age’, ‘marital_status’, etc. After this step, we use the
 mutate function to transform and categorize several columns:</p>
@@ -374,6 +466,8 @@ analysis or visualization.</p>
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -405,7 +499,41 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
