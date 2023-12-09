@@ -121,15 +121,15 @@ cv_df =
   obesity |> 
   crossv_mc(n = 100) |> 
   mutate(
-    train = map(train, as_tibble),
-    test = map(test, as_tibble)
+    train = purrr::map(train, as_tibble),
+    test = purrr::map(test, as_tibble)
   )
 cv_results =
   cv_df |> 
   mutate(
-    model_fast_crude = map(train, \(df) lm(log(bmi) ~ freq_fast_food, data = df) ),
-    model_fast_adjusted = map(train, \(df) lm(log(bmi) ~ freq_fast_food+age+gender+marital_status+ race+education+income_to_poverty, data = df)),
-    model_fast_inter = map(train, \(df) lm(log(bmi) ~ freq_fast_food*education+freq_fast_food*income_to_poverty+freq_fast_food+age+gender+marital_status+ race+education+income_to_poverty, data = df))
+    model_fast_crude = purrr::map(train, \(df) lm(log(bmi) ~ freq_fast_food, data = df) ),
+    model_fast_adjusted = purrr::map(train, \(df) lm(log(bmi) ~ freq_fast_food+age+gender+marital_status+ race+education+income_to_poverty, data = df)),
+    model_fast_inter = purrr::map(train, \(df) lm(log(bmi) ~ freq_fast_food*education+freq_fast_food*income_to_poverty+freq_fast_food+age+gender+marital_status+ race+education+income_to_poverty, data = df))
   ) |> 
   mutate(
     rmse_fast_crude = map2_dbl(model_fast_crude, test, \(mod, df) rmse(mod, df)),
@@ -188,16 +188,16 @@ cv_df_sedentary =
   obesity |> 
   crossv_mc(n = 100) |> 
   mutate(
-    train = map(train, as_tibble),
-    test = map(test, as_tibble)
+    train = purrr::map(train, as_tibble),
+    test = purrr::map(test, as_tibble)
   )
 
 cv_results_sedentary =
   cv_df_sedentary |> 
   mutate(
-    model_sed_crude = map(train, \(df) lm(log(bmi) ~ sedentary_activity, data = df)),
-    model_sed_adjusted = map(train, \(df) lm(log(bmi) ~ sedentary_activity+age+gender+marital_status+race+education+income_to_poverty, data = df)),
-    model_sed_inter = map(train, \(df) lm(log(bmi) ~ sedentary_activity*education+sedentary_activity*income_to_poverty+sedentary_activity+age+gender+marital_status+race+education+income_to_poverty, data = df))
+    model_sed_crude = purrr::map(train, \(df) lm(log(bmi) ~ sedentary_activity, data = df)),
+    model_sed_adjusted = purrr::map(train, \(df) lm(log(bmi) ~ sedentary_activity+age+gender+marital_status+race+education+income_to_poverty, data = df)),
+    model_sed_inter = purrr::map(train, \(df) lm(log(bmi) ~ sedentary_activity*education+sedentary_activity*income_to_poverty+sedentary_activity+age+gender+marital_status+race+education+income_to_poverty, data = df))
   ) |> 
   mutate(
     rmse_sed_crude = map2_dbl(model_sed_crude, test, \(mod, df) rmse(mod, df)),
@@ -319,8 +319,8 @@ cv_df_frozen =
   obesity |> 
   crossv_mc(n = 100) |> 
   mutate(
-    train = map(train, as_tibble),
-    test = map(test, as_tibble)
+    train = purrr::map(train, as_tibble),
+    test = purrr::map(test, as_tibble)
   )
 ```
 
@@ -329,9 +329,9 @@ cv_df_frozen =
 cv_results_frozen =
   cv_df_frozen |> 
   mutate(
-    model_frozen_crude = map(train, \(df) lm(log(bmi) ~ freq_frozen, data = df)),
-    model_frozen_adjusted = map(train, \(df) lm(log(bmi) ~ freq_frozen + age + gender + marital_status + race + education + income_to_poverty, data = df)),
-    model_frozen_inter = map(train, \(df) lm(log(bmi) ~ freq_frozen * education + freq_frozen * income_to_poverty + freq_frozen + age + gender + marital_status + race + education + income_to_poverty, data = df))
+    model_frozen_crude = purrr::map(train, \(df) lm(log(bmi) ~ freq_frozen, data = df)),
+    model_frozen_adjusted = purrr::map(train, \(df) lm(log(bmi) ~ freq_frozen + age + gender + marital_status + race + education + income_to_poverty, data = df)),
+    model_frozen_inter = purrr::map(train, \(df) lm(log(bmi) ~ freq_frozen * education + freq_frozen * income_to_poverty + freq_frozen + age + gender + marital_status + race + education + income_to_poverty, data = df))
   ) |> 
   mutate(
     rmse_frozen_crude = map2_dbl(model_frozen_crude, test, \(mod, df) rmse(mod, df)),
