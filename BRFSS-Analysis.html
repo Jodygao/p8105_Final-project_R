@@ -11,12 +11,12 @@
 
 
 
-<title>BRFSS Analysis</title>
+<title>Conclusion</title>
 
 <script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -328,7 +328,7 @@ div.tocify {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="BRFSS-Analysis.html">Prevalence US Map</a>
+  <a href="BRFSS-Analysis.html">US Overview</a>
 </li>
 <li>
   <a href="Data-Sources.html">Data Sources</a>
@@ -338,6 +338,9 @@ div.tocify {
 </li>
 <li>
   <a href="p8105-Final-model-analysis.html">Exploratory Analysis</a>
+</li>
+<li>
+  <a href="Conclusion.html">Conclusion</a>
 </li>
 <li>
   <a href="https://github.com/Jodygao/p8105_Final-project_R.git">
@@ -362,66 +365,26 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">BRFSS Analysis</h1>
+<h1 class="title toc-ignore">Conclusion</h1>
 
 </div>
 
 
 <div id="data-import" class="section level1">
 <h1>Data Import</h1>
-<pre class="r"><code>overall = read_csv(&quot;data/BRFSS/2022-overall-prevalence.csv&quot;)</code></pre>
-<pre><code>## Rows: 54 Columns: 3
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;,&quot;
-## chr (2): State, 95% CI
-## dbl (1): Prevalence
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-<pre class="r"><code>asian = read_csv(&quot;data/BRFSS/2022-asian.csv&quot;)</code></pre>
-<pre><code>## Rows: 54 Columns: 3
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;,&quot;
-## chr (3): State, Prevalence, 95% CI
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-<pre class="r"><code>black = read_csv(&quot;data/BRFSS/2022-black.csv&quot;)</code></pre>
-<pre><code>## Rows: 54 Columns: 3
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;,&quot;
-## chr (3): State, Prevalence, 95% CI
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-<pre class="r"><code>white = read_csv(&quot;data/BRFSS/2022-white.csv&quot;)</code></pre>
-<pre><code>## Rows: 54 Columns: 3
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;,&quot;
-## chr (3): State, Prevalence, 95% CI
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-<pre class="r"><code>hispanic = read_csv(&quot;data/BRFSS/2022-hispanic.csv&quot;)</code></pre>
-<pre><code>## Rows: 54 Columns: 3
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;,&quot;
-## chr (3): State, Prevalence, 95% CI
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-<pre class="r"><code>states_map = map_data(&quot;state&quot;)</code></pre>
+<pre class="r"><code>overall = read_csv(&quot;data/BRFSS/2022-overall-prevalence.csv&quot;, show_col_types = FALSE)
+asian = read_csv(&quot;data/BRFSS/2022-asian.csv&quot;, show_col_types = FALSE)
+black = read_csv(&quot;data/BRFSS/2022-black.csv&quot;, show_col_types = FALSE)
+white = read_csv(&quot;data/BRFSS/2022-white.csv&quot;, show_col_types = FALSE)
+hispanic = read_csv(&quot;data/BRFSS/2022-hispanic.csv&quot;, show_col_types = FALSE)
+
+states_map = map_data(&quot;state&quot;)</code></pre>
 </div>
 <div id="maps" class="section level1">
 <h1>Maps</h1>
 <div id="overall-obesity" class="section level2">
 <h2>Overall Obesity</h2>
-<pre class="r"><code>display.brewer.all()</code></pre>
-<p><img src="BRFSS-Analysis_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
-<pre class="r"><code>color1 = brewer.pal(10, &quot;Paired&quot;)  
-color2 = brewer.pal(8, &quot;Set2&quot;) 
-
-overall = overall |&gt;
+<pre class="r"><code>overall = overall |&gt;
   mutate(State = tolower(State))
 
 overall_map = left_join(states_map, overall, by = c(&quot;region&quot; = &quot;State&quot;))
@@ -435,7 +398,7 @@ ggplot(data = overall_map) +
     breaks = breaks, 
     labels = c(&quot;&lt;20%&quot;, &quot;20%-&lt;25%&quot;, &quot;25%-&lt;30%&quot;, &quot;30%-&lt;35%&quot;, 
                &quot;35%-&lt;40%&quot;, &quot;40%-&lt;45%&quot;, &quot;45%-&lt;50%&quot;, &quot;50%+&quot;),
-    low = color2[7], high = color1[10], na.value = &quot;grey&quot;
+    low = &quot;beige&quot;, high = &quot;darkred&quot;, na.value = &quot;grey&quot;
   ) +
   coord_fixed(1.3) +
   theme_minimal() +
@@ -448,11 +411,10 @@ ggplot(data = overall_map) +
         axis.ticks = element_blank(),
         axis.title.x = element_blank(),
         axis.title.y = element_blank())</code></pre>
-<p><img src="BRFSS-Analysis_files/figure-html/unnamed-chunk-2-2.png" width="672" /></p>
+<p><img src="BRFSS-Analysis_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 </div>
-<div id="maps-obesity-by-raceethnicity---non-hispanic-asian-adults"
-class="section level2">
-<h2>Maps: Obesity by Race/Ethnicity - Non-Hispanic Asian Adults</h2>
+<div id="non-hispanic-asian-adults" class="section level2">
+<h2>Non-Hispanic Asian Adults</h2>
 <pre class="r"><code>asian = asian |&gt;
   mutate(State = tolower(State))
 asian_map = left_join(states_map, asian, by = c(&quot;region&quot; = &quot;State&quot;))
@@ -470,7 +432,7 @@ ggplot(data = asian_map) +
     breaks = breaks, 
     labels = c(&quot;&lt;20%&quot;, &quot;20%-&lt;25%&quot;, &quot;25%-&lt;30%&quot;, &quot;30%-&lt;35%&quot;, 
                &quot;35%-&lt;40%&quot;, &quot;40%-&lt;45%&quot;, &quot;45%-&lt;50%&quot;, &quot;50%+&quot;),
-    low = color2[7], high = color1[10], na.value = &quot;grey&quot;
+    low = &quot;beige&quot;, high = &quot;darkred&quot;, na.value = &quot;grey&quot;
   ) +
   coord_fixed(1.3) +
   theme_minimal() +
@@ -485,9 +447,8 @@ ggplot(data = asian_map) +
         axis.title.y = element_blank())</code></pre>
 <p><img src="BRFSS-Analysis_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 </div>
-<div id="maps-obesity-by-raceethnicity---non-hispanic-black-adults"
-class="section level2">
-<h2>Maps: Obesity by Race/Ethnicity - Non-Hispanic Black Adults</h2>
+<div id="non-hispanic-black-adults" class="section level2">
+<h2>Non-Hispanic Black Adults</h2>
 <pre class="r"><code>black = black |&gt;
   mutate(State = tolower(State))
 black_map = left_join(states_map, black, by = c(&quot;region&quot; = &quot;State&quot;))
@@ -505,7 +466,7 @@ ggplot(data = black_map) +
     breaks = breaks, 
     labels = c(&quot;&lt;20%&quot;, &quot;20%-&lt;25%&quot;, &quot;25%-&lt;30%&quot;, &quot;30%-&lt;35%&quot;, 
                &quot;35%-&lt;40%&quot;, &quot;40%-&lt;45%&quot;, &quot;45%-&lt;50%&quot;, &quot;50%+&quot;),
-     low = color2[7], high = color1[10], na.value = &quot;grey&quot;
+     low = &quot;beige&quot;, high = &quot;darkred&quot;, na.value = &quot;grey&quot;
   ) +
   coord_fixed(1.3) +
   theme_minimal() +
@@ -520,9 +481,8 @@ ggplot(data = black_map) +
         axis.title.y = element_blank())</code></pre>
 <p><img src="BRFSS-Analysis_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 </div>
-<div id="maps-obesity-by-raceethnicity---non-hispanic-white-adults"
-class="section level2">
-<h2>Maps: Obesity by Race/Ethnicity - Non-Hispanic White Adults</h2>
+<div id="non-hispanic-white-adults" class="section level2">
+<h2>Non-Hispanic White Adults</h2>
 <pre class="r"><code>white = white |&gt;
   mutate(State = tolower(State))
 white_map = left_join(states_map, white, by = c(&quot;region&quot; = &quot;State&quot;))
@@ -540,7 +500,7 @@ ggplot(data = white_map) +
     breaks = breaks, 
     labels = c(&quot;&lt;20%&quot;, &quot;20%-&lt;25%&quot;, &quot;25%-&lt;30%&quot;, &quot;30%-&lt;35%&quot;, 
                &quot;35%-&lt;40%&quot;, &quot;40%-&lt;45%&quot;, &quot;45%-&lt;50%&quot;, &quot;50%+&quot;),
-     low = color2[7], high = color1[10], na.value = &quot;grey&quot;
+     low = &quot;beige&quot;, high = &quot;darkred&quot;, na.value = &quot;grey&quot;
   ) +
   coord_fixed(1.3) +
   theme_minimal() +
@@ -555,9 +515,8 @@ ggplot(data = white_map) +
         axis.title.y = element_blank())</code></pre>
 <p><img src="BRFSS-Analysis_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 </div>
-<div id="maps-obesity-by-raceethnicity---hispanic-adults"
-class="section level2">
-<h2>Maps: Obesity by Race/Ethnicity - Hispanic Adults</h2>
+<div id="hispanic-adults" class="section level2">
+<h2>Hispanic Adults</h2>
 <pre class="r"><code>hispanic = hispanic |&gt;
   mutate(State = tolower(State))
 hispanic_map = left_join(states_map, hispanic, by = c(&quot;region&quot; = &quot;State&quot;))
@@ -575,7 +534,7 @@ ggplot(data = hispanic_map) +
     breaks = breaks, 
     labels = c(&quot;&lt;20%&quot;, &quot;20%-&lt;25%&quot;, &quot;25%-&lt;30%&quot;, &quot;30%-&lt;35%&quot;, 
                &quot;35%-&lt;40%&quot;, &quot;40%-&lt;45%&quot;, &quot;45%-&lt;50%&quot;, &quot;50%+&quot;),
-     low = color2[7], high = color1[10], na.value = &quot;grey&quot;
+     low = &quot;beige&quot;, high = &quot;darkred&quot;, na.value = &quot;grey&quot;
   ) +
   coord_fixed(1.3) +
   theme_minimal() +
