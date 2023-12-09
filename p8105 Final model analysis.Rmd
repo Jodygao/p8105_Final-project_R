@@ -384,6 +384,9 @@ cv_results_frozen |>
   group_by(model_type) |> 
   summarize(m_rmse = mean(rmse))
 ```
+
+According to the violin plot of the RMSE distribution for each model, the adjusted model consistently shows a concentrated distribution of lower RMSE values, meaning it has a superior predictive performance relative to the crude and interaction models. This observation is confirmed by the summary of cross-validation results, which indicates that the adjusted model has the lowest mean RMSE of 0.243, compared to 0.309 for the crude model and 0.336 for the interaction model. Since lower values mean better model performance, the adjusted model has the best model performance among these three models.
+
 # Model Plot for Adjusted Model
 # Generate new data for plotting
 ```{r}
@@ -419,6 +422,7 @@ ggplot(new_data_frozen, aes(x = freq_frozen, y = log_bmi_pred)) +
        y = "Predicted Log BMI") +
   theme_minimal()
 ```
+
 # Summary of the best 'adjusted' model from cross-validation
 ```{r}
 best_adjusted_model_summary <- cv_results_frozen$model_frozen_adjusted[[1]] %>% summary()
@@ -426,6 +430,10 @@ best_adjusted_model_summary <- cv_results_frozen$model_frozen_adjusted[[1]] %>% 
 # Print the summary which includes coefficients, R-squared, p-values...
 print(best_adjusted_model_summary)
 ```
+
+The best-fitting model, based on the cross-validation results, is the adjusted model. Thus, a detailed examination was conducted, and its summary statistics indicate that: The Intercept is estimated at 3.409 on the log scale. The coefficient for frozen fast food frequency is -4.291e-06 with a p-value of 0.86427, this suggests that the number of frozen fast food meals consumed does not have a statistically significant effect on BMI in this model. Other covariates, such as gender and race show significant associations with BMI, with gender (Male) and race (Other) showing a strong negative association with BMI. The R-squared value of 0.03455 indicates that approximately 3.455% of the variability in the log-transformed BMI is explained by the model.
+
+
 # Create a residuals plot for the 'adjusted' model
 ```{r}
 adjusted_model <- cv_results_frozen$model_frozen_adjusted[[1]]
@@ -446,6 +454,14 @@ residual_plot <- ggplot() +
 print(residual_plot)
 
 ```
+
+The residuals plot against fitted values provides insight into the adequacy of the model fit. The presence of a random scatter of residuals around the horizontal line at zero suggests no obvious issues with non-linearity or heteroscedasticity. However, the slight curvature in the LOESS line and the increasing spread of residuals at higher fitted values could imply potential model misspecification or the need for a variable transformation to address heteroscedasticity.
+
+## Conclusion of frozen food consumption on BMI
+
+Overall, our analysis suggests that while frozen fast food consumption frequency does not significantly predict BMI, other factors such as gender and race do have significant associations. The small R-squared value implies that other unmeasured factors also play a role in influencing BMI, which are not captured by this model.
+
+The relatively stable variance in residuals suggests that the linear model is a reasonable fit for the data, although there is room for improvement. Future modeling efforts might explore the inclusion of non-linear terms, additional interaction terms, or other predictor variables to enhance the model's explanatory power.
 
 # Regression Models and Diagnostics
 

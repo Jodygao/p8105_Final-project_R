@@ -13,7 +13,7 @@
 
 <title>P8105 Fall 2023 Final Project Proposal</title>
 
-<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.24/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
@@ -433,9 +433,9 @@ class="section level1">
 <pre><code>## # A tibble: 3 × 2
 ##   model_type    m_rmse
 ##   &lt;chr&gt;          &lt;dbl&gt;
-## 1 fast_adjusted  0.306
-## 2 fast_crude     0.479
-## 3 fast_inter     0.346</code></pre>
+## 1 fast_adjusted  0.341
+## 2 fast_crude     0.522
+## 3 fast_inter     0.374</code></pre>
 <pre class="r"><code>cv_results |&gt; 
   select(starts_with(&quot;rmse&quot;)) |&gt; 
   pivot_longer(
@@ -536,9 +536,9 @@ class="section level1">
 <pre><code>## # A tibble: 3 × 2
 ##   model_type m_rmse
 ##   &lt;chr&gt;       &lt;dbl&gt;
-## 1 adjusted    0.235
+## 1 adjusted    0.234
 ## 2 crude       0.237
-## 3 inter       0.235</code></pre>
+## 3 inter       0.234</code></pre>
 <p>In the context of these models, a lower RMSE indicates a more
 accurate prediction of BMI from the predictors used in the model.</p>
 <p>The cross-validation results show that the mean RMSE for the adjusted
@@ -594,30 +594,30 @@ print(best_model_summary)</code></pre>
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -0.73750 -0.15411 -0.00735  0.14443  1.12121 
+## -0.75471 -0.15667 -0.00535  0.14440  1.03979 
 ## 
 ## Coefficients:
 ##                                            Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)                               3.378e+00  1.869e-02 180.716  &lt; 2e-16
-## sedentary_activity                        1.780e-04  1.896e-05   9.388  &lt; 2e-16
-## age                                       8.228e-06  2.405e-04   0.034 0.972716
-## genderMale                               -4.356e-02  7.456e-03  -5.843 5.53e-09
-## marital_statusNever married              -3.239e-02  1.057e-02  -3.064 0.002200
-## marital_statusWidowed/Divorced/Separated -3.728e-02  9.608e-03  -3.880 0.000106
-## raceMexican American                      4.187e-03  1.262e-02   0.332 0.740026
-## raceOther                                -1.678e-01  1.558e-02 -10.768  &lt; 2e-16
-## raceOther Hispanic                       -2.060e-02  1.343e-02  -1.534 0.125051
-## raceWhite                                -3.398e-02  9.305e-03  -3.652 0.000263
-## educationHigh school graduate             1.707e-02  1.185e-02   1.441 0.149756
-## educationLess than 9th grade              7.961e-03  1.585e-02   0.502 0.615517
-## educationSome college or AA degree        2.400e-02  1.169e-02   2.054 0.040087
-## income_to_poverty                        -7.619e-04  2.712e-03  -0.281 0.778775
+## (Intercept)                               3.368e+00  1.853e-02 181.755  &lt; 2e-16
+## sedentary_activity                        1.839e-04  1.881e-05   9.773  &lt; 2e-16
+## age                                       3.820e-04  2.387e-04   1.600 0.109569
+## genderMale                               -5.086e-02  7.400e-03  -6.874 7.22e-12
+## marital_statusNever married              -1.439e-02  1.049e-02  -1.371 0.170348
+## marital_statusWidowed/Divorced/Separated -3.291e-02  9.534e-03  -3.451 0.000564
+## raceMexican American                      1.220e-02  1.257e-02   0.970 0.331955
+## raceOther                                -1.748e-01  1.543e-02 -11.330  &lt; 2e-16
+## raceOther Hispanic                       -1.576e-02  1.327e-02  -1.188 0.234974
+## raceWhite                                -3.524e-02  9.232e-03  -3.817 0.000137
+## educationHigh school graduate             6.855e-03  1.182e-02   0.580 0.561950
+## educationLess than 9th grade             -5.894e-03  1.595e-02  -0.369 0.711782
+## educationSome college or AA degree        8.946e-03  1.170e-02   0.765 0.444370
+## income_to_poverty                        -9.093e-04  2.701e-03  -0.337 0.736375
 ##                                             
 ## (Intercept)                              ***
 ## sedentary_activity                       ***
 ## age                                         
 ## genderMale                               ***
-## marital_statusNever married              ** 
+## marital_statusNever married                 
 ## marital_statusWidowed/Divorced/Separated ***
 ## raceMexican American                        
 ## raceOther                                ***
@@ -625,15 +625,15 @@ print(best_model_summary)</code></pre>
 ## raceWhite                                ***
 ## educationHigh school graduate               
 ## educationLess than 9th grade                
-## educationSome college or AA degree       *  
+## educationSome college or AA degree          
 ## income_to_poverty                           
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.2343 on 4068 degrees of freedom
-##   (5028 observations deleted due to missingness)
-## Multiple R-squared:  0.0617, Adjusted R-squared:  0.0587 
-## F-statistic: 20.58 on 13 and 4068 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 0.2319 on 4043 degrees of freedom
+##   (5053 observations deleted due to missingness)
+## Multiple R-squared:  0.06772,    Adjusted R-squared:  0.06472 
+## F-statistic: 22.59 on 13 and 4043 DF,  p-value: &lt; 2.2e-16</code></pre>
 <pre class="r"><code># Plotting the &#39;adjusted&#39; model&#39;s fitted values vs. residuals
 best_model &lt;- cv_results_sedentary$model_sed_adjusted[[1]]
 best_model_residuals &lt;- resid(best_model)
@@ -755,9 +755,18 @@ class="section level1">
 <pre><code>## # A tibble: 3 × 2
 ##   model_type m_rmse
 ##   &lt;chr&gt;       &lt;dbl&gt;
-## 1 adjusted    0.252
+## 1 adjusted    0.246
 ## 2 crude       0.309
-## 3 inter       0.359</code></pre>
+## 3 inter       0.331</code></pre>
+<p>According to the violin plot of the RMSE distribution for each model,
+the adjusted model consistently shows a concentrated distribution of
+lower RMSE values, meaning it has a superior predictive performance
+relative to the crude and interaction models. This observation is
+confirmed by the summary of cross-validation results, which indicates
+that the adjusted model has the lowest mean RMSE of 0.243, compared to
+0.309 for the crude model and 0.336 for the interaction model. Since
+lower values mean better model performance, the adjusted model has the
+best model performance among these three models.</p>
 </div>
 <div id="model-plot-for-adjusted-model" class="section level1">
 <h1>Model Plot for Adjusted Model</h1>
@@ -812,8 +821,11 @@ ggplot(new_data_frozen, aes(x = freq_frozen, y = log_bmi_pred)) +
        x = &quot;Frozen Fast Food Frequency&quot;,
        y = &quot;Predicted Log BMI&quot;) +
   theme_minimal()</code></pre>
-<p><img src="p8105-Final-model-analysis_files/figure-html/unnamed-chunk-8-1.png" width="672" />
-# Summary of the best ‘adjusted’ model from cross-validation</p>
+<p><img src="p8105-Final-model-analysis_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+<div id="summary-of-the-best-adjusted-model-from-cross-validation"
+class="section level1">
+<h1>Summary of the best ‘adjusted’ model from cross-validation</h1>
 <pre class="r"><code>best_adjusted_model_summary &lt;- cv_results_frozen$model_frozen_adjusted[[1]] %&gt;% summary()
 
 # Print the summary which includes coefficients, R-squared, p-values...
@@ -825,46 +837,58 @@ print(best_adjusted_model_summary)</code></pre>
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -0.77451 -0.15727 -0.01138  0.15113  1.08798 
+## -0.77474 -0.15840 -0.00797  0.14524  1.07106 
 ## 
 ## Coefficients:
 ##                                            Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)                               3.413e+00  1.855e-02 183.970  &lt; 2e-16
-## freq_frozen                              -5.155e-06  2.547e-05  -0.202 0.839634
-## age                                       3.098e-04  2.483e-04   1.248 0.212219
-## genderMale                               -4.675e-02  7.620e-03  -6.135 9.35e-10
-## marital_statusNever married              -1.768e-02  1.075e-02  -1.645 0.100024
-## marital_statusWidowed/Divorced/Separated -2.525e-02  9.799e-03  -2.577 0.009993
-## raceMexican American                     -1.677e-02  1.303e-02  -1.287 0.198210
-## raceOther                                -1.812e-01  1.559e-02 -11.627  &lt; 2e-16
-## raceOther Hispanic                       -3.166e-02  1.357e-02  -2.333 0.019673
-## raceWhite                                -3.270e-02  9.523e-03  -3.434 0.000601
-## educationHigh school graduate             1.625e-02  1.209e-02   1.344 0.178985
-## educationLess than 9th grade              1.666e-02  1.648e-02   1.011 0.312140
-## educationSome college or AA degree        3.068e-02  1.193e-02   2.571 0.010168
-## income_to_poverty                         2.389e-03  2.765e-03   0.864 0.387631
+## (Intercept)                               3.413e+00  1.824e-02 187.105  &lt; 2e-16
+## freq_frozen                              -3.975e-06  2.493e-05  -0.159  0.87331
+## age                                       2.205e-04  2.425e-04   0.909  0.36332
+## genderMale                               -4.398e-02  7.465e-03  -5.891 4.15e-09
+## marital_statusNever married              -1.868e-02  1.051e-02  -1.777  0.07571
+## marital_statusWidowed/Divorced/Separated -2.542e-02  9.608e-03  -2.645  0.00819
+## raceMexican American                     -1.354e-03  1.266e-02  -0.107  0.91486
+## raceOther                                -1.735e-01  1.522e-02 -11.396  &lt; 2e-16
+## raceOther Hispanic                       -2.267e-02  1.327e-02  -1.708  0.08763
+## raceWhite                                -2.370e-02  9.344e-03  -2.536  0.01124
+## educationHigh school graduate             1.598e-02  1.186e-02   1.348  0.17781
+## educationLess than 9th grade             -1.444e-03  1.611e-02  -0.090  0.92859
+## educationSome college or AA degree        2.258e-02  1.173e-02   1.925  0.05430
+## income_to_poverty                         1.938e-03  2.715e-03   0.714  0.47531
 ##                                             
 ## (Intercept)                              ***
 ## freq_frozen                                 
 ## age                                         
 ## genderMale                               ***
-## marital_statusNever married                 
+## marital_statusNever married              .  
 ## marital_statusWidowed/Divorced/Separated ** 
 ## raceMexican American                        
 ## raceOther                                ***
-## raceOther Hispanic                       *  
-## raceWhite                                ***
+## raceOther Hispanic                       .  
+## raceWhite                                *  
 ## educationHigh school graduate               
 ## educationLess than 9th grade                
-## educationSome college or AA degree       *  
+## educationSome college or AA degree       .  
 ## income_to_poverty                           
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.2398 on 4061 degrees of freedom
-##   (5035 observations deleted due to missingness)
-## Multiple R-squared:  0.04368,    Adjusted R-squared:  0.04062 
-## F-statistic: 14.27 on 13 and 4061 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 0.2347 on 4062 degrees of freedom
+##   (5034 observations deleted due to missingness)
+## Multiple R-squared:  0.04245,    Adjusted R-squared:  0.03939 
+## F-statistic: 13.85 on 13 and 4062 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>The best-fitting model, based on the cross-validation results, is the
+adjusted model. Thus, a detailed examination was conducted, and its
+summary statistics indicate that: The Intercept is estimated at 3.409 on
+the log scale. The coefficient for frozen fast food frequency is
+-4.291e-06 with a p-value of 0.86427, this suggests that the number of
+frozen fast food meals consumed does not have a statistically
+significant effect on BMI in this model. Other covariates, such as
+gender and race show significant associations with BMI, with gender
+(Male) and race (Other) showing a strong negative association with BMI.
+The R-squared value of 0.03455 indicates that approximately 3.455% of
+the variability in the log-transformed BMI is explained by the
+model.</p>
 </div>
 <div id="create-a-residuals-plot-for-the-adjusted-model"
 class="section level1">
@@ -887,6 +911,27 @@ residual_plot &lt;- ggplot() +
 print(residual_plot)</code></pre>
 <pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="p8105-Final-model-analysis_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>The residuals plot against fitted values provides insight into the
+adequacy of the model fit. The presence of a random scatter of residuals
+around the horizontal line at zero suggests no obvious issues with
+non-linearity or heteroscedasticity. However, the slight curvature in
+the LOESS line and the increasing spread of residuals at higher fitted
+values could imply potential model misspecification or the need for a
+variable transformation to address heteroscedasticity.</p>
+<div id="conclusion-of-frozen-food-consumption-on-bmi"
+class="section level2">
+<h2>Conclusion of frozen food consumption on BMI</h2>
+<p>Overall, our analysis suggests that while frozen fast food
+consumption frequency does not significantly predict BMI, other factors
+such as gender and race do have significant associations. The small
+R-squared value implies that other unmeasured factors also play a role
+in influencing BMI, which are not captured by this model.</p>
+<p>The relatively stable variance in residuals suggests that the linear
+model is a reasonable fit for the data, although there is room for
+improvement. Future modeling efforts might explore the inclusion of
+non-linear terms, additional interaction terms, or other predictor
+variables to enhance the model’s explanatory power.</p>
+</div>
 </div>
 <div id="regression-models-and-diagnostics" class="section level1">
 <h1>Regression Models and Diagnostics</h1>
