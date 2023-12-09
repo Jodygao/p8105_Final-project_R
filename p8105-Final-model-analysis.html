@@ -450,9 +450,9 @@ class="section level2">
 <pre><code>## # A tibble: 3 × 2
 ##   model_type    m_rmse
 ##   &lt;chr&gt;          &lt;dbl&gt;
-## 1 fast_adjusted  0.364
-## 2 fast_crude     0.582
-## 3 fast_inter     0.430</code></pre>
+## 1 fast_adjusted  0.320
+## 2 fast_crude     0.490
+## 3 fast_inter     0.342</code></pre>
 <pre class="r"><code>cv_results |&gt; 
   select(starts_with(&quot;rmse&quot;)) |&gt; 
   pivot_longer(
@@ -494,8 +494,6 @@ ggplot(obesity, aes(x = sedentary_activity)) +
   geom_density(alpha = 0.2, adjust = 1/5) + 
   labs(title = &quot;Distribution of Sedentary Activity&quot;, x = &quot;Sedentary Activity&quot;, y = &quot;Density&quot;) +
   theme_minimal()</code></pre>
-<pre><code>## Warning: Removed 3879 rows containing non-finite values (`stat_bin()`).</code></pre>
-<pre><code>## Warning: Removed 3879 rows containing non-finite values (`stat_density()`).</code></pre>
 <p><img src="p8105-Final-model-analysis_files/figure-html/distribution-1.png" width="672" /></p>
 <div id="step-1-model-building-for-sedentary-activity-with-logbmi"
 class="section level3">
@@ -536,7 +534,7 @@ cv_results_sedentary =
 <div id="summary-of-cross-validation-results--sendendary-activity"
 class="section level2">
 <h2>Summary of Cross validation Results- Sendendary Activity</h2>
-<pre class="r"><code>cv_results_sedentary |&gt; 
+<pre class="r"><code>rmse_summary = cv_results_sedentary |&gt; 
   select(starts_with(&quot;rmse_sed&quot;)) |&gt; 
   pivot_longer(
     everything(),
@@ -545,13 +543,31 @@ class="section level2">
     names_prefix = &quot;rmse_sed_&quot;
   ) |&gt; 
   group_by(model_type) |&gt; 
-  summarize(m_rmse = mean(rmse))</code></pre>
-<pre><code>## # A tibble: 3 × 2
-##   model_type m_rmse
-##   &lt;chr&gt;       &lt;dbl&gt;
-## 1 adjusted    0.235
-## 2 crude       0.237
-## 3 inter       0.235</code></pre>
+  summarize(m_rmse = mean(rmse))
+kable(rmse_summary, format = &quot;markdown&quot;, caption = &quot;Summary of RMSE for Sedentary Models&quot;)</code></pre>
+<table>
+<caption>Summary of RMSE for Sedentary Models</caption>
+<thead>
+<tr class="header">
+<th align="left">model_type</th>
+<th align="right">m_rmse</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">adjusted</td>
+<td align="right">0.2354447</td>
+</tr>
+<tr class="even">
+<td align="left">crude</td>
+<td align="right">0.2374056</td>
+</tr>
+<tr class="odd">
+<td align="left">inter</td>
+<td align="right">0.2353406</td>
+</tr>
+</tbody>
+</table>
 <p>In the context of these models, a lower RMSE indicates a more
 accurate prediction of BMI from the predictors used in the model.</p>
 <p>The cross-validation results show that the mean RMSE for the adjusted
@@ -609,31 +625,31 @@ print(best_model_summary)</code></pre>
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -0.73996 -0.15082 -0.00714  0.14656  1.11879 
+## -0.73319 -0.15406 -0.00803  0.14553  1.12462 
 ## 
 ## Coefficients:
 ##                                            Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)                               3.370e+00  1.869e-02 180.357  &lt; 2e-16
-## sedentary_activity                        1.941e-04  1.905e-05  10.192  &lt; 2e-16
-## age                                       1.445e-04  2.415e-04   0.598  0.54966
-## genderMale                               -4.504e-02  7.456e-03  -6.042 1.66e-09
-## marital_statusNever married              -1.633e-02  1.051e-02  -1.553  0.12051
-## marital_statusWidowed/Divorced/Separated -2.837e-02  9.568e-03  -2.965  0.00305
-## raceMexican American                     -5.055e-04  1.260e-02  -0.040  0.96801
-## raceOther                                -1.697e-01  1.561e-02 -10.876  &lt; 2e-16
-## raceOther Hispanic                       -9.231e-03  1.328e-02  -0.695  0.48711
-## raceWhite                                -3.620e-02  9.268e-03  -3.906 9.52e-05
-## educationHigh school graduate             1.310e-02  1.168e-02   1.122  0.26213
-## educationLess than 9th grade              1.352e-02  1.589e-02   0.851  0.39489
-## educationSome college or AA degree        1.478e-02  1.153e-02   1.282  0.19989
-## income_to_poverty                        -8.980e-04  2.743e-03  -0.327  0.74336
+## (Intercept)                               3.382e+00  1.881e-02 179.851  &lt; 2e-16
+## sedentary_activity                        1.768e-04  1.908e-05   9.267  &lt; 2e-16
+## age                                       5.789e-05  2.437e-04   0.238 0.812250
+## genderMale                               -4.739e-02  7.520e-03  -6.302 3.26e-10
+## marital_statusNever married              -2.811e-02  1.076e-02  -2.611 0.009048
+## marital_statusWidowed/Divorced/Separated -3.198e-02  9.614e-03  -3.326 0.000888
+## raceMexican American                     -6.548e-04  1.272e-02  -0.051 0.958938
+## raceOther                                -1.754e-01  1.546e-02 -11.344  &lt; 2e-16
+## raceOther Hispanic                       -1.627e-02  1.339e-02  -1.215 0.224283
+## raceWhite                                -3.604e-02  9.331e-03  -3.863 0.000114
+## educationHigh school graduate             1.395e-02  1.186e-02   1.176 0.239522
+## educationLess than 9th grade              1.640e-02  1.619e-02   1.013 0.311228
+## educationSome college or AA degree        1.043e-02  1.175e-02   0.888 0.374786
+## income_to_poverty                         9.416e-04  2.748e-03   0.343 0.731880
 ##                                             
 ## (Intercept)                              ***
 ## sedentary_activity                       ***
 ## age                                         
 ## genderMale                               ***
-## marital_statusNever married                 
-## marital_statusWidowed/Divorced/Separated ** 
+## marital_statusNever married              ** 
+## marital_statusWidowed/Divorced/Separated ***
 ## raceMexican American                        
 ## raceOther                                ***
 ## raceOther Hispanic                          
@@ -645,10 +661,10 @@ print(best_model_summary)</code></pre>
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.2333 on 4039 degrees of freedom
-##   (5057 observations deleted due to missingness)
-## Multiple R-squared:  0.06322,    Adjusted R-squared:  0.06021 
-## F-statistic: 20.97 on 13 and 4039 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 0.2346 on 4023 degrees of freedom
+##   (5073 observations deleted due to missingness)
+## Multiple R-squared:  0.06215,    Adjusted R-squared:  0.05912 
+## F-statistic: 20.51 on 13 and 4023 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 <div id="residual-plot-for-adjusted-model---sedentary-activity"
@@ -768,9 +784,9 @@ Frozen Fast Food Frequency</h1>
 <pre><code>## # A tibble: 3 × 2
 ##   model_type m_rmse
 ##   &lt;chr&gt;       &lt;dbl&gt;
-## 1 adjusted    0.259
+## 1 adjusted    0.255
 ## 2 crude       0.309
-## 3 inter       0.339</code></pre>
+## 3 inter       0.341</code></pre>
 <p>According to the violin plot of the RMSE distribution for each model,
 the adjusted model consistently shows a concentrated distribution of
 lower RMSE values, meaning it has a superior predictive performance
@@ -845,34 +861,34 @@ print(best_adjusted_model_summary)</code></pre>
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -0.78177 -0.15790 -0.00878  0.14899  1.09470 
+## -0.77950 -0.16042 -0.00957  0.14804  1.08649 
 ## 
 ## Coefficients:
 ##                                            Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)                               3.4158950  0.0184767 184.875  &lt; 2e-16
-## freq_frozen                              -0.0017836  0.0006329  -2.818  0.00486
-## age                                       0.0002014  0.0002432   0.828  0.40756
-## genderMale                               -0.0371845  0.0075392  -4.932 8.46e-07
-## marital_statusNever married              -0.0185917  0.0106341  -1.748  0.08049
-## marital_statusWidowed/Divorced/Separated -0.0198407  0.0096186  -2.063  0.03920
-## raceMexican American                     -0.0071902  0.0127329  -0.565  0.57231
-## raceOther                                -0.1764792  0.0153877 -11.469  &lt; 2e-16
-## raceOther Hispanic                       -0.0300902  0.0135577  -2.219  0.02651
-## raceWhite                                -0.0304570  0.0094179  -3.234  0.00123
-## educationHigh school graduate             0.0162683  0.0118752   1.370  0.17078
-## educationLess than 9th grade              0.0016897  0.0162329   0.104  0.91710
-## educationSome college or AA degree        0.0294315  0.0117265   2.510  0.01212
-## income_to_poverty                         0.0008610  0.0027255   0.316  0.75208
+## (Intercept)                               3.425e+00  1.852e-02 184.908  &lt; 2e-16
+## freq_frozen                              -5.864e-05  3.588e-05  -1.634  0.10229
+## age                                       2.015e-04  2.478e-04   0.813  0.41612
+## genderMale                               -4.636e-02  7.628e-03  -6.078 1.33e-09
+## marital_statusNever married              -2.089e-02  1.082e-02  -1.931  0.05360
+## marital_statusWidowed/Divorced/Separated -2.197e-02  9.743e-03  -2.255  0.02418
+## raceMexican American                     -1.438e-02  1.289e-02  -1.116  0.26459
+## raceOther                                -1.825e-01  1.562e-02 -11.685  &lt; 2e-16
+## raceOther Hispanic                       -3.588e-02  1.347e-02  -2.664  0.00775
+## raceWhite                                -3.019e-02  9.437e-03  -3.199  0.00139
+## educationHigh school graduate             8.532e-03  1.201e-02   0.710  0.47745
+## educationLess than 9th grade              1.591e-05  1.640e-02   0.001  0.99923
+## educationSome college or AA degree        2.756e-02  1.188e-02   2.321  0.02035
+## income_to_poverty                         8.040e-04  2.780e-03   0.289  0.77244
 ##                                             
 ## (Intercept)                              ***
-## freq_frozen                              ** 
+## freq_frozen                                 
 ## age                                         
 ## genderMale                               ***
 ## marital_statusNever married              .  
 ## marital_statusWidowed/Divorced/Separated *  
 ## raceMexican American                        
 ## raceOther                                ***
-## raceOther Hispanic                       *  
+## raceOther Hispanic                       ** 
 ## raceWhite                                ** 
 ## educationHigh school graduate               
 ## educationLess than 9th grade                
@@ -881,10 +897,10 @@ print(best_adjusted_model_summary)</code></pre>
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.2365 on 4067 degrees of freedom
-##   (5029 observations deleted due to missingness)
-## Multiple R-squared:  0.04339,    Adjusted R-squared:  0.04033 
-## F-statistic: 14.19 on 13 and 4067 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 0.2391 on 4065 degrees of freedom
+##   (5031 observations deleted due to missingness)
+## Multiple R-squared:  0.04484,    Adjusted R-squared:  0.04178 
+## F-statistic: 14.68 on 13 and 4065 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>The best-fitting model, based on the cross-validation results, is the
 adjusted model. Thus, a detailed examination was conducted, and its
 summary statistics indicate that: The Intercept is estimated at 3.409 on

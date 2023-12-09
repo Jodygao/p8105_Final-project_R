@@ -15,6 +15,7 @@ library(dplyr)
 library(reshape2)
 library(modelr)
 library (broom)
+library(knitr)
 ```
 
 
@@ -221,7 +222,7 @@ cv_results_sedentary |>
 
 ## Summary of Cross validation Results- Sendendary Activity
 ```{r}
-cv_results_sedentary |> 
+rmse_summary = cv_results_sedentary |> 
   select(starts_with("rmse_sed")) |> 
   pivot_longer(
     everything(),
@@ -231,6 +232,7 @@ cv_results_sedentary |>
   ) |> 
   group_by(model_type) |> 
   summarize(m_rmse = mean(rmse))
+kable(rmse_summary, format = "markdown", caption = "Summary of RMSE for Sedentary Models")
 ```
 
 In the context of these models, a lower RMSE indicates a more accurate prediction of BMI from the predictors used in the model.
