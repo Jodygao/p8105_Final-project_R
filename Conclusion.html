@@ -11,7 +11,7 @@
 
 
 
-<title>Data Sources</title>
+<title>Conclusion</title>
 
 <script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -274,102 +274,99 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Data Sources</h1>
+<h1 class="title toc-ignore">Conclusion</h1>
 
 </div>
 
 
-<div id="data-source" class="section level1">
-<h1>Data Source</h1>
-<div id="description" class="section level2">
-<h2>Description</h2>
-<p>The 2017–March 2020 Pre-Pandemic Data Files for this study are
-sourced from the National Health and Nutrition Examination Survey
-(NHANES), which is an ongoing series of studies designed to assess the
-health and nutritional status of the civilian noninstitutionalized U.S.
-population. The NHANES data collection involves interviews and physical
-examinations, covering a wide range of health and nutrition-related
-topics. The data is critical for the assessment of public health and
-nutrition and aids in the development of health policies and research.
-Special weighting measures have been applied to the combined dataset to
-ensure that it reflects the population and health trends accurately for
-nationally representative estimates.</p>
+<div id="discussion" class="section level1">
+<h1>Discussion</h1>
+<p>Our findings underscored the significant, albeit modest, influence of
+sedentary behavior, on BMI when adjusted for demographic and
+socioeconomic factors. The adjusted model’s efficacy in capturing this
+relationship provides a compelling narrative about the subtle yet
+impactful role of lifestyle choices on personal health metrics such as
+BMI.</p>
+<p>Furthermore, the linear regression analysis for fast food emphasizes
+that the positive and statistically significant coefficient for fast
+food consumption underscores the importance of dietary habits in
+influencing BMI. While the effect size of fast food consumption on BMI
+may seem small, over time or across a population, even small increases
+in BMI can have substantial health implications. This analysis could
+have a profound influence on policy and the health field. For instance,
+the result could inform interventions aimed at reducing fast food
+consumption as part of a strategy to combat obesity.</p>
+<p>These insights carry significant implications for public health
+initiatives. They emphasize the necessity of addressing sedentary
+lifestyles and consumption of fast food as part of obesity intervention
+strategies. Moreover, the disparities highlighted by demographic
+variables like gender and race call for tailored approaches that
+consider the socio-cultural dimensions of health.</p>
+<p>The nuanced understanding gleaned from our analysis can inform health
+policies and programs, enabling them to target interventions more
+effectively and contribute to the broader goal of mitigating obesity’s
+prevalence and impact.</p>
 </div>
-<div id="data-collection-methodology" class="section level2">
-<h2>Data Collection Methodology</h2>
-<div id="primary-sampling-units-psus" class="section level3">
-<h3>Primary Sampling Units (PSUs)</h3>
-<p>The survey utilizes a multistage probabilistic sampling design. In
-the first stage, PSUs are selected based on stratification by various
-health and demographic characteristics. Each PSU is typically a county
-or a group of contiguous counties.</p>
-</div>
-<div id="stratification" class="section level3">
-<h3>Stratification</h3>
-<p>States are categorized into health groups according to health index
-values. PSUs are further divided into major strata within each health
-group, which are determined by the urban-rural population distribution
-and other locality characteristics.</p>
-</div>
-<div id="sampling-periods" class="section level3">
-<h3>Sampling Periods</h3>
-<p>The 2017-2018 and 2019-March 2020 cycles were based on different
-4-year sample designs, with PSUs selected annually from their respective
-strata.</p>
-</div>
-<div id="representativeness" class="section level3">
-<h3>Representativeness</h3>
-<p>The 2017-March 2020 pre-pandemic data file includes PSUs from the
-2017-2018 cycle and 2019-March 2020 data collection. The combined
-dataset was calibrated to ensure national representativeness according
-to the 2015-2018 sample design, accounting for changes in population
-size and other characteristics that determine major stratum
-membership.</p>
-</div>
-</div>
-</div>
-<div id="data-cleaning" class="section level1">
-<h1>Data Cleaning:</h1>
-<p>We first import three files by creating the data import function
-(import_df) that reads the data from an .XPT file format. The four
-datasets that were merged were: Demographic Variables and Sample Weights
-(P_DEMO), Body Measures (P_BMX), Physical Activity (P_PAQ) andDiet
-Behavior &amp; Nutrition (P_DBQ). Using a full join on the ‘SEQN’ column
-to merge the datasets. Then, we select the specific column that are
-meaningful in the process of analysis: SEQN, RIAGENDR, RIDAGEYR,
-DMDMARTZ, INDFMPIR, RIDRETH3, DMDEDUC2, PAD680, BMXBMI, DBD900, and
-DBD910.</p>
-<p>Next, we did the data filtering by filter out specific values from
-various column (e.g., ‘77’, ‘99’, ‘.’, ‘7777’, ‘9999’). This step
-removed the missing, unknown, and null value from the dataset and only
-keep those meaningful values in the dataset.</p>
-<p>Furthermore, we rename the columns to more descriptive names like
-‘gender’, ‘age’, ‘marital_status’, etc. After this step, we use the
-mutate function to transform and categorize several columns:</p>
+<div id="limitations" class="section level1">
+<h1>Limitations</h1>
+<p>Despite the robust analytical framework employed, our study is not
+devoid of limitations:</p>
 <ul>
-<li><code>gender</code>: Categorizing and converting to a factor.</li>
-<li><code>marital_status</code>, <code>race</code>,
-<code>education</code>: Categorizing different demographic details.</li>
-<li><code>obese</code>: Creating a new variable based on BMI,
-categorizing individuals as ‘normal’ or ‘obese’.</li>
+<li><p><strong>Transformation Challenges</strong>: The use of
+log-transformed BMI to normalize the distribution may introduce
+complexities in interpretation. The relationship between predictors and
+the outcome in the transformed scale does not readily translate to the
+original BMI scale without back-transformation.</p></li>
+<li><p><strong>Model’s Explained Variability</strong>: The R-squared
+values indicated that a significant proportion of BMI variability
+remains unexplained by our models. This suggests the presence of other
+influential factors not captured in the analysis, which could range from
+genetic predispositions to environmental and behavioral
+influences.</p></li>
+<li><p><strong>Causality Constraints</strong>: The cross-sectional
+nature of NHANES data inhibits our ability to draw causal inferences.
+Longitudinal studies would be required to establish causal relationships
+between lifestyle factors and BMI.</p></li>
+<li><p><strong>Potential Confounders</strong>: Our models may not have
+accounted for all potential confounders, such as mental health status,
+quality of diet, metabolic rates, and genetic factors, which could
+affect the accuracy of our conclusions.</p></li>
+<li><p><strong>Heteroscedasticity</strong>: If the log transformation
+did not fully correct for heteroscedasticity, the standard errors of our
+estimates might be biased, leading to unreliable confidence intervals
+and hypothesis tests.</p></li>
+<li><p><strong>Clinical Relevance</strong>: The clinical relevance of a
+log-transformed BMI may not be as straightforward compared to the
+traditional BMI categories used in medical practice.</p></li>
+<li><p><strong>Generalizability</strong>: Our results are based on the
+U.S. population and may not be generalizable to other countries or
+cultures due to differences in lifestyle, diet, and genetic
+factors.</p></li>
 </ul>
-<p>The variables in the Final dataset are listed below: -
-<code>SEQN</code> : Respondent sequence number - <code>gender</code>:
-Female or male - <code>age</code>: Age in years at screening -
-<code>marital_status</code>: never married, married,
-widowed/divorced/separated - <code>income_to_poverty</code>: ratio of
-family income to poverty - <code>race</code>: Mexican American, White,
-Black, Other Hispanic - <code>bmi</code>: Body Mass Index (kg/m**2) -
-<code>freq_fast_food</code>: number of meals from fast food or pizza
-place - <code>freq_frozen</code>: Numbers of frozen meals/pizza in past
-30 days - <code>sedentary_activity</code>: Minutes sedentary activity -
-<code>obese</code>: normal, obese</p>
-<p>The process effectively cleans and transforms the data, preparing it
-for analysis related to obesity. The use of case_match and case_when for
-categorizing data is particularly efficient, as it allows for more
-readable and interpretable data. This structured approach ensures the
-dataset is clean, well-organized, and ready for further statistical
-analysis or visualization.</p>
+</div>
+<div id="future-directions" class="section level1">
+<h1>Future Directions</h1>
+<p>Considering these limitations, future research could:</p>
+<ul>
+<li><p>Incorporate additional variables and potential confounders to
+capture a more complete picture of the factors influencing BMI.</p></li>
+<li><p>Utilize longitudinal data to explore the temporal dynamics of BMI
+changes in relation to lifestyle factors. Apply more sophisticated
+statistical techniques or machine learning algorithms to better model
+complex, non-linear relationships.</p></li>
+<li><p>Extend the analysis to diverse populations to enhance the
+generalizability of the findings.</p></li>
+</ul>
+<div
+id="in-conclusion-our-research-contributes-valuable-insights-into-the-factors-associated-with-bmi-among-the-obese-population-in-the-u.s.-it-lays-the-groundwork-for-more-nuanced-public-health-strategies-that-can-adapt-to-the-multifaceted-nature-of-obesity.-the-limitations-and-potential-avenues-for-future-work-highlight-the-ongoing-need-for-comprehensive-research-in-this-domain."
+class="section level4">
+<h4>In conclusion, our research contributes valuable insights into the
+factors associated with BMI among the obese population in the U.S. It
+lays the groundwork for more nuanced public health strategies that can
+adapt to the multifaceted nature of obesity. The limitations and
+potential avenues for future work highlight the ongoing need for
+comprehensive research in this domain.</h4>
+</div>
 </div>
 
 

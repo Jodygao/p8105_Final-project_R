@@ -21,13 +21,27 @@ The 2017-2018 and 2019-March 2020 cycles were based on different 4-year sample d
 The 2017-March 2020 pre-pandemic data file includes PSUs from the 2017-2018 cycle and 2019-March 2020 data collection. The combined dataset was calibrated to ensure national representativeness according to the 2015-2018 sample design, accounting for changes in population size and other characteristics that determine major stratum membership.
 
 # Data Cleaning:
-We first import three files by creating the data import function (import_df) that reads the data from an .XPT file format. Then we merge the three datasets (P_BMX.XPT, P_DEMO.XPT, P_PAQ.XPT, P_DBQ.XPT) using a full join on the ‘SEQN’ column. Then, we select the specific column SEQN, RIAGENDR, RIDAGEYR, DMDMARTZ, INDFMPIR, RIDRETH3, DMDEDUC2, PAD680, BMXBMI, DBD900, and DBD910.
+We first import three files by creating the data import function (import_df) that reads the data from an .XPT file format. The four datasets that were merged were: Demographic Variables and Sample Weights (P_DEMO), Body Measures (P_BMX), Physical Activity (P_PAQ) andDiet Behavior & Nutrition (P_DBQ). Using a full join on the ‘SEQN’ column to merge the datasets. Then, we select the specific column that are meaningful in the process of analysis: SEQN, RIAGENDR, RIDAGEYR, DMDMARTZ, INDFMPIR, RIDRETH3, DMDEDUC2, PAD680, BMXBMI, DBD900, and DBD910.
 
 Next, we did the data filtering by filter out specific values from various column (e.g., '77', '99', '.', '7777', '9999'). This step removed the missing, unknown, and null value from the dataset and only keep those meaningful values in the dataset.
 
 Furthermore, we rename the columns to more descriptive names like 'gender', 'age', 'marital_status', etc. After this step, we use the mutate function to transform and categorize several columns:
 
-`gender`: Categorizing and converting to a factor.
-`marital_status`, `race`, `education`: Categorizing different demographic details.
-`obese`: Creating a new variable based on BMI, categorizing individuals as 'normal' or 'obese'.
+- `gender`: Categorizing and converting to a factor.
+- `marital_status`, `race`, `education`: Categorizing different demographic details.
+- `obese`: Creating a new variable based on BMI, categorizing individuals as 'normal' or 'obese'.
+
+The variables in the Final dataset are listed below:
+-  `SEQN` : Respondent sequence number
+- `gender`: Female or male
+- `age`: Age in years at screening
+- `marital_status`: never married, married, widowed/divorced/separated
+- `income_to_poverty`: ratio of family income to poverty
+- `race`: Mexican American, White, Black, Other Hispanic
+- `bmi`: Body Mass Index (kg/m**2)
+- `freq_fast_food`: number of meals from fast food or pizza place
+- `freq_frozen`: Numbers of frozen meals/pizza in past 30 days
+- `sedentary_activity`: Minutes sedentary activity
+- `obese`: normal, obese
+
 The process effectively cleans and transforms the data, preparing it for analysis related to obesity. The use of case_match and case_when for categorizing data is particularly efficient, as it allows for more readable and interpretable data. This structured approach ensures the dataset is clean, well-organized, and ready for further statistical analysis or visualization.
