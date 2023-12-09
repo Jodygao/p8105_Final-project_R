@@ -449,9 +449,9 @@ class="section level2">
 <pre><code>## # A tibble: 3 × 2
 ##   model_type    m_rmse
 ##   &lt;chr&gt;          &lt;dbl&gt;
-## 1 fast_adjusted  0.343
-## 2 fast_crude     0.534
-## 3 fast_inter     0.385</code></pre>
+## 1 fast_adjusted  0.305
+## 2 fast_crude     0.470
+## 3 fast_inter     0.332</code></pre>
 <pre class="r"><code>cv_results |&gt; 
   select(starts_with(&quot;rmse&quot;)) |&gt; 
   pivot_longer(
@@ -561,15 +561,15 @@ kable(rmse_summary, format = &quot;markdown&quot;, caption = &quot;Summary of RM
 <tbody>
 <tr class="odd">
 <td align="left">adjusted</td>
-<td align="right">0.2348988</td>
+<td align="right">0.2348302</td>
 </tr>
 <tr class="even">
 <td align="left">crude</td>
-<td align="right">0.2372018</td>
+<td align="right">0.2373531</td>
 </tr>
 <tr class="odd">
 <td align="left">inter</td>
-<td align="right">0.2347949</td>
+<td align="right">0.2347843</td>
 </tr>
 </tbody>
 </table>
@@ -632,31 +632,31 @@ print(best_model_summary)</code></pre>
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -0.74548 -0.15179 -0.00884  0.14567  0.96024 
+## -0.74590 -0.15020 -0.00852  0.14735  1.12331 
 ## 
 ## Coefficients:
 ##                                            Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)                               3.383e+00  1.858e-02 182.083  &lt; 2e-16
-## sedentary_activity                        1.941e-04  1.909e-05  10.169  &lt; 2e-16
-## age                                       1.714e-04  2.414e-04   0.710   0.4777
-## genderMale                               -5.067e-02  7.465e-03  -6.787 1.31e-11
-## marital_statusNever married              -5.092e-02  1.047e-02  -4.863 1.20e-06
-## marital_statusWidowed/Divorced/Separated -4.252e-02  9.633e-03  -4.414 1.04e-05
-## raceMexican American                      4.569e-03  1.270e-02   0.360   0.7190
-## raceOther                                -1.765e-01  1.537e-02 -11.480  &lt; 2e-16
-## raceOther Hispanic                       -2.283e-02  1.335e-02  -1.710   0.0874
-## raceWhite                                -3.716e-02  9.265e-03  -4.011 6.16e-05
-## educationHigh school graduate             1.446e-02  1.182e-02   1.223   0.2215
-## educationLess than 9th grade              8.898e-03  1.616e-02   0.550   0.5820
-## educationSome college or AA degree        1.825e-02  1.167e-02   1.563   0.1181
-## income_to_poverty                        -2.712e-03  2.724e-03  -0.996   0.3195
+## (Intercept)                               3.377e+00  1.865e-02 181.087  &lt; 2e-16
+## sedentary_activity                        1.929e-04  1.905e-05  10.126  &lt; 2e-16
+## age                                       6.774e-05  2.410e-04   0.281 0.778626
+## genderMale                               -4.382e-02  7.458e-03  -5.876 4.54e-09
+## marital_statusNever married              -2.381e-02  1.053e-02  -2.262 0.023744
+## marital_statusWidowed/Divorced/Separated -2.361e-02  9.588e-03  -2.462 0.013839
+## raceMexican American                      6.675e-03  1.266e-02   0.527 0.597978
+## raceOther                                -1.751e-01  1.540e-02 -11.370  &lt; 2e-16
+## raceOther Hispanic                       -2.612e-02  1.333e-02  -1.959 0.050197
+## raceWhite                                -3.414e-02  9.270e-03  -3.683 0.000234
+## educationHigh school graduate             2.030e-03  1.177e-02   0.172 0.863061
+## educationLess than 9th grade              1.319e-02  1.604e-02   0.822 0.411007
+## educationSome college or AA degree        1.116e-02  1.169e-02   0.954 0.339900
+## income_to_poverty                        -2.540e-04  2.717e-03  -0.093 0.925542
 ##                                             
 ## (Intercept)                              ***
 ## sedentary_activity                       ***
 ## age                                         
 ## genderMale                               ***
-## marital_statusNever married              ***
-## marital_statusWidowed/Divorced/Separated ***
+## marital_statusNever married              *  
+## marital_statusWidowed/Divorced/Separated *  
 ## raceMexican American                        
 ## raceOther                                ***
 ## raceOther Hispanic                       .  
@@ -668,10 +668,10 @@ print(best_model_summary)</code></pre>
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.2342 on 4058 degrees of freedom
-##   (5038 observations deleted due to missingness)
-## Multiple R-squared:  0.0713, Adjusted R-squared:  0.06832 
-## F-statistic: 23.97 on 13 and 4058 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 0.2337 on 4045 degrees of freedom
+##   (5051 observations deleted due to missingness)
+## Multiple R-squared:  0.06646,    Adjusted R-squared:  0.06346 
+## F-statistic: 22.15 on 13 and 4045 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <div id="residual-plot-for-adjusted-model---sedentary-activity"
 class="section level2">
@@ -793,9 +793,9 @@ class="section level2">
 <pre><code>## # A tibble: 3 × 2
 ##   model_type m_rmse
 ##   &lt;chr&gt;       &lt;dbl&gt;
-## 1 adjusted    0.253
+## 1 adjusted    0.256
 ## 2 crude       0.309
-## 3 inter       0.324</code></pre>
+## 3 inter       0.322</code></pre>
 <p>According to the violin plot of the RMSE distribution for each model,
 the adjusted model consistently shows a concentrated distribution of
 lower RMSE values, meaning it has a superior predictive performance
@@ -874,47 +874,47 @@ print(best_adjusted_model_summary)</code></pre>
 ##     race + education + income_to_poverty, data = df)
 ## 
 ## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -0.7814 -0.1580 -0.0108  0.1477  1.0965 
+##      Min       1Q   Median       3Q      Max 
+## -0.77685 -0.15940 -0.00933  0.14952  1.09613 
 ## 
 ## Coefficients:
 ##                                            Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)                               3.419e+00  1.843e-02 185.539  &lt; 2e-16
-## freq_frozen                              -4.509e-06  2.533e-05  -0.178 0.858729
-## age                                       2.145e-04  2.448e-04   0.876 0.381010
-## genderMale                               -3.865e-02  7.599e-03  -5.087 3.81e-07
-## marital_statusNever married              -2.812e-02  1.065e-02  -2.640 0.008321
-## marital_statusWidowed/Divorced/Separated -2.455e-02  9.697e-03  -2.532 0.011373
-## raceMexican American                     -7.295e-03  1.280e-02  -0.570 0.568674
-## raceOther                                -1.728e-01  1.536e-02 -11.247  &lt; 2e-16
-## raceOther Hispanic                       -3.411e-02  1.346e-02  -2.534 0.011322
-## raceWhite                                -3.564e-02  9.441e-03  -3.774 0.000163
-## educationHigh school graduate             1.835e-02  1.193e-02   1.538 0.124034
-## educationLess than 9th grade              5.947e-03  1.629e-02   0.365 0.715061
-## educationSome college or AA degree        3.059e-02  1.180e-02   2.592 0.009564
-## income_to_poverty                         1.873e-05  2.758e-03   0.007 0.994582
+## (Intercept)                               3.422e+00  1.841e-02 185.889  &lt; 2e-16
+## freq_frozen                              -3.526e-06  2.522e-05  -0.140  0.88884
+## age                                       1.426e-04  2.457e-04   0.581  0.56155
+## genderMale                               -4.863e-02  7.579e-03  -6.416 1.56e-10
+## marital_statusNever married              -1.972e-02  1.061e-02  -1.859  0.06306
+## marital_statusWidowed/Divorced/Separated -1.845e-02  9.683e-03  -1.905  0.05680
+## raceMexican American                     -7.568e-03  1.279e-02  -0.592  0.55397
+## raceOther                                -1.771e-01  1.545e-02 -11.465  &lt; 2e-16
+## raceOther Hispanic                       -3.380e-02  1.365e-02  -2.476  0.01333
+## raceWhite                                -2.958e-02  9.398e-03  -3.147  0.00166
+## educationHigh school graduate             1.501e-02  1.184e-02   1.268  0.20489
+## educationLess than 9th grade              8.513e-03  1.606e-02   0.530  0.59599
+## educationSome college or AA degree        2.073e-02  1.169e-02   1.774  0.07608
+## income_to_poverty                         2.815e-03  2.761e-03   1.019  0.30805
 ##                                             
 ## (Intercept)                              ***
 ## freq_frozen                                 
 ## age                                         
 ## genderMale                               ***
-## marital_statusNever married              ** 
-## marital_statusWidowed/Divorced/Separated *  
+## marital_statusNever married              .  
+## marital_statusWidowed/Divorced/Separated .  
 ## raceMexican American                        
 ## raceOther                                ***
 ## raceOther Hispanic                       *  
-## raceWhite                                ***
+## raceWhite                                ** 
 ## educationHigh school graduate               
 ## educationLess than 9th grade                
-## educationSome college or AA degree       ** 
+## educationSome college or AA degree       .  
 ## income_to_poverty                           
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.2385 on 4092 degrees of freedom
-##   (5004 observations deleted due to missingness)
-## Multiple R-squared:  0.0403, Adjusted R-squared:  0.03725 
-## F-statistic: 13.22 on 13 and 4092 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 0.2375 on 4050 degrees of freedom
+##   (5046 observations deleted due to missingness)
+## Multiple R-squared:  0.04269,    Adjusted R-squared:  0.03962 
+## F-statistic: 13.89 on 13 and 4050 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>The best-fitting model, based on the cross-validation results, is the
 adjusted model. Thus, a detailed examination was conducted, and its
 summary statistics indicate that: The Intercept is estimated at 3.409 on
