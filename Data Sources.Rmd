@@ -36,7 +36,7 @@ Furthermore, we rename the columns to more descriptive names like 'gender', 'age
 - `marital_status`, `race`, `education`: Categorizing different demographic details.
 - `obese`: Creating a new variable based on BMI, categorizing individuals as 'normal' or 'obese'.
 
-The variables in the Final dataset are listed below:
+The variables in the Final dataset are listed below.
 -  `SEQN` : Respondent sequence number
 - `gender`: Female or male
 - `age`: Age in years at screening

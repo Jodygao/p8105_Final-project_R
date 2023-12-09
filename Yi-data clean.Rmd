@@ -242,19 +242,34 @@ kable(bmi_summary, format = "markdown", caption = "BMI Summary")
 ```
 
 ```{r fast_food}
+
+# Create age groups
+obesity <- obesity %>%
+  mutate(age_group = case_when(
+    age >= 18 & age <= 25 ~ "18-25",
+    age > 25 & age <= 35 ~ "26-35",
+    age > 35 & age <= 45 ~ "36-45",
+    age > 45 & age <= 55 ~ "46-55",
+    age > 55 & age <= 65 ~ "56-65",
+    age > 65 ~ "66+",
+    TRUE ~ "Unknown"
+  ))
+
 fast_food_summary <- obesity %>%
-  group_by(gender, age) %>%
+  group_by(gender, age_group) %>%
   summarise(Avg_Fast_Food = mean(freq_fast_food, na.rm = TRUE))
 
-kable(fast_food_summary, format = "markdown", caption = "Fast Food Summary")
+kable(fast_food_summary, format = "markdown", caption = "Fast Food Frequency Summary by Age Group and Gender")
+
 ```
 
 ```{r frozen_food}
+# Summarize by gender and age group
 frozen_food_summary <- obesity %>%
-  group_by(gender, age) %>%
+  group_by(gender, age_group) %>%
   summarise(Avg_Frozen_Food = mean(freq_frozen, na.rm = TRUE)) 
 
-kable(frozen_food_summary, format = "markdown", caption = "Frozen Food Summary")
+kable(frozen_food_summary, format = "markdown", caption = "Frozen Food Frequency Summary by Age Group and Gender")
 ```
 
 
