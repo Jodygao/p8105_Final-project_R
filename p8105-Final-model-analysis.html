@@ -9,9 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="All Group Member Collaboration" />
 
-<meta name="date" content="2023-12-07" />
 
 <title>P8105 Fall 2023 Final Project Proposal</title>
 
@@ -277,8 +275,6 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">P8105 Fall 2023 Final Project Proposal</h1>
-<h4 class="author">All Group Member Collaboration</h4>
-<h4 class="date">2023-12-07</h4>
 
 </div>
 
@@ -437,9 +433,9 @@ class="section level1">
 <pre><code>## # A tibble: 3 × 2
 ##   model_type    m_rmse
 ##   &lt;chr&gt;          &lt;dbl&gt;
-## 1 fast_adjusted  0.302
-## 2 fast_crude     0.458
-## 3 fast_inter     0.338</code></pre>
+## 1 fast_adjusted  0.306
+## 2 fast_crude     0.479
+## 3 fast_inter     0.346</code></pre>
 <pre class="r"><code>cv_results |&gt; 
   select(starts_with(&quot;rmse&quot;)) |&gt; 
   pivot_longer(
@@ -540,9 +536,9 @@ class="section level1">
 <pre><code>## # A tibble: 3 × 2
 ##   model_type m_rmse
 ##   &lt;chr&gt;       &lt;dbl&gt;
-## 1 adjusted    0.234
+## 1 adjusted    0.235
 ## 2 crude       0.237
-## 3 inter       0.234</code></pre>
+## 3 inter       0.235</code></pre>
 <p>In the context of these models, a lower RMSE indicates a more
 accurate prediction of BMI from the predictors used in the model.</p>
 <p>The cross-validation results show that the mean RMSE for the adjusted
@@ -598,46 +594,46 @@ print(best_model_summary)</code></pre>
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -0.74812 -0.15061 -0.00545  0.14724  1.12644 
+## -0.73750 -0.15411 -0.00735  0.14443  1.12121 
 ## 
 ## Coefficients:
 ##                                            Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)                               3.367e+00  1.820e-02 185.005  &lt; 2e-16
-## sedentary_activity                        1.822e-04  1.874e-05   9.722  &lt; 2e-16
-## age                                       1.318e-04  2.368e-04   0.557 0.577705
-## genderMale                               -3.950e-02  7.362e-03  -5.366 8.49e-08
-## marital_statusNever married              -2.843e-02  1.037e-02  -2.742 0.006136
-## marital_statusWidowed/Divorced/Separated -2.251e-02  9.406e-03  -2.394 0.016725
-## raceMexican American                      4.998e-03  1.240e-02   0.403 0.686926
-## raceOther                                -1.753e-01  1.513e-02 -11.581  &lt; 2e-16
-## raceOther Hispanic                       -1.543e-02  1.299e-02  -1.188 0.234941
-## raceWhite                                -3.127e-02  9.159e-03  -3.414 0.000647
-## educationHigh school graduate             8.977e-03  1.150e-02   0.781 0.435020
-## educationLess than 9th grade              1.074e-02  1.573e-02   0.682 0.495077
-## educationSome college or AA degree        2.085e-02  1.135e-02   1.837 0.066235
-## income_to_poverty                        -2.149e-03  2.691e-03  -0.799 0.424598
+## (Intercept)                               3.378e+00  1.869e-02 180.716  &lt; 2e-16
+## sedentary_activity                        1.780e-04  1.896e-05   9.388  &lt; 2e-16
+## age                                       8.228e-06  2.405e-04   0.034 0.972716
+## genderMale                               -4.356e-02  7.456e-03  -5.843 5.53e-09
+## marital_statusNever married              -3.239e-02  1.057e-02  -3.064 0.002200
+## marital_statusWidowed/Divorced/Separated -3.728e-02  9.608e-03  -3.880 0.000106
+## raceMexican American                      4.187e-03  1.262e-02   0.332 0.740026
+## raceOther                                -1.678e-01  1.558e-02 -10.768  &lt; 2e-16
+## raceOther Hispanic                       -2.060e-02  1.343e-02  -1.534 0.125051
+## raceWhite                                -3.398e-02  9.305e-03  -3.652 0.000263
+## educationHigh school graduate             1.707e-02  1.185e-02   1.441 0.149756
+## educationLess than 9th grade              7.961e-03  1.585e-02   0.502 0.615517
+## educationSome college or AA degree        2.400e-02  1.169e-02   2.054 0.040087
+## income_to_poverty                        -7.619e-04  2.712e-03  -0.281 0.778775
 ##                                             
 ## (Intercept)                              ***
 ## sedentary_activity                       ***
 ## age                                         
 ## genderMale                               ***
 ## marital_statusNever married              ** 
-## marital_statusWidowed/Divorced/Separated *  
+## marital_statusWidowed/Divorced/Separated ***
 ## raceMexican American                        
 ## raceOther                                ***
 ## raceOther Hispanic                          
 ## raceWhite                                ***
 ## educationHigh school graduate               
 ## educationLess than 9th grade                
-## educationSome college or AA degree       .  
+## educationSome college or AA degree       *  
 ## income_to_poverty                           
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.2314 on 4084 degrees of freedom
-##   (5012 observations deleted due to missingness)
-## Multiple R-squared:  0.06521,    Adjusted R-squared:  0.06223 
-## F-statistic: 21.91 on 13 and 4084 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 0.2343 on 4068 degrees of freedom
+##   (5028 observations deleted due to missingness)
+## Multiple R-squared:  0.0617, Adjusted R-squared:  0.0587 
+## F-statistic: 20.58 on 13 and 4068 DF,  p-value: &lt; 2.2e-16</code></pre>
 <pre class="r"><code># Plotting the &#39;adjusted&#39; model&#39;s fitted values vs. residuals
 best_model &lt;- cv_results_sedentary$model_sed_adjusted[[1]]
 best_model_residuals &lt;- resid(best_model)
@@ -759,9 +755,9 @@ class="section level1">
 <pre><code>## # A tibble: 3 × 2
 ##   model_type m_rmse
 ##   &lt;chr&gt;       &lt;dbl&gt;
-## 1 adjusted    0.253
+## 1 adjusted    0.252
 ## 2 crude       0.309
-## 3 inter       0.331</code></pre>
+## 3 inter       0.359</code></pre>
 </div>
 <div id="model-plot-for-adjusted-model" class="section level1">
 <h1>Model Plot for Adjusted Model</h1>
@@ -829,30 +825,30 @@ print(best_adjusted_model_summary)</code></pre>
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -0.78273 -0.15920 -0.00797  0.14771  1.09279 
+## -0.77451 -0.15727 -0.01138  0.15113  1.08798 
 ## 
 ## Coefficients:
 ##                                            Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)                               3.430e+00  1.843e-02 186.107  &lt; 2e-16
-## freq_frozen                              -5.871e-05  3.544e-05  -1.656 0.097744
-## age                                       1.270e-04  2.438e-04   0.521 0.602499
-## genderMale                               -4.524e-02  7.539e-03  -6.001 2.13e-09
-## marital_statusNever married              -2.858e-02  1.067e-02  -2.679 0.007415
-## marital_statusWidowed/Divorced/Separated -2.529e-02  9.604e-03  -2.633 0.008490
-## raceMexican American                     -5.550e-03  1.287e-02  -0.431 0.666329
-## raceOther                                -1.782e-01  1.549e-02 -11.504  &lt; 2e-16
-## raceOther Hispanic                       -3.082e-02  1.340e-02  -2.300 0.021499
-## raceWhite                                -3.408e-02  9.412e-03  -3.621 0.000297
-## educationHigh school graduate             1.418e-02  1.198e-02   1.184 0.236604
-## educationLess than 9th grade             -1.032e-03  1.604e-02  -0.064 0.948703
-## educationSome college or AA degree        2.622e-02  1.181e-02   2.221 0.026395
-## income_to_poverty                         9.579e-05  2.751e-03   0.035 0.972221
+## (Intercept)                               3.413e+00  1.855e-02 183.970  &lt; 2e-16
+## freq_frozen                              -5.155e-06  2.547e-05  -0.202 0.839634
+## age                                       3.098e-04  2.483e-04   1.248 0.212219
+## genderMale                               -4.675e-02  7.620e-03  -6.135 9.35e-10
+## marital_statusNever married              -1.768e-02  1.075e-02  -1.645 0.100024
+## marital_statusWidowed/Divorced/Separated -2.525e-02  9.799e-03  -2.577 0.009993
+## raceMexican American                     -1.677e-02  1.303e-02  -1.287 0.198210
+## raceOther                                -1.812e-01  1.559e-02 -11.627  &lt; 2e-16
+## raceOther Hispanic                       -3.166e-02  1.357e-02  -2.333 0.019673
+## raceWhite                                -3.270e-02  9.523e-03  -3.434 0.000601
+## educationHigh school graduate             1.625e-02  1.209e-02   1.344 0.178985
+## educationLess than 9th grade              1.666e-02  1.648e-02   1.011 0.312140
+## educationSome college or AA degree        3.068e-02  1.193e-02   2.571 0.010168
+## income_to_poverty                         2.389e-03  2.765e-03   0.864 0.387631
 ##                                             
 ## (Intercept)                              ***
-## freq_frozen                              .  
+## freq_frozen                                 
 ## age                                         
 ## genderMale                               ***
-## marital_statusNever married              ** 
+## marital_statusNever married                 
 ## marital_statusWidowed/Divorced/Separated ** 
 ## raceMexican American                        
 ## raceOther                                ***
@@ -865,10 +861,10 @@ print(best_adjusted_model_summary)</code></pre>
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.2362 on 4045 degrees of freedom
-##   (5051 observations deleted due to missingness)
-## Multiple R-squared:  0.04463,    Adjusted R-squared:  0.04156 
-## F-statistic: 14.54 on 13 and 4045 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 0.2398 on 4061 degrees of freedom
+##   (5035 observations deleted due to missingness)
+## Multiple R-squared:  0.04368,    Adjusted R-squared:  0.04062 
+## F-statistic: 14.27 on 13 and 4061 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <div id="create-a-residuals-plot-for-the-adjusted-model"
 class="section level1">

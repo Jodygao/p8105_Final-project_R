@@ -1,7 +1,5 @@
 ---
 title: "P8105 Fall 2023 Final Project Proposal"
-date: "2023-12-07"
-author: "All Group Member Collaboration"
 output: html_document
 ---
 

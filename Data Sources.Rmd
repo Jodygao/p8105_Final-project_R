@@ -3,7 +3,6 @@ title: "Data Sources"
 output: html_document
 ---
 
-
 # Data Source
 ## Description
 The 2017–March 2020 Pre-Pandemic Data Files for this study are sourced from the National Health and Nutrition Examination Survey (NHANES), which is an ongoing series of studies designed to assess the health and nutritional status of the civilian noninstitutionalized U.S. population. The NHANES data collection involves interviews and physical examinations, covering a wide range of health and nutrition-related topics. The data is critical for the assessment of public health and nutrition and aids in the development of health policies and research. Special weighting measures have been applied to the combined dataset to ensure that it reflects the population and health trends accurately for nationally representative estimates.
