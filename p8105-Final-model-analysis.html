@@ -13,7 +13,7 @@
 
 <title>P8105 Fall 2023 Final Project Proposal</title>
 
-<script src="site_libs/header-attrs-2.24/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
@@ -29,7 +29,11 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
@@ -218,7 +222,73 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
 
 
 
@@ -228,6 +298,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -271,6 +351,14 @@ $(document).ready(function () {
 </div><!--/.navbar -->
 
 <div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
 
 
 
@@ -433,9 +521,9 @@ class="section level1">
 <pre><code>## # A tibble: 3 × 2
 ##   model_type    m_rmse
 ##   &lt;chr&gt;          &lt;dbl&gt;
-## 1 fast_adjusted  0.341
-## 2 fast_crude     0.522
-## 3 fast_inter     0.374</code></pre>
+## 1 fast_adjusted  0.308
+## 2 fast_crude     0.464
+## 3 fast_inter     0.336</code></pre>
 <pre class="r"><code>cv_results |&gt; 
   select(starts_with(&quot;rmse&quot;)) |&gt; 
   pivot_longer(
@@ -594,35 +682,35 @@ print(best_model_summary)</code></pre>
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -0.75471 -0.15667 -0.00535  0.14440  1.03979 
+## -0.73426 -0.15405 -0.00695  0.14756  1.12732 
 ## 
 ## Coefficients:
 ##                                            Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)                               3.368e+00  1.853e-02 181.755  &lt; 2e-16
-## sedentary_activity                        1.839e-04  1.881e-05   9.773  &lt; 2e-16
-## age                                       3.820e-04  2.387e-04   1.600 0.109569
-## genderMale                               -5.086e-02  7.400e-03  -6.874 7.22e-12
-## marital_statusNever married              -1.439e-02  1.049e-02  -1.371 0.170348
-## marital_statusWidowed/Divorced/Separated -3.291e-02  9.534e-03  -3.451 0.000564
-## raceMexican American                      1.220e-02  1.257e-02   0.970 0.331955
-## raceOther                                -1.748e-01  1.543e-02 -11.330  &lt; 2e-16
-## raceOther Hispanic                       -1.576e-02  1.327e-02  -1.188 0.234974
-## raceWhite                                -3.524e-02  9.232e-03  -3.817 0.000137
-## educationHigh school graduate             6.855e-03  1.182e-02   0.580 0.561950
-## educationLess than 9th grade             -5.894e-03  1.595e-02  -0.369 0.711782
-## educationSome college or AA degree        8.946e-03  1.170e-02   0.765 0.444370
-## income_to_poverty                        -9.093e-04  2.701e-03  -0.337 0.736375
+## (Intercept)                               3.387e+00  1.863e-02 181.746  &lt; 2e-16
+## sedentary_activity                        1.802e-04  1.892e-05   9.521  &lt; 2e-16
+## age                                       2.937e-05  2.407e-04   0.122 0.902885
+## genderMale                               -4.204e-02  7.440e-03  -5.651  1.7e-08
+## marital_statusNever married              -3.615e-02  1.060e-02  -3.412 0.000651
+## marital_statusWidowed/Divorced/Separated -3.528e-02  9.507e-03  -3.711 0.000209
+## raceMexican American                     -1.337e-03  1.267e-02  -0.106 0.915973
+## raceOther                                -1.694e-01  1.541e-02 -10.990  &lt; 2e-16
+## raceOther Hispanic                       -1.192e-02  1.322e-02  -0.902 0.367317
+## raceWhite                                -2.818e-02  9.301e-03  -3.030 0.002463
+## educationHigh school graduate             3.175e-03  1.168e-02   0.272 0.785825
+## educationLess than 9th grade             -6.310e-04  1.574e-02  -0.040 0.968029
+## educationSome college or AA degree        1.396e-02  1.153e-02   1.211 0.226038
+## income_to_poverty                        -2.020e-03  2.730e-03  -0.740 0.459351
 ##                                             
 ## (Intercept)                              ***
 ## sedentary_activity                       ***
 ## age                                         
 ## genderMale                               ***
-## marital_statusNever married                 
+## marital_statusNever married              ***
 ## marital_statusWidowed/Divorced/Separated ***
 ## raceMexican American                        
 ## raceOther                                ***
 ## raceOther Hispanic                          
-## raceWhite                                ***
+## raceWhite                                ** 
 ## educationHigh school graduate               
 ## educationLess than 9th grade                
 ## educationSome college or AA degree          
@@ -630,10 +718,10 @@ print(best_model_summary)</code></pre>
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.2319 on 4043 degrees of freedom
-##   (5053 observations deleted due to missingness)
-## Multiple R-squared:  0.06772,    Adjusted R-squared:  0.06472 
-## F-statistic: 22.59 on 13 and 4043 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 0.2344 on 4074 degrees of freedom
+##   (5022 observations deleted due to missingness)
+## Multiple R-squared:  0.06176,    Adjusted R-squared:  0.05877 
+## F-statistic: 20.63 on 13 and 4074 DF,  p-value: &lt; 2.2e-16</code></pre>
 <pre class="r"><code># Plotting the &#39;adjusted&#39; model&#39;s fitted values vs. residuals
 best_model &lt;- cv_results_sedentary$model_sed_adjusted[[1]]
 best_model_residuals &lt;- resid(best_model)
@@ -755,9 +843,9 @@ class="section level1">
 <pre><code>## # A tibble: 3 × 2
 ##   model_type m_rmse
 ##   &lt;chr&gt;       &lt;dbl&gt;
-## 1 adjusted    0.246
+## 1 adjusted    0.247
 ## 2 crude       0.309
-## 3 inter       0.331</code></pre>
+## 3 inter       0.336</code></pre>
 <p>According to the violin plot of the RMSE distribution for each model,
 the adjusted model consistently shows a concentrated distribution of
 lower RMSE values, meaning it has a superior predictive performance
@@ -837,35 +925,35 @@ print(best_adjusted_model_summary)</code></pre>
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -0.77474 -0.15840 -0.00797  0.14524  1.07106 
+## -0.78523 -0.15769 -0.00966  0.14476  1.06734 
 ## 
 ## Coefficients:
 ##                                            Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)                               3.413e+00  1.824e-02 187.105  &lt; 2e-16
-## freq_frozen                              -3.975e-06  2.493e-05  -0.159  0.87331
-## age                                       2.205e-04  2.425e-04   0.909  0.36332
-## genderMale                               -4.398e-02  7.465e-03  -5.891 4.15e-09
-## marital_statusNever married              -1.868e-02  1.051e-02  -1.777  0.07571
-## marital_statusWidowed/Divorced/Separated -2.542e-02  9.608e-03  -2.645  0.00819
-## raceMexican American                     -1.354e-03  1.266e-02  -0.107  0.91486
-## raceOther                                -1.735e-01  1.522e-02 -11.396  &lt; 2e-16
-## raceOther Hispanic                       -2.267e-02  1.327e-02  -1.708  0.08763
-## raceWhite                                -2.370e-02  9.344e-03  -2.536  0.01124
-## educationHigh school graduate             1.598e-02  1.186e-02   1.348  0.17781
-## educationLess than 9th grade             -1.444e-03  1.611e-02  -0.090  0.92859
-## educationSome college or AA degree        2.258e-02  1.173e-02   1.925  0.05430
-## income_to_poverty                         1.938e-03  2.715e-03   0.714  0.47531
+## (Intercept)                               3.412e+00  1.838e-02 185.672  &lt; 2e-16
+## freq_frozen                              -3.118e-06  2.511e-05  -0.124   0.9012
+## age                                       4.282e-04  2.444e-04   1.752   0.0798
+## genderMale                               -4.724e-02  7.545e-03  -6.260 4.24e-10
+## marital_statusNever married              -1.673e-02  1.059e-02  -1.579   0.1143
+## marital_statusWidowed/Divorced/Separated -2.125e-02  9.702e-03  -2.191   0.0285
+## raceMexican American                     -1.020e-02  1.270e-02  -0.803   0.4220
+## raceOther                                -1.811e-01  1.545e-02 -11.724  &lt; 2e-16
+## raceOther Hispanic                       -3.029e-02  1.355e-02  -2.236   0.0254
+## raceWhite                                -3.937e-02  9.399e-03  -4.189 2.86e-05
+## educationHigh school graduate             7.708e-03  1.189e-02   0.648   0.5170
+## educationLess than 9th grade              4.482e-03  1.622e-02   0.276   0.7822
+## educationSome college or AA degree        2.213e-02  1.180e-02   1.875   0.0609
+## income_to_poverty                         1.498e-03  2.762e-03   0.543   0.5875
 ##                                             
 ## (Intercept)                              ***
 ## freq_frozen                                 
-## age                                         
+## age                                      .  
 ## genderMale                               ***
-## marital_statusNever married              .  
-## marital_statusWidowed/Divorced/Separated ** 
+## marital_statusNever married                 
+## marital_statusWidowed/Divorced/Separated *  
 ## raceMexican American                        
 ## raceOther                                ***
-## raceOther Hispanic                       .  
-## raceWhite                                *  
+## raceOther Hispanic                       *  
+## raceWhite                                ***
 ## educationHigh school graduate               
 ## educationLess than 9th grade                
 ## educationSome college or AA degree       .  
@@ -873,10 +961,10 @@ print(best_adjusted_model_summary)</code></pre>
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.2347 on 4062 degrees of freedom
-##   (5034 observations deleted due to missingness)
-## Multiple R-squared:  0.04245,    Adjusted R-squared:  0.03939 
-## F-statistic: 13.85 on 13 and 4062 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 0.2364 on 4049 degrees of freedom
+##   (5047 observations deleted due to missingness)
+## Multiple R-squared:  0.04473,    Adjusted R-squared:  0.04167 
+## F-statistic: 14.59 on 13 and 4049 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>The best-fitting model, based on the cross-validation results, is the
 adjusted model. Thus, a detailed examination was conducted, and its
 summary statistics indicate that: The Intercept is estimated at 3.409 on
@@ -967,6 +1055,8 @@ obesity |&gt; modelr::add_residuals(freq_frozen_crude) |&gt;
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -998,7 +1088,41 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
