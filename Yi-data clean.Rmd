@@ -128,13 +128,13 @@ ggplot(subset(obesity, bmi == "obese"), aes(y = income_to_poverty, x = "", fill 
 
 The box plot shows the distribution of the income to poverty ratio among obese individuals. The data is spread across a range of ratios, mostly concentrated between 1 and 4, with the median around 2. This suggests that individuals with obesity come from a range of economic backgrounds, but there's a tendency towards lower income to poverty ratios.
 
-### Scatter Plot of BMI vs. Sedentary Activity
+### Histogram of Sedentary Activity
 ```{r}
 obesity_sedentary_activity_filtered = obesity |> 
   filter(!is.na(sedentary_activity))
 
 ggplot(obesity_sedentary_activity_filtered, aes(x = sedentary_activity)) +
-  geom_histogram(binwidth = 10, fill = "pink", color = "lightblue") +
+  geom_histogram(binwidth = 1, fill = "pink", color = "lightblue") +
   labs(title = "Sedentary Activity Distribution Among Obese Individuals",
        x = "Sedentary Activity",
        y = "Count") +
