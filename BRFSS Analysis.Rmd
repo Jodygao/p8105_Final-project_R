@@ -1,5 +1,5 @@
 ---
-title: "Conclusion"
+title: "US Prevelance Overview"
 output: 
   html_document:
     code_folding: hide
@@ -15,8 +15,7 @@ library(dplyr)
 library(maps)
 ```
 
-# Data Import
-```{r}
+```{r, include=FALSE}
 overall = read_csv("data/BRFSS/2022-overall-prevalence.csv", show_col_types = FALSE)
 asian = read_csv("data/BRFSS/2022-asian.csv", show_col_types = FALSE)
 black = read_csv("data/BRFSS/2022-black.csv", show_col_types = FALSE)

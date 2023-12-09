@@ -11,7 +11,7 @@
 
 
 
-<title>Conclusion</title>
+<title>US Prevelance Overview</title>
 
 <script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -365,21 +365,11 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Conclusion</h1>
+<h1 class="title toc-ignore">US Prevelance Overview</h1>
 
 </div>
 
 
-<div id="data-import" class="section level1">
-<h1>Data Import</h1>
-<pre class="r"><code>overall = read_csv(&quot;data/BRFSS/2022-overall-prevalence.csv&quot;, show_col_types = FALSE)
-asian = read_csv(&quot;data/BRFSS/2022-asian.csv&quot;, show_col_types = FALSE)
-black = read_csv(&quot;data/BRFSS/2022-black.csv&quot;, show_col_types = FALSE)
-white = read_csv(&quot;data/BRFSS/2022-white.csv&quot;, show_col_types = FALSE)
-hispanic = read_csv(&quot;data/BRFSS/2022-hispanic.csv&quot;, show_col_types = FALSE)
-
-states_map = map_data(&quot;state&quot;)</code></pre>
-</div>
 <div id="maps" class="section level1">
 <h1>Maps</h1>
 <div id="overall-obesity" class="section level2">
@@ -413,8 +403,8 @@ ggplot(data = overall_map) +
         axis.title.y = element_blank())</code></pre>
 <p><img src="BRFSS-Analysis_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 </div>
-<div id="non-hispanic-asian-adults" class="section level2">
-<h2>Non-Hispanic Asian Adults</h2>
+<div id="asian-adults" class="section level2">
+<h2>Asian Adults</h2>
 <pre class="r"><code>asian = suppressWarnings(
   asian |&gt;
   mutate(State = tolower(State))
@@ -446,8 +436,8 @@ ggplot(data = asian_map) +
         axis.title.y = element_blank())</code></pre>
 <p><img src="BRFSS-Analysis_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 </div>
-<div id="non-hispanic-black-adults" class="section level2">
-<h2>Non-Hispanic Black Adults</h2>
+<div id="black-adults" class="section level2">
+<h2>Black Adults</h2>
 <pre class="r"><code>black = suppressWarnings(
   black |&gt;
   mutate(State = tolower(State))
@@ -479,8 +469,8 @@ ggplot(data = black_map) +
         axis.title.y = element_blank())</code></pre>
 <p><img src="BRFSS-Analysis_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 </div>
-<div id="non-hispanic-white-adults" class="section level2">
-<h2>Non-Hispanic White Adults</h2>
+<div id="white-adults" class="section level2">
+<h2>White Adults</h2>
 <pre class="r"><code>white = suppressWarnings(white |&gt;
   mutate(State = tolower(State))
 )

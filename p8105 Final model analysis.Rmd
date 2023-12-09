@@ -171,7 +171,7 @@ Interpretaion: For one unit increase in number of meals from fast food or pizza 
 
 
 ## Cross-Validation and Model Comparison for Predicting BMI Based on Sendendary Activity
-```{r distribution}
+```{r distribution, warning=FALSE}
 # Histogram and Density Plot for Sedentary Activity
 ggplot(obesity, aes(x = sedentary_activity)) +
   geom_histogram(binwidth = 10, fill = "green", color = "black", alpha = 0.7) + 

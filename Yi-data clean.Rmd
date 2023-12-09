@@ -133,16 +133,15 @@ The box plot shows the distribution of the income to poverty ratio among obese i
 obesity_sedentary_activity_filtered = obesity |> 
   filter(!is.na(sedentary_activity))
 
-ggplot(obesity_sedentary_activity_filtered, aes(x = sedentary_activity, y = bmi, color = bmi)) +
-  geom_point() +
-  scale_color_manual(values = c("normal" = "lightblue", "obese" = "pink")) +
-  labs(title = "BMI vs. Sedentary Activity",
-       x = "Sedentary Activity (minutes)",
-       y = "BMI") +
+ggplot(obesity_sedentary_activity_filtered, aes(x = sedentary_activity)) +
+  geom_histogram(binwidth = 10, fill = "pink", color = "lightblue") +
+  labs(title = "Sedentary Activity Distribution Among Obese Individuals",
+       x = "Sedentary Activity",
+       y = "Count") +
   theme_minimal()
 ```
 
-The scatter plot presents a comparison of sedentary activity (in minutes) with BMI categories (normal and obese). Points are relatively evenly distributed across the range of sedentary activity for both BMI categories, suggesting no clear or immediate correlation between the amount of sedentary activity and BMI category within this dataset. It indicates that individuals classified as obese and those with a normal BMI report similar patterns of sedentary behavior.
+The majority of obese individuals report sedentary activity levels between 0 to around 500 minutes, with frequency decreasing as the amount of sedentary activity increases. There are notable peaks at certain intervals which may indicate common reporting increments (～250 minutes). Very few individuals report very high levels of sedentary activity, as seen by the low counts past 1000 minutes.
 
 ## Baseline characterics
 ```{r}
@@ -162,7 +161,8 @@ kable(gender_summary, format = "markdown", caption = "Gender Summary")
 marital_status_summary <- obesity %>%
   count(marital_status) %>%
   mutate(Percentage = n / sum(n) * 100)
-print(marital_status_summary)
+
+kable(marital_status_summary, format = "markdown", caption = "Marital Status Summary")
 ```
 
 ```{r age}
@@ -179,7 +179,7 @@ age_summary <- obesity %>%
     Max = max(age, na.rm = TRUE)
   )
 
-print(age_summary)
+kable(age_summary, format = "markdown", caption = "Age Summary")
 ```
 
 ```{r income}
@@ -196,7 +196,7 @@ income_to_poverty_summary <- obesity %>%
     Max = max(income_to_poverty, na.rm = TRUE)
   )
 
-print(income_to_poverty_summary)
+kable(income_to_poverty_summary, format = "markdown", caption = "Income to Poverty Summary")
 ```
 
 ```{r education}
@@ -204,25 +204,19 @@ education_summary <- obesity %>%
   count(education) %>%
   mutate(Percentage = n / sum(n) * 100)
 
-print(education_summary)
+kable(education_summary, format = "markdown", caption = "Education Summary")
 ```
 
 
 ```{r race}
-
 race_summary <- obesity %>%
   count(race) %>%
   mutate(Percentage = n / sum(n) * 100)
 
-print(race_summary)
+kable(race_summary, format = "markdown", caption = "Race Summary")
 ```
 
-
-What's left for baseline: 
-sedentary_activit, BMI, freq_fast_food, freq_frozen
-
-```{r sedentary_activity}
-
+```{r sedentary_activity, echo=FALSE, message=FALSE}
 sedentary_activity_summary <- obesity %>%
   summarise(
     Count = n(),
@@ -234,29 +228,33 @@ sedentary_activity_summary <- obesity %>%
     `75th_Pctl` = quantile(sedentary_activity, 0.75, na.rm = TRUE),
     Max = max(sedentary_activity, na.rm = TRUE)
   )
-print(sedentary_activity_summary)
+
+kable(sedentary_activity_summary, format = "markdown", caption = "Sedentary Activity Summary")
 ```
 
 ```{r BMI}
-
 bmi_summary <- obesity %>%
   count(bmi) %>%
-  mutate(Percentage = n / sum(n) * 100)
-print(bmi_summary)
+  mutate(Percentage = n / sum(n) * 100) %>%
+  ungroup() 
+
+kable(bmi_summary, format = "markdown", caption = "BMI Summary")
 ```
 
 ```{r fast_food}
 fast_food_summary <- obesity %>%
   group_by(gender, age) %>%
   summarise(Avg_Fast_Food = mean(freq_fast_food, na.rm = TRUE))
-print(fast_food_summary)
+
+kable(fast_food_summary, format = "markdown", caption = "Fast Food Summary")
 ```
 
 ```{r frozen_food}
 frozen_food_summary <- obesity %>%
   group_by(gender, age) %>%
-  summarise(Avg_Frozen_Food = mean(freq_frozen, na.rm = TRUE))
-print(frozen_food_summary)
+  summarise(Avg_Frozen_Food = mean(freq_frozen, na.rm = TRUE)) 
+
+kable(frozen_food_summary, format = "markdown", caption = "Frozen Food Summary")
 ```
 
 
