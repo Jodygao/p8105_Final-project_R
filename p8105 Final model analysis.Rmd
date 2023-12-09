@@ -17,16 +17,8 @@ library(modelr)
 library (broom)
 ```
 
-### Group Members
 
-- Yuandi Gao (yg2907) 
-- Yi Li (yl5214)
-- Yingting Zhang (yz4434)
-- Ruohan Hong (rh3132)
-- Shiqi Wu (sw3737)
-
-## Import data from NHANES
-```{r import data}
+```{r import data, include=FALSE}
 import_df= function(path){
   read_xpt(path)
 }
@@ -91,10 +83,9 @@ obesity=
     bmi>=30 ~'obese'
   )
   )
-  
 ```
 
-
+## Distribution Plot
 ```{r data distribution plots}
 # Histogram for BMI
 ggplot(obesity, aes(x = bmi)) + 
@@ -113,7 +104,6 @@ ggplot(obesity, aes(y = bmi, x = 1)) +
   geom_boxplot(fill = "blue", alpha = 0.5) + 
   labs(title = "Boxplot for BMI", x = "", y = "BMI") + 
   theme_minimal()
-
 ```
 
 The histogram and density plot indicate that the distribution of `BMI` is right-skewed, which is a common observation in health-related data.
@@ -121,8 +111,6 @@ The histogram and density plot indicate that the distribution of `BMI` is right-
 When the response variable in a regression model, BMI, in our case, is not normally distributed, we took a common approach is to apply a transformation to achieve normality. The logarithmic transformation is particularly useful because it is a monotonic transformation that can handle positive skewness by compressing the long tail and expanding the lower end of the distribution. This can make the distribution more symmetric and more closely approximate the normal distribution, which meets the assumptions of linear regression.
 
 By transforming `BMI` using the natural logarithm, we can stabilize the variance (homoscedasticity) and make the relationship between the predictors and the response variable more linear. This is beneficial because linear regression assumes a linear relationship between the predictors and the outcome variable.
-
-
 
 ## Cross-Validation and Model Comparison for Predicting BMI Based on Fast Food Frequency
 First, we compare the three models for predictor fast food frequency 
@@ -146,11 +134,9 @@ cv_results =
     rmse_fast_adjusted = map2_dbl(model_fast_adjusted, test, \(mod, df) rmse(mod, df)),
     rmse_fast_inter = map2_dbl(model_fast_inter, test, \(mod, df) rmse(mod, df))
   )
-  
-
 ```
 
-# Plot of model comparison of fast food frequency
+## Plot of Model Comparison of Fast Food Frequency
 ```{r model comparison}
 cv_results |> 
   select(starts_with("rmse")) |> 
@@ -175,18 +161,16 @@ cv_results |>
   geom_violin()
 ```
 
-## Interpretion of the fast food frequncy in terms of BMI:
-`fast_adjusted` model has a lower median with most of its data concentrated at the lower end of the rmse scale, which suggests better predictive performance for most of its predictions compared to the other models.
-`fast_crude` model has a wider spread of values, indicating less consistency in predictive performance.
-`fast_inter` has most of its data concentrated at the low end like fast_adjusted, but the long tail indicates there are also quite a few cases where its predictions are much worse.
+- `fast_adjusted` model has a lower median with most of its data concentrated at the lower end of the rmse scale, which suggests better predictive performance for most of its predictions compared to the other models.
+- `fast_crude` model has a wider spread of values, indicating less consistency in predictive performance.
+- `fast_inter` has most of its data concentrated at the low end like fast_adjusted, but the long tail indicates there are also quite a few cases where its predictions are much worse.
+
 Considering this, `fast_adjusted` seems to be the best model overall due to its concentration of lower rmse values, although `fast_inter` may also perform similarly well for the majority of predictions but has some predictions with high error. 
 
-## Interpretation of fast food variable:
-For one unit increase in number of meals from fast food or pizza place, the bmi will decrease by 0.0026 kg/m^2, while adjusting for all other covariate in the model.
+Interpretaion: For one unit increase in number of meals from fast food or pizza place, the bmi will decrease by 0.0026 kg/m^2, while adjusting for all other covariate in the model.
 
 
-## Cross-Validation and Model Comparison for Predicting BMI Based on Fast Food FrequencyBMI and predictor sendendary activity
-
+## Cross-Validation and Model Comparison for Predicting BMI Based on Sendendary Activity
 ```{r distribution}
 # Histogram and Density Plot for Sedentary Activity
 ggplot(obesity, aes(x = sedentary_activity)) +
@@ -196,8 +180,7 @@ ggplot(obesity, aes(x = sedentary_activity)) +
   theme_minimal()
 ```
 
-# Step 1: Model building for sedentary activity with log(BMI)
-
+### Step 1: Model building for sedentary activity with log(BMI)
 ```{r model building}
 cv_df_sedentary = 
   obesity |> 
@@ -236,7 +219,7 @@ cv_results_sedentary |>
 ```
 
 
-# Summary of Cross validation Results- sendendary activity
+## Summary of Cross validation Results- Sendendary Activity
 ```{r}
 cv_results_sedentary |> 
   select(starts_with("rmse_sed")) |> 
@@ -257,9 +240,10 @@ The cross-validation results show that the mean RMSE for the adjusted and inter 
 A valid reason we choose the adjusted model over the inter model, despite having the same RMSE, could be due to its simplicity and interpretability. The adjusted model includes additional covariates (age, gender, marital status, race, education, and income to poverty ratio) that are expected to be related to BMI based on previous research or theoretical considerations. Including these covariates allows the model to account for more variability in BMI that is explained by these factors.
 
 Moreover, while interaction terms in the inter model may capture the combined effects of sedentary activity with other variables, they can make the model more complex and harder to interpret.
-We proceed the model statitics in adjusted model for sedentary activity.
 
+We proceed the model statistics in adjusted model for sedentary activity.
 
+### Adjusted Model
 ```{r model plot for adjusted model}
 # Step 1: Generate new data for plotting
 new_data <- with(obesity, expand.grid(
@@ -286,20 +270,18 @@ ggplot(new_data, aes(x = sedentary_activity, y = log_bmi_pred)) +
 ```
 
 ```{r}
-# Extract the summary of the 'adjusted' model
 best_model_summary <- cv_results_sedentary$model_sed_adjusted[[1]] %>% summary()
 
-# Print the summary which includes beta coefficients, p-values, etc.
+# Summary of Adjusted Model
 print(best_model_summary)
 ```
-```{r residual plot for activity}
 
-# Plotting the 'adjusted' model's fitted values vs. residuals
+## Residual Plot for Adjusted Model - Sedentary Activity
+```{r residual plot for activity}
 best_model <- cv_results_sedentary$model_sed_adjusted[[1]]
 best_model_residuals <- resid(best_model)
 best_model_fitted <- fitted(best_model)
 
-# Create a residuals vs fitted values plot
 residual_plot <- ggplot() +
   geom_point(aes(x = best_model_fitted, y = best_model_residuals)) +
   geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
@@ -309,31 +291,26 @@ residual_plot <- ggplot() +
   theme_minimal() +
   geom_smooth(aes(x = best_model_fitted, y = best_model_residuals), method = "loess", se = FALSE)
 
-# Print the residual plot
 print(residual_plot)
 ```
 
-## Interpretation of the Adjusted model (activity)
-`Coefficients Interpretation on Log Scale`:
-`Intercept`: The estimated `log(BMI)` is approximately 3.366 when all predictor variables are held at zero. To interpret this on the original BMI scale, you would calculate exp(3.366). This value represents the estimated BMI for the baseline categories of all categorical predictors (usually the most common or reference category) and zero for continuous predictors.
+**Coefficients Interpretation on Log Scale**
+- `Intercept`: The estimated `log(BMI)` is approximately 3.366 when all predictor variables are held at zero. To interpret this on the original BMI scale, you would calculate exp(3.366). This value represents the estimated BMI for the baseline categories of all categorical predictors (usually the most common or reference category) and zero for continuous predictors.
 
-`Sedentary Activity`: The coefficient for sedentary activity is positive (0.0001905) and statistically significant. This suggests that for each unit increase in sedentary activity, the log(BMI) increases by this amount. To interpret the effect on the original BMI scale, consider that a small increase in the `log(BMI)` corresponds to a percentage increase in BMI. Specifically, a one-unit increase in sedentary activity is associated with approximately a 0.01905% increase in BMI.
+- `Sedentary Activity`: The coefficient for sedentary activity is positive (0.0001905) and statistically significant. This suggests that for each unit increase in sedentary activity, the log(BMI) increases by this amount. To interpret the effect on the original BMI scale, consider that a small increase in the `log(BMI)` corresponds to a percentage increase in BMI. Specifically, a one-unit increase in sedentary activity is associated with approximately a 0.01905% increase in BMI.
 
-`Other Predictors`: Similarly, for other continuous predictors like age, the coefficient represents the percentage change in BMI for a one-unit increase in that predictor. For categorical predictors like gender, marital status, and race, the coefficients represent the percentage difference in BMI compared to the reference category.
+- `Other Predictors`: Similarly, for other continuous predictors like age, the coefficient represents the percentage change in BMI for a one-unit increase in that predictor. For categorical predictors like gender, marital status, and race, the coefficients represent the percentage difference in BMI compared to the reference category.
 
-`Model Fit and R-squared`:
-The `R-squared` value (0.06851) indicates that about 6.851% of the variability in log-transformed BMI is explained by the model. While this might seem low, it's not uncommon in behavioral and social science research where many unmeasured factors can influence the outcome.
-Statistical Significance:
+- `Model Fit and R-squared`: The `R-squared` value (0.06851) indicates that about 6.851% of the variability in log-transformed BMI is explained by the model. While this might seem low, it's not uncommon in behavioral and social science research where many unmeasured factors can influence the outcome.
 
+**Statistical Significance**
 The significance of the coefficients suggests that these factors have a statistically significant association with BMI. However, the magnitude of these effects  might be small, especially for variables like age and income_to_poverty ratio.
 
-
-Overall Interpretation:
+**Overall Interpretation**
 The significant predictors in the model, like `sedentary activity` and `gender`, indicate factors that are associated with `BMI`. However, the small R-squared value suggests that many other factors not included in the model also influence `BMI`.
 Given that the response variable is log-transformed, the interpretation is in terms of percentage change (for continuous predictors) or relative percentage difference (for categorical predictors) in BMI.
 
-
-# Cross-Validation and Model Buildup  for Predicting BMI Based on Frozen Fast Food Frequency
+# Cross-Validation and Model Buildup for Predicting BMI Based on Frozen Fast Food Frequency
 ```{r}
 cv_df_frozen = 
   obesity |> 
@@ -342,10 +319,9 @@ cv_df_frozen =
     train = map(train, as_tibble),
     test = map(test, as_tibble)
   )
-
 ```
 
-# Model building for frozen fast food with log(BMI)
+## Model building - log(BMI)
 ```{r}
 cv_results_frozen =
   cv_df_frozen |> 
@@ -361,7 +337,7 @@ cv_results_frozen =
   )
 ```
 
-# Cross-validation comparison
+## Cross-validation Comparison
 ```{r}
 cv_results_frozen |> 
   select(starts_with("rmse_frozen")) |> 
@@ -375,7 +351,7 @@ cv_results_frozen |>
   geom_violin()
 ```
 
-# Summary of Cross-Validation Results
+## Results
 ```{r}
 cv_results_frozen |> 
   select(starts_with("rmse_frozen")) |> 
@@ -391,8 +367,7 @@ cv_results_frozen |>
 
 According to the violin plot of the RMSE distribution for each model, the adjusted model consistently shows a concentrated distribution of lower RMSE values, meaning it has a superior predictive performance relative to the crude and interaction models. This observation is confirmed by the summary of cross-validation results, which indicates that the adjusted model has the lowest mean RMSE of 0.243, compared to 0.309 for the crude model and 0.336 for the interaction model. Since lower values mean better model performance, the adjusted model has the best model performance among these three models.
 
-# Model Plot for Adjusted Model
-# Generate new data for plotting
+## Adjusted Model
 ```{r}
 obesity$marital_status <- factor(obesity$marital_status)
 obesity$race <- factor(obesity$race)
@@ -409,10 +384,9 @@ new_data_frozen <- expand.grid(
 )
 
 str(new_data_frozen)
-
-
 ```
-# Predict log(BMI) using the adjusted model and the new data
+
+### Predict log(BMI) 
 ```{r}
 
 adjusted_model_frozen <- cv_results_frozen$model_frozen_adjusted[[1]]
@@ -427,7 +401,7 @@ ggplot(new_data_frozen, aes(x = freq_frozen, y = log_bmi_pred)) +
   theme_minimal()
 ```
 
-# Summary of the best 'adjusted' model from cross-validation
+### Best 'Adjusted' Model from Cross-validation
 ```{r}
 best_adjusted_model_summary <- cv_results_frozen$model_frozen_adjusted[[1]] %>% summary()
 
@@ -437,8 +411,7 @@ print(best_adjusted_model_summary)
 
 The best-fitting model, based on the cross-validation results, is the adjusted model. Thus, a detailed examination was conducted, and its summary statistics indicate that: The Intercept is estimated at 3.409 on the log scale. The coefficient for frozen fast food frequency is -4.291e-06 with a p-value of 0.86427, this suggests that the number of frozen fast food meals consumed does not have a statistically significant effect on BMI in this model. Other covariates, such as gender and race show significant associations with BMI, with gender (Male) and race (Other) showing a strong negative association with BMI. The R-squared value of 0.03455 indicates that approximately 3.455% of the variability in the log-transformed BMI is explained by the model.
 
-
-# Create a residuals plot for the 'adjusted' model
+### Residuals Plot
 ```{r}
 adjusted_model <- cv_results_frozen$model_frozen_adjusted[[1]]
 adjusted_model_residuals <- resid(adjusted_model)
@@ -469,10 +442,9 @@ The relatively stable variance in residuals suggests that the linear model is a 
 
 # Regression Models and Diagnostics
 
-Model1: log(BMI)=freq_fast
+## Model1: log(BMI)=freq_fast
 ```{r}
 
-# Crude model for freq_fast_food
 freq_fast_crude = lm(log(bmi) ~ freq_fast_food, data = obesity)
 
 obesity |> modelr::add_residuals(freq_fast_crude) |> 
@@ -481,20 +453,18 @@ obesity |> modelr::add_residuals(freq_fast_crude) |>
 
 ```
 
-Model2: log(BMI)=sedentary activity
+## Model2: log(BMI)=sedentary_activity
 ```{r}
 
-# Crude model for inactivity
 inactivity_crude = lm(log(bmi) ~ sedentary_activity, data = obesity)
 
 obesity |> modelr::add_residuals(inactivity_crude) |> 
   ggplot(aes(sample = resid))+stat_qq()+stat_qq_line()
 ```
 
-Model3: log(BMI)=freqence of frozen
+## Model3: log(BMI)=freqence of frozen
 ```{r}
 
-# Crude model for freq_frozen
 freq_frozen_crude = lm(log(bmi) ~ freq_frozen, data = obesity)
 
 
