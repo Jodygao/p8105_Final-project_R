@@ -5,6 +5,8 @@ navbar:
   right:
     - text: "US Overview"
       href: BRFSS-Analysis.html
+    - text: "Final report"
+      href: Report.html
     - text: "Data Sources"
       href: Data-Sources.html
     - text: "Preliminary Analysis"
