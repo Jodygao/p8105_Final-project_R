@@ -7,64 +7,52 @@ output:
     toc_float: true
 ---
 
-“A Holistic Perspective on Public Health and Personal Wellness Among the Obese Population in the U.S"
-Project Report
+“Multifaceted Analysis of Obesity: Exploring the Interplay of Diet, Sedentary Lifestyle, and Socio-Demographic Factors in the United States from 2017-2020"
 
-
-
-
-
-
-
-Group members: 
-Yuandi Gao(yg2907)
-Yi Li(yl5214)
-Yingting Zhang(yz4434) 
-Ruohan Hong(rh3132)
-Shiqi Wu (sw3737)
-
-P8105 Data Sciences
-
-
-
-
-
-
-Motivation
+## Motivation
 The increasing prevalence of obesity cases in the United States is becoming a serious public health issue and bringing up lots of adverse comorbidities. The problem that comes with obesity exists not just on an individual level but is more troublesome as it can lead to substantial effects on the overall healthcare system's performance and affect economies across the country. When we talk about obesity nowadays, we can not stop thinking of the burden that associated with it. According to a National Survey published by Forbes Health, between  2017 and 2020, around 41.9% of adults in the United States were obese1. With almost half of the adults being obese, Obesity was considered a national epidemic. Concerns like chronic diseases, type 2 diabetes, cardiovascular conditions, and certain forms of cancer, that are linked with obesity, can easily lead to heightened mortality rates and diminished quality of life. The causes of obesity are diverse and complex2, involving genetics, societal, and environmental factors but addressing this public health problem and educating the importance of personal wellness among the obese population in the U.S. is in urgent need.
 
-Related work/Inspiration 
-	The inspiration for this project comes from a small observation and pure curiosity. Although it has always been acknowledged that obesity prevalence is very high in the U.S., it can have many adverse health effects on one’s overall health and well-being, our awareness of obesity as a health issue was still initially superficial. However, it deepened significantly this semester. For most of us in the group, we have a class running from 5:30-8:30 PM. By the time we finish the class, what we rely on is McDonald’s, primarily due to its distance to the campus, low price, and is the one that still opens at that time of the day. This routine exposure to fast food changed our way of understanding obesity’s impacts on the public since we constantly see people with big body images consuming fast food in McDonald’s. The observation led to curiosity and we wonder about the health consequences of fast-food consumption and the impact of obesity.    
+## Related work/Inspiration 
+The inspiration for this project comes from a small observation and pure curiosity. Although it has always been acknowledged that obesity prevalence is very high in the U.S., it can have many adverse health effects on one’s overall health and well-being, our awareness of obesity as a health issue was still initially superficial. However, it deepened significantly this semester. For most of us in the group, we have a class running from 5:30-8:30 PM. By the time we finish the class, what we rely on is McDonald’s, primarily due to its distance to the campus, low price, and is the one that still opens at that time of the day. This routine exposure to fast food changed our way of understanding obesity’s impacts on the public since we constantly see people with big body images consuming fast food in McDonald’s. The observation led to curiosity and we wonder about the health consequences of fast-food consumption and the impact of obesity.    
 
-Initial questions 
-Primary Questions: 
+#Initial questions 
+## Primary Questions: 
 How does the frequency of fast food consumption relate to the Body Mass Index (BMI) of individuals in the U.S.?
 Is there a significant correlation between the consumption of frozen fast food and BMI?
 How does sedentary activity impact BMI, and what is the extent of this impact?
-Evolution of Questions:
+## Evolution of Questions:
 As we dig deeper into the project and go into the data analysis section, the initial questions evolved to accommodate the complexities of dietary habits and lifestyle choices. The simple correlation between fast food consumption and BMI was expanded to include other variables like physical inactivity.
 The inadequacy of finding significant results in the initial models led to a deeper exploration of other contributing factors. This shift prompted a broader approach to understanding the multifaceted nature of obesity.
-Emerging Questions:
+## Emerging Questions:
 Given the nonsignificant findings in the initial models, new questions emerged: Are there other dietary or lifestyle factors, beyond fast food consumption and physical inactivity, that significantly contribute to obesity?
 Analysis Driven Questions(For us to consider later): 
 During the data analysis, our group also brought up questions about the effectiveness of existing public health strategies in combating obesity. We still see lots of news and articles saying the prevalence rate increasing, but not much mentioning the success of any interventions. What are the gaps in current approaches, and how can they be addressed more holistically?
 How can we use the analysis we did and the website we made to form public health policy changes, for it to better tackle the root causes of obesity, considering the complex interplay of individual, societal, and environmental factors?
 
-Data
-Data Source
+# Data
+## Data Source
 Description. The 2017–March 2020 Pre-Pandemic Data Files for this study are sourced from the National Health and Nutrition Examination Survey (NHANES), which is an ongoing series of studies designed to assess the health and nutritional status of the civilian noninstitutionalized U.S. population. The NHANES data collection involves interviews and physical examinations, covering a wide range of health and nutrition-related topics. The data is critical for the assessment of public health and nutrition and aids in the development of health policies and research. Special weighting measures have been applied to the combined dataset to ensure that it reflects the population and health trends accurately for nationally representative estimates.
-Data Collection Methodology
+
+## Data Collection Methodology
 Primary Sampling Units (PSUs). The survey utilizes a multistage probabilistic sampling design. In the first stage, PSUs are selected based on stratification by various health and demographic characteristics. Each PSU is typically a county or a group of contiguous counties.
+
 Stratification. States are categorized into health groups according to health index values. PSUs are further divided into major strata within each health group, which are determined by the urban-rural population distribution and other locality characteristics.
+
 Sampling Periods. The 2017-2018 and 2019-March 2020 cycles were based on different 4-year sample designs, with PSUs selected annually from their respective strata.
- 	Representativeness. The 2017-March 2020 pre-pandemic data file includes PSUs from the 2017-2018 cycle and 2019-March 2020 data collection. The combined dataset was calibrated to ensure national representativeness according to the 2015-2018 sample design, accounting for changes in population size and other characteristics that determine major stratum membership.
-Data Cleaning
-We first import three files by creating the data import function (import_df) that reads the data from an .XPT file format. The four datasets that were merged were: Demographic Variables and Sample Weights (P_DEMO), Body Measures (P_BMX), Physical Activity (P_PAQ) andDiet Behavior & Nutrition (P_DBQ). Using a full join on the ‘SEQN’ column to merge the datasets. Then, we select the specific column that are meaningful in the process of analysis: SEQN, RIAGENDR, RIDAGEYR, DMDMARTZ, INDFMPIR, RIDRETH3, DMDEDUC2, PAD680, BMXBMI, DBD900, and DBD910.
+
+Representativeness. The 2017-March 2020 pre-pandemic data file includes PSUs from the 2017-2018 cycle and 2019-March 2020 data collection. The combined dataset was calibrated to ensure national representativeness according to the 2015-2018 sample design, accounting for changes in population size and other characteristics that determine major stratum membership.
+
+# Data Cleaning
+We first import three files by creating the data import function (import_df) that reads the data from an .XPT file format. The four datasets that were merged were: Demographic Variables and Sample Weights (P_DEMO), Body Measures (P_BMX), Physical Activity (P_PAQ) andDiet Behavior & Nutrition (P_DBQ). Using a full join on the ‘SEQN’ column to merge the datasets. Then, we select the specific column that are meaningful in the process of analysis: `SEQN`, `RIAGENDR`, `RIDAGEYR`, `DMDMARTZ`, `INDFMPIR`, `RIDRETH3`, `DMDEDUC2`, `PAD680`, `BMXBMI`, `DBD900`, and `DBD910`.
+
 Next, we did the data filtering by filtering out specific values from various column (e.g., '77', '99', '.', '7777', '9999'). This step removed the missing, unknown, and null value from the dataset and only kept those meaningful values in the dataset.
+
 Furthermore, we rename the columns to more descriptive names like 'gender', 'age', 'marital_status', etc. After this step, we use the mutate function to transform and categorize several columns:
 gender: Categorizing and converting to a factor.
+
 marital_status, race, education: Categorizing different demographic details.
-obese: Creating a new variable based on BMI, categorizing individuals as 'normal' or 'obese'.
+obese: Creating a new variable based on BMI, categorizing individuals as `normal` or `obese`.
+
 The variables in the Final dataset are listed below:
  `SEQN` : Respondent sequence number
 `gender`: Female or male
@@ -77,28 +65,36 @@ The variables in the Final dataset are listed below:
 `freq_frozen`: Numbers of frozen meals/pizza in past 30 days
 `sedentary_activity`: Minutes sedentary activity
 `obese`: normal, obese
+
 The process effectively cleans and transforms the data, preparing it for analysis related to obesity. The use of case_match and case_when for categorizing data is particularly efficient, as it allows for more readable and interpretable data. This structured approach ensures the dataset is clean, well-organized, and ready for further statistical analysis or visualization.
 
-Exploratory Analysis
-Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.
+
+# Exploratory Analysis
 
 Interpretation: The bar chart displays the prevalence of obesity across different racial categories, differentiated by gender. It shows that the White population has the highest count of obesity cases, with a notable number of cases in both genders. The Black population follows, with females being higher than males, whereas the "Other Hispanic" categories have the lowest count of obesity cases.
 
 Interpretation: The histogram indicates that obesity is present across all age groups, with a relatively uniform distribution from young adulthood to late middle age. There's a significant peak in obesity cases among individuals in their late 50s to early 60s. After this peak, the number of obese individuals declines sharply for those in the older age groups.
+
 Interpretation: The box plot shows the distribution of the income to poverty ratio among obese individuals. The data is spread across a range of ratios, mostly concentrated between 1 and 4, with the median around 2. This suggests that individuals with obesity come from a range of economic backgrounds, but there's a tendency towards lower income to poverty ratios.
 
 Interpretation: The majority of recorded sedentary activity times for both normal and obese BMI categories are clustered around the lower end of the activity scale. This suggests that shorter periods of sedentary activity are more common among the participants regardless of BMI category.
 
 The normal BMI category (red bars) generally has a higher count across most bins of sedentary activity compared to the obese category (cyan bars), indicating that there are more instances of people with normal BMI in the dataset. Both normal and obese categories show a decrease in count as the minutes of sedentary activity increase. However, this decrease appears to be more gradual for the normal BMI category and more pronounced for the obese BMI category, especially after around 500 minutes of sedentary activity where the counts are very low.
+
 There are very few instances of extremely high sedentary activity (approaching 1000 minutes) for either BMI category. These observations could suggest several things, such as a possible correlation between lower amounts of sedentary activity and normal BMI, and vice versa.
-Statistical Analysis
+
+
+# Statistical Analysis
 Analysis of the relationship between fast food consumption and BMI:
 First, we used the crossv_mc function to create 100  Monte Carlo cross-validation splits of the obesity dataset. This approach helps in assessing the model's performance more robustly by training and testing it on different subsets of the data. Then, we constructed three different models including a fast-food variable as the predictor and log(bmi) as the outcome for each training set to decide which model was best fit.
+
 Three models are listed below
 model_fast_crude: A simple linear regression model with log(bmi) as the response variable and freq_fast_food as the predictor.
 model_fast_adjusted: An adjusted linear regression model including freq_fast_food and other covariates like age, gender, marital status, race, education, and income_to_poverty.
 model_fast_inter: An interaction model considering interactions between freq_fast_food and variables such as education and income_to_poverty, along with the main effects of these predictors.
-Model Performance Evaluation
+
+
+## Model Performance Evaluation
 After the computation of the RMSE for each model on their test dataset, the violin plot was made for visualization purposes. This plot helps in comparing the distribution of RMSEs across the model. Furthermore, we look at the summary of the Best-Fitting Model. We extracted and printed the summary of the adjusted model, which is the best model from the previous step. This summary includes beta coefficients and p-values.
 Then, we do the residual analysis for the adjusted Model. A plot of residuals versus fitted values for the best_model_fast (adjusted model) was created. This plot is crucial for diagnosing model fit, as it helps in identifying patterns in the residuals that might suggest problems with the model, such as non-linearity or heteroscedasticity.
 
@@ -106,15 +102,19 @@ Then, we do the residual analysis for the adjusted Model. A plot of residuals ve
 Best-Fitting Model Analysis
 
 The estimated `log(BMI)` is approximately 3.414 when all predictor variables are held at zero. To interpret this on the original BMI scale, you would calculate exp(3.414). This value represents the estimated BMI for the baseline categories of all categorical predictors (usually the most common or reference category) and zero for continuous predictors. The coefficient for consumption of the number of meals from fast food or pizza place is positive (0.00264) and statistically significant. To interpret the effect on the original BMI scale, consider that a small increase in the `log(BMI)` corresponds to a percentage increase in BMI. Specifically, for each one-unit increase in fast food consumption, the log(BMI) is expected to increase by 0.0026372 kg/m^2. Similarly, for other continuous predictors like age, the coefficient represents the percentage change in log(BMI) for a one-unit increase in that predictor. For categorical predictors like gender, marital status, and race, the coefficients represent the percentage difference in log(BMI) compared to the reference category. The `R-squared` value (0.02777) indicates that about 2.777% of the variability in log-transformed BMI is explained by the model. While this might seem low, it's not uncommon in behavioral and social science research where many unmeasured factors can influence the outcome. The significance of the coefficients suggests that these factors have a statistically significant association with BMI. However, the magnitude of these effects  might be small, especially for variables like age, education and income_to_poverty ratio. The significant predictors in the model, like `freq_fast_food `,`gender`,`race` indicate factors that are associated with `BMI`. However, the small R-squared value suggests that many other factors not included in the model also influence `BMI`. Given that the response variable is log-transformed, the interpretation is in terms of percentage change (for continuous predictors) or relative percentage difference (for categorical predictors) in BMI.
-Residual Analysis
+
+
+## Residual Analysis
 
 The variance of residuals increasing with the fitted values suggests that the model might benefit from a transformation of variables or the inclusion of additional predictors to stabilize the variance across the range of predictions. The curvature in the LOESS line could imply that the model is missing some complexity of the relationship, which might be addressed with non-linear terms or interaction terms in the model.
-Conclusion
+
+## Conclusion
 Overall, this residual plot indicates that while the model might be performing adequately, there is room for improvement in terms of accounting for non-constant variance and potentially non-linear relationships.
 
 Analysis of the relationship between sedentary activity and BMI:
 This model's aim is to understand how sedentary activity potentially influences BMI when controlling for demographic and socioeconomic factors. 
-Histogram for Sedentary Activity
+
+## Histogram for Sedentary Activity
 
 Sedentary activity with log(BMI) - Cross-validation Results
 In the context of these models, a lower RMSE indicates a more accurate prediction of BMI from the predictors used in the model.
@@ -124,15 +124,13 @@ The cross-validation results show that the mean RMSE for the adjusted and inter 
 A valid reason we chose the adjusted model over the inter-model, despite having the same RMSE, could be its simplicity and interpretability. The adjusted model includes additional covariates (age, gender, marital status, race, education, and income-to-poverty ratio) that are expected to be related to BMI based on previous research or theoretical considerations. Including these covariates allows the model to account for more variability in BMI that is explained by these factors.
 
 Moreover, while interaction terms in the inter-model may capture the combined effects of sedentary activity with other variables, they can make the model more complex and harder to interpret. We proceed the model statistics in the adjusted model for sedentary activity.
-Violin plot: model_type
 
-Interpretation of the Adjusted model (Sedentary Ativity)
+## Interpretation of the Adjusted model (Sedentary Ativity)
 Coefficients Interpretation on Log Scale: Intercept: The estimated log(BMI) is approximately 3.366 when all predictor variables are held at zero. To interpret this on the original BMI scale, you would calculate exp(3.366). This value represents the estimated BMI for the baseline categories of all categorical predictors (usually the most common or reference category) and zero for continuous predictors.
 
 Sedentary Activity: The coefficient for sedentary activity is positive (0.0001905) and statistically significant. This suggests that for each unit increase in sedentary activity, the log(BMI) increases by this amount. To interpret the effect on the original BMI scale, consider that a small increase in the log(BMI) corresponds to a percentage increase in BMI. Specifically, a one-unit increase in sedentary activity is associated with approximately a 0.01905% increase in BMI.
 
-Predict log(BMI) using the adjusted model
-
+## Predict log(BMI) using the adjusted model
 
 Other Predictors: Similarly, for other continuous predictors like age, the coefficient represents the percentage change in BMI for a one-unit increase in that predictor. For categorical predictors like gender, marital status, and race, the coefficients represent the percentage difference in BMI compared to the reference category.
 
@@ -140,36 +138,42 @@ Model Fit and R-squared: The R-squared value (0.06851) indicates that about 6.85
 
 Statistical Significance: The significance of the coefficients suggests that these factors have a statistically significant association with BMI. However, the magnitude of these effects might be small, especially for variables like age and income_to_poverty ratio.
 
-Residuals vs Fitted values plot
-
+## Residuals vs Fitted values plot
 
 Overall Interpretation: The significant predictors in the model, like sedentary activity and gender, indicate factors that are associated with BMI. However, the small R-squared value suggests that many other factors not included in the model also influence BMI. Given that the response variable is log-transformed, the interpretation is in terms of percentage change (for continuous predictors) or relative percentage difference (for categorical predictors) in BMI.
 
-Analysis of the relationship between frozen food consumption and BMI:
+# Analysis of the relationship between frozen food consumption and BMI:
 This model's aim is to understand how frozen food consumption potentially influences BMI when controlling for demographic and socioeconomic factors. I first started generating 100 Monte Carlo cross-validation splits of the obesity dataset. By doing so, I was able to evaluate the model's predictive performance across various subsets of the data, thereby providing a more reliable assessment of its predictive capabilities.
 Three linear regression models were then used for comparison and analysis
+
 Crude Model: ‘model_frozen_crude’ includes only the frequency of frozen fast food consumption as a predictor for log-transformed BMI.
 Adjusted Model: ‘model_frozen_adjusted’ adjusts for additional covariates, including age, gender, marital status, race, education, and income-to-poverty ratio.
 Interaction Model: ‘model_frozen_inter’ includes interaction terms between frozen fast food frequency and socioeconomic factors such as education and income-to-poverty ratio, alongside the main effects.
-Model Performance Evaluation
+
+## Model Performance Evaluation
 According to the violin plot of the RMSE distribution for each model, the adjusted model consistently shows a concentrated distribution of lower RMSE values, meaning it has a superior predictive performance relative to the crude and interaction models. This observation is confirmed by the summary of cross-validation results, which indicates that the adjusted model has the lowest mean RMSE of 0.243, compared to 0.309 for the crude model and 0.336 for the interaction model. Since lower values mean better model performance, the adjusted model has the best model performance among these three models.
-Violin plot: model_type
-Cross-Validation Results
+
+
+## Cross-Validation Results
 Best-Fitting Model Analysis
 The best-fitting model, based on the cross-validation results, is the adjusted model. Thus, a detailed examination was conducted, and its summary statistics indicate that:
 The Intercept is estimated at 3.409 on the log scale. 
 The coefficient for frozen fast food frequency is -4.291e-06 with a p-value of 0.86427, this suggests that the number of frozen fast food meals consumed does not have a statistically significant effect on BMI in this model.
+
 Other covariates, such as gender and race, show significant associations with BMI, with gender (Male) and race (Other) showing a strong negative association with BMI.
 The R-squared value of 0.03455 indicates that approximately 3.455% of the variability in the log-transformed BMI is explained by the model.
-Residual Analysis
+
+## Residual Analysis
 The residuals plot against fitted values provides insight into the adequacy of the model fit. The presence of a random scatter of residuals around the horizontal line at zero suggests no obvious issues with non-linearity or heteroscedasticity. However, the slight curvature in the LOESS line and the increasing spread of residuals at higher fitted values could imply potential model misspecification or the need for a variable transformation to address heteroscedasticity.
 
-Conclusion
+# Conclusion
 Overall, our analysis suggests that while frozen fast food consumption frequency does not significantly predict BMI, other factors such as gender and race do have significant associations. The small R-squared value implies that other unmeasured factors also play a role in influencing BMI, which are not captured by this model.
 The relatively stable variance in residuals suggests that the linear model is a reasonable fit for the data, although there is room for improvement. Future modeling efforts might explore the inclusion of non-linear terms, additional interaction terms, or other predictor variables to enhance the model's explanatory power.
-Data Visualization
+
+# Data Visualization
 Initial exploratory data analysis involved visualizing the distribution of sedentary activity within the study population. Histogram and density plots revealed the spread and central tendency of sedentary activity levels, which is crucial for identifying the range of sedentary behaviors in the dataset.
-Regression Analysis
+
+# Regression Analysis
 A robust statistical approach was employed to predict BMI, operationalized through a natural logarithmic transformation to achieve normalization. Three distinct models were constructed to analyze the relationship:
 Crude Model: A simple linear regression with sedentary activity as the sole predictor.
 Adjusted Model: An extended model incorporating covariates such as age, gender, marital status, race, education, and income-to-poverty ratio.
@@ -177,7 +181,8 @@ Interaction Model: A sophisticated model considering the interaction between sed
 Each model was rigorously tested using a 100-fold cross-validation procedure to ensure the stability and reliability of our findings.
 Model Comparison and Selection
 The comparison of cross-validation results revealed a slightly superior performance of the adjusted and interaction models over the crude model, indicated by marginally lower RMSE values (0.235 vs. 0.237). These results support the hypothesis that sedentary activity and BMI are linked, and this association is influenced by the included covariates. The choice of the adjusted model was driven by its balance of complexity and interpretability, as it significantly accounts for more variability in BMI while remaining comprehensible.
-Model Statistics
+
+# Model Statistics
 The regression coefficients from the adjusted model provide insight into the relationship between each predictor and BMI:
 Sedentary Activity: A positive and significant relationship with BMI, though the effect size is relatively small.
 Gender: Being male is associated with a lower BMI compared to females.
@@ -187,10 +192,10 @@ Education: Attaining some college or AA degree is associated with a higher BMI c
 The R-squared value of 0.06094, although modest, is not uncommon in behavioral sciences, indicating that other factors not included in the model also influence BMI.
 Residual Analysis
 The residual plot for the interaction model was evaluated, revealing a random scatter of residuals around the zero line with no apparent systematic pattern, indicating a good fit for the model. The blue LOESS curve is relatively flat and centered around the horizontal red dashed line, which further corroborates the model's appropriateness.
-Detailed Interpretation
+## Detailed Interpretation
 The coefficients obtained through regression analysis must be interpreted in the context of a log-transformed dependent variable. For instance, the coefficient for sedentary activity (0.0001753) suggests that for each additional unit of sedentary activity, there is a corresponding 0.01753% increase in BMI, holding other variables constant. This nuanced interpretation is vital for understanding the true impact of sedentary behavior on BMI.
 
-Discussion
+# Discussion
 Our findings underscored the significant, albeit modest, influence of sedentary behavior, on BMI when adjusted for demographic and socioeconomic factors. The adjusted model's efficacy in capturing this relationship provides a compelling narrative about the subtle yet impactful role of lifestyle choices on personal health metrics such as BMI.
 
 Furthermore, the linear regression analysis for fast food emphasizes that the positive and statistically significant coefficient for fast food consumption underscores the importance of dietary habits in influencing BMI. While the effect size of fast food consumption on BMI may seem small, over time or across a population, even small increases in BMI can have substantial health implications. This analysis could have a profound influence on policy and the health field. For instance, the result could inform interventions aimed at reducing fast food consumption as part of a strategy to combat obesity.
@@ -200,7 +205,7 @@ These insights carry significant implications for public health initiatives. The
 The nuanced understanding gleaned from our analysis can inform health policies and programs, enabling them to target interventions more effectively and contribute to the broader goal of mitigating obesity's prevalence and impact.
 
 
-Limitations
+# Limitations
 Despite the robust analytical framework employed, our study is not devoid of limitations:
 
 Transformation Challenges: The use of log-transformed BMI to normalize the distribution may introduce complexities in interpretation. The relationship between predictors and the outcome in the transformed scale does not readily translate to the original BMI scale without back-transformation.
@@ -217,7 +222,7 @@ Clinical Relevance: The clinical relevance of a log-transformed BMI may not be a
 
 Generalizability: Our results are based on the U.S. population and may not be generalizable to other countries or cultures due to differences in lifestyle, diet, and genetic factors.
 
-Future Directions
+# Future Directions
 Considering these limitations, future research could:
 
 Incorporate additional variables and potential confounders to capture a more complete picture of the factors influencing BMI.
@@ -228,10 +233,7 @@ Extend the analysis to diverse populations to enhance the generalizability of th
 In conclusion, our research contributes valuable insights into the factors associated with BMI among the obese population in the U.S. It lays the groundwork for more nuanced public health strategies that can adapt to the multifaceted nature of obesity. The limitations and potential avenues for future work highlight the ongoing need for comprehensive research in this domain.
 
 
-References
+# References
 1.	Obesity Statistics. Forbes Health. Published January 17, 2023. Accessed December 8, 2023. https://www.forbes.com/health/body/obesity-statistics/
 2.	Tiwari A, Balasundaram P. Public Health Considerations Regarding Obesity. In: StatPearls. StatPearls Publishing; 2023. Accessed December 8, 2023. http://www.ncbi.nlm.nih.gov/books/NBK572122/
-
-
-
 

@@ -15,6 +15,8 @@ navbar:
       href: p8105-Final-model-analysis.html
     - text: "Conclusion"
       href: Conclusion.html
+    - text: "Final Report"
+      href: Report.html
     - icon: fa-github fa-lg
       href: https://github.com/Jodygao/p8105_Final-project_R.git
 
