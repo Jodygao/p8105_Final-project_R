@@ -3,16 +3,14 @@ output_dir: "."
 navbar:
   title: "Home"
   right:
-    - text: "US Overview"
-      href: BRFSS-Analysis.html
-    - text: "Final report"
-      href: Report.html
     - text: "Data Sources"
       href: Data-Sources.html
     - text: "Preliminary Analysis"
       href: Yi-data-clean.html
     - text: "Exploratory Analysis"
       href: p8105-Final-model-analysis.html
+    - text: "Shiny App"
+      href: https://8105final.shinyapps.io/shiny/
     - text: "Conclusion"
       href: Conclusion.html
     - text: "Final Report"
