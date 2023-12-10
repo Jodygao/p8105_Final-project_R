@@ -9,6 +9,16 @@ output:
 
 “Multifaceted Analysis of Obesity: Exploring the Interplay of Diet, Sedentary Lifestyle, and Socio-Demographic Factors in the United States from 2017-2020"
 
+```{r setup, include=FALSE}
+library(haven)
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(reshape2)
+library(knitr)
+library(readxl)
+```
+
 ## Motivation
 The increasing prevalence of obesity cases in the United States is becoming a serious public health issue and bringing up lots of adverse comorbidities. The problem that comes with obesity exists not just on an individual level but is more troublesome as it can lead to substantial effects on the overall healthcare system's performance and affect economies across the country. When we talk about obesity nowadays, we can not stop thinking of the burden that associated with it. According to a National Survey published by Forbes Health, between  2017 and 2020, around 41.9% of adults in the United States were obese1. With almost half of the adults being obese, Obesity was considered a national epidemic. Concerns like chronic diseases, type 2 diabetes, cardiovascular conditions, and certain forms of cancer, that are linked with obesity, can easily lead to heightened mortality rates and diminished quality of life. The causes of obesity are diverse and complex2, involving genetics, societal, and environmental factors but addressing this public health problem and educating the importance of personal wellness among the obese population in the U.S. is in urgent need.
 
@@ -43,6 +53,73 @@ Sampling Periods. The 2017-2018 and 2019-March 2020 cycles were based on differe
 Representativeness. The 2017-March 2020 pre-pandemic data file includes PSUs from the 2017-2018 cycle and 2019-March 2020 data collection. The combined dataset was calibrated to ensure national representativeness according to the 2015-2018 sample design, accounting for changes in population size and other characteristics that determine major stratum membership.
 
 # Data Cleaning
+```{r include=FALSE}
+import_df= function(path){
+  read_xpt(path)
+}
+obesity=
+  import_df(path='data/P_BMX.XPT') |> 
+  full_join((import_df(path='data/P_DEMO.XPT')), by='SEQN') |>
+  full_join((import_df(path='data/P_PAQ.XPT')), by='SEQN')|>
+  full_join ((import_df(path='data/P_DBQ.XPT')), by='SEQN') |> 
+  select (SEQN,RIAGENDR,RIDAGEYR,DMDMARTZ,INDFMPIR,RIDRETH3,DMDEDUC2,PAD680,BMXBMI,DBD900,DBD910) |> 
+  filter(
+    !(DMDMARTZ %in% c('77','99','.') ),
+    !(INDFMPIR == '.'),
+    !(DMDEDUC2 %in% c('7','9','.') ),
+    !(PAD680 %in% c('7777', '9999', '.')),
+    !(BMXBMI =='.'),
+    !(DBD900 %in% c('7777', '9999', '.')),
+    !(DBD910 %in% c('7777', '9999', '.'))
+  ) |> 
+  rename(
+    gender=RIAGENDR,
+    age=RIDAGEYR,
+    marital_status=DMDMARTZ,
+    income_to_poverty=INDFMPIR,
+    race=RIDRETH3,
+    education=DMDEDUC2,
+    sedentary_activity=PAD680,
+    bmi=BMXBMI,
+    freq_fast_food=DBD900,
+    freq_frozen=DBD910
+  ) |> 
+  mutate(
+    gender = case_match(
+      gender,
+      1~"Male",
+      2~"Female"),
+    gender = as.factor(gender),
+  marital_status= case_match(
+    marital_status,
+      1~"Married",
+      2~"Widowed/Divorced/Separated",
+      3~"Never married"
+  ),
+    race= case_match(
+    race,
+      1~"Mexican American",
+      2~"Other Hispanic",
+      3~"White",
+      4~"Black",
+      5~"Asian",
+      6~"Other"
+     ),
+      education= case_match(
+    education,
+      1~"Less than 9th grade",
+      2~"9-11th grade",
+      3~"High school graduate" ,
+      4~"Some college or AA degree",
+      6~"College graduate or above"
+     ),
+   bmi =case_when(
+    bmi<30 ~ 'normal',
+    bmi>=30 ~'obese'
+  )
+  )
+```
+
 We first import three files by creating the data import function (import_df) that reads the data from an .XPT file format. The four datasets that were merged were: Demographic Variables and Sample Weights (P_DEMO), Body Measures (P_BMX), Physical Activity (P_PAQ) andDiet Behavior & Nutrition (P_DBQ). Using a full join on the ‘SEQN’ column to merge the datasets. Then, we select the specific column that are meaningful in the process of analysis: `SEQN`, `RIAGENDR`, `RIDAGEYR`, `DMDMARTZ`, `INDFMPIR`, `RIDRETH3`, `DMDEDUC2`, `PAD680`, `BMXBMI`, `DBD900`, and `DBD910`.
 
 Next, we did the data filtering by filtering out specific values from various column (e.g., '77', '99', '.', '7777', '9999'). This step removed the missing, unknown, and null value from the dataset and only kept those meaningful values in the dataset.
@@ -70,21 +147,330 @@ The process effectively cleans and transforms the data, preparing it for analysi
 
 
 # Exploratory Analysis
+```{r}
+obesity_race_filtered = obesity |>  
+  filter(!is.na(race) & race != "NA")
 
+ggplot(obesity_race_filtered, aes(x = race, fill = gender)) +
+  geom_bar(position = "dodge") +
+  scale_fill_manual(values = c("pink", "lightblue")) +
+  labs(title = "Obesity Prevalence by Race and Gender",
+       x = "Race",
+       y = "Count") +
+  theme_minimal()
+```
 Interpretation: The bar chart displays the prevalence of obesity across different racial categories, differentiated by gender. It shows that the White population has the highest count of obesity cases, with a notable number of cases in both genders. The Black population follows, with females being higher than males, whereas the "Other Hispanic" categories have the lowest count of obesity cases.
 
+```{r}
+ggplot(subset(obesity, bmi == "obese"), aes(x = age)) +
+  geom_histogram(binwidth = 1, fill = "pink", color = "lightblue") +
+  labs(title = "Age Distribution Among Obese Individuals",
+       x = "Age",
+       y = "Count") +
+  theme_minimal()
+```
 Interpretation: The histogram indicates that obesity is present across all age groups, with a relatively uniform distribution from young adulthood to late middle age. There's a significant peak in obesity cases among individuals in their late 50s to early 60s. After this peak, the number of obese individuals declines sharply for those in the older age groups.
 
+```{r}
+ggplot(subset(obesity, bmi == "obese"), aes(y = income_to_poverty, x = "", fill = bmi)) +
+  geom_boxplot() +
+  scale_fill_manual(values = c("pink")) +
+  labs(title = "Income to Poverty Ratio Among Obese Individuals",
+       x = "",
+       y = "Income to Poverty Ratio") +
+  theme_minimal()
+```
 Interpretation: The box plot shows the distribution of the income to poverty ratio among obese individuals. The data is spread across a range of ratios, mostly concentrated between 1 and 4, with the median around 2. This suggests that individuals with obesity come from a range of economic backgrounds, but there's a tendency towards lower income to poverty ratios.
 
-Interpretation: The majority of recorded sedentary activity times for both normal and obese BMI categories are clustered around the lower end of the activity scale. This suggests that shorter periods of sedentary activity are more common among the participants regardless of BMI category.
+```{r}
+obesity_sedentary_activity_filtered = obesity |> 
+  filter(!is.na(sedentary_activity))
 
-The normal BMI category (red bars) generally has a higher count across most bins of sedentary activity compared to the obese category (cyan bars), indicating that there are more instances of people with normal BMI in the dataset. Both normal and obese categories show a decrease in count as the minutes of sedentary activity increase. However, this decrease appears to be more gradual for the normal BMI category and more pronounced for the obese BMI category, especially after around 500 minutes of sedentary activity where the counts are very low.
+ggplot(obesity_sedentary_activity_filtered, aes(x = sedentary_activity)) +
+  geom_histogram(binwidth = 1, fill = "pink", color = "lightblue") +
+  labs(title = "Sedentary Activity Distribution Among Obese Individuals",
+       x = "Sedentary Activity",
+       y = "Count") +
+  theme_minimal()
+```
+The majority of obese individuals report sedentary activity levels between 0 to around 500 minutes, with frequency decreasing as the amount of sedentary activity increases. There are notable peaks at certain intervals which may indicate common reporting increments (～250 minutes). Very few individuals report very high levels of sedentary activity, as seen by the low counts past 1000 minutes.
 
-There are very few instances of extremely high sedentary activity (approaching 1000 minutes) for either BMI category. These observations could suggest several things, such as a possible correlation between lower amounts of sedentary activity and normal BMI, and vice versa.
+# baseline Analysis
+```{r gender}
+gender_summary <- obesity %>%
+  count(gender) %>%
+  mutate(Percentage = n / sum(n) * 100)
+
+kable(gender_summary, format = "markdown", caption = "Gender Summary")
+```
+
+```{r marital_status}
+marital_status_summary <- obesity %>%
+  count(marital_status) %>%
+  mutate(Percentage = n / sum(n) * 100)
+
+kable(marital_status_summary, format = "markdown", caption = "Marital Status Summary")
+```
+
+```{r age}
+age_summary <- obesity %>%
+  summarise(
+    Count = n(),
+    Unique = n_distinct(age),
+    Mean = mean(age, na.rm = TRUE),
+    Std_Dev = sd(age, na.rm = TRUE),
+    Min = min(age, na.rm = TRUE),
+    `25th_Pctl` = quantile(age, 0.25, na.rm = TRUE),
+    Median = median(age, na.rm = TRUE),
+    `75th_Pctl` = quantile(age, 0.75, na.rm = TRUE),
+    Max = max(age, na.rm = TRUE)
+  )
+
+kable(age_summary, format = "markdown", caption = "Age Summary")
+```
+In our study, we found a near-equal distribution of obesity across genders, with varying prevalence across different marital statuses and a wide age range.
 
 
+```{r income}
+income_to_poverty_summary <- obesity %>%
+  summarise(
+    Count = n(),
+    Unique = n_distinct(income_to_poverty),
+    Mean = mean(income_to_poverty, na.rm = TRUE),
+    Std_Dev = sd(income_to_poverty, na.rm = TRUE),
+    Min = min(income_to_poverty, na.rm = TRUE),
+    `25th_Pctl` = quantile(income_to_poverty, 0.25, na.rm = TRUE),
+    Median = median(income_to_poverty, na.rm = TRUE),
+    `75th_Pctl` = quantile(income_to_poverty, 0.75, na.rm = TRUE),
+    Max = max(income_to_poverty, na.rm = TRUE)
+  )
+
+kable(income_to_poverty_summary, format = "markdown", caption = "Income to Poverty Summary")
+```
+
+```{r education}
+education_summary <- obesity %>%
+  count(education) %>%
+  mutate(Percentage = n / sum(n) * 100)
+
+kable(education_summary, format = "markdown", caption = "Education Summary")
+```
+
+```{r race}
+race_summary <- obesity %>%
+  count(race) %>%
+  mutate(Percentage = n / sum(n) * 100)
+
+kable(race_summary, format = "markdown", caption = "Race Summary")
+```
+The economic and educational backgrounds of our study group varied, with significant representation across different races."
+
+```{r sedentary_activity, echo=FALSE, message=FALSE}
+sedentary_activity_summary <- obesity %>%
+  summarise(
+    Count = n(),
+    Mean = mean(sedentary_activity, na.rm = TRUE),
+    Std_Dev = sd(sedentary_activity, na.rm = TRUE),
+    Min = min(sedentary_activity, na.rm = TRUE),
+    `25th_Pctl` = quantile(sedentary_activity, 0.25, na.rm = TRUE),
+    Median = median(sedentary_activity, na.rm = TRUE),
+    `75th_Pctl` = quantile(sedentary_activity, 0.75, na.rm = TRUE),
+    Max = max(sedentary_activity, na.rm = TRUE)
+  )
+
+kable(sedentary_activity_summary, format = "markdown", caption = "Sedentary Activity Summary")
+```
+
+```{r BMI}
+bmi_summary <- obesity %>%
+  count(bmi) %>%
+  mutate(Percentage = n / sum(n) * 100) %>%
+  ungroup() 
+
+kable(bmi_summary, format = "markdown", caption = "BMI Summary")
+```
+Sedentary activity averages around 338 minutes, and approximately 30% of our study population is categorized as obese.
+
+```{r}
+
+# Create age groups
+obesity <- obesity %>%
+  mutate(age_group = case_when(
+    age >= 18 & age <= 25 ~ "18-25",
+    age > 25 & age <= 35 ~ "26-35",
+    age > 35 & age <= 45 ~ "36-45",
+    age > 45 & age <= 55 ~ "46-55",
+    age > 55 & age <= 65 ~ "56-65",
+    age > 65 ~ "66+",
+    TRUE ~ "Unknown"
+  ))
+
+fast_food_summary <- obesity %>%
+  group_by(gender, age_group) %>%
+  summarise(Avg_Fast_Food = mean(freq_fast_food, na.rm = TRUE))
+
+kable(fast_food_summary, format = "markdown", caption = "Fast Food Frequency Summary by Age Group and Gender")
+
+```
+Our analysis of fast food consumption by age and gender shows that younger females and males aged 18-25 report the highest average frequency, with a general decline in older age groups.
+
+```{r frozen_food}
+# Summarize by gender and age group
+frozen_food_summary <- obesity %>%
+  group_by(gender, age_group) %>%
+  summarise(Avg_Frozen_Food = mean(freq_frozen, na.rm = TRUE)) 
+
+kable(frozen_food_summary, format = "markdown", caption = "Frozen Food Frequency Summary by Age Group and Gender")
+```
+Similarly, for frozen food, the highest consumption is noted in younger males, with a notable decrease in older age groups.
+
+```{r setup2, include=FALSE}
+library(haven)
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(reshape2)
+library(modelr)
+library (broom)
+library(knitr)
+```
+
+```{r import data2, include=FALSE}
+import_df= function(path){
+  read_xpt(path)
+}
+obesity=
+  import_df(path='data/P_BMX.XPT') |> 
+  full_join((import_df(path='data/P_DEMO.XPT')), by='SEQN') |>
+  full_join((import_df(path='data/P_PAQ.XPT')), by='SEQN')|>
+  full_join ((import_df(path='data/P_DBQ.XPT')), by='SEQN') |> 
+  select (SEQN,RIAGENDR,RIDAGEYR,DMDMARTZ,INDFMPIR,RIDRETH3,DMDEDUC2,PAD680,BMXBMI,DBD900,DBD910) |> 
+  filter(
+    !(DMDMARTZ %in% c('77','99','.') ),
+    !(INDFMPIR == '.'),
+    !(DMDEDUC2 %in% c('7','9','.') ),
+    !(PAD680 %in% c('7777', '9999', '.')),
+    !(BMXBMI =='.'),
+    !(DBD900 %in% c('7777', '9999', '.')),
+    !(DBD910 %in% c('7777', '9999', '.'))
+  ) |> 
+  rename(
+    gender=RIAGENDR,
+    age=RIDAGEYR,
+    marital_status=DMDMARTZ,
+    income_to_poverty=INDFMPIR,
+    race=RIDRETH3,
+    education=DMDEDUC2,
+    sedentary_activity=PAD680,
+    bmi=BMXBMI,
+    freq_fast_food=DBD900,
+    freq_frozen=DBD910
+  ) |> 
+  mutate(
+    gender = case_match(
+      gender,
+      1~"Male",
+      2~"Female"),
+    gender = as.factor(gender),
+  marital_status= case_match(
+    marital_status,
+      1~"Married",
+      2~"Widowed/Divorced/Separated",
+      3~"Never married"
+  ),
+    race= case_match(
+    race,
+      1~"Mexican American",
+      2~"Other Hispanic",
+      3~"White",
+      4~"Black",
+      5~"Asian",
+      6~"Other"
+     ),
+      education= case_match(
+    education,
+      1~"Less than 9th grade",
+      2~"9-11th grade",
+      3~"High school graduate" ,
+      4~"Some college or AA degree",
+      6~"College graduate or above"
+     ),
+   obese =case_when(
+    bmi<30 ~ 'normal',
+    bmi>=30 ~'obese'
+  )
+  )
+```
+```{r data distribution plots}
+# Histogram for BMI
+ggplot(obesity, aes(x = bmi)) + 
+  geom_histogram(binwidth = 1, fill = "blue", color = "black") + 
+  labs(title = "Distribution of BMI", x = "BMI", y = "Count") + 
+  theme_minimal()
+
+# Density plot for BMI
+ggplot(obesity, aes(x = bmi)) + 
+  geom_density(fill = "blue", alpha = 0.5) + 
+  labs(title = "Density Plot for BMI", x = "BMI", y = "Density") + 
+  theme_minimal()
+
+# Boxplot for BMI
+ggplot(obesity, aes(y = bmi, x = 1)) + 
+  geom_boxplot(fill = "blue", alpha = 0.5) + 
+  labs(title = "Boxplot for BMI", x = "", y = "BMI") + 
+  theme_minimal()
+```
+The histogram and density plot indicate that the distribution of `BMI` is right-skewed, which is a common observation in health-related data.
+
+When the response variable in a regression model, BMI, in our case, is not normally distributed, we took a common approach is to apply a transformation to achieve normality. The logarithmic transformation is particularly useful because it is a monotonic transformation that can handle positive skewness by compressing the long tail and expanding the lower end of the distribution. This can make the distribution more symmetric and more closely approximate the normal distribution, which meets the assumptions of linear regression.
+
+By transforming `BMI` using the natural logarithm, we can stabilize the variance (homoscedasticity) and make the relationship between the predictors and the response variable more linear. This is beneficial because linear regression assumes a linear relationship between the predictors and the outcome variable.
 # Statistical Analysis
+```{r fast_food, include=FALSE}
+cv_df = 
+  obesity |> 
+  crossv_mc(n = 100) |> 
+  mutate(
+    train = purrr::map(train, as_tibble),
+    test = purrr::map(test, as_tibble)
+  )
+cv_results =
+  cv_df |> 
+  mutate(
+    model_fast_crude = purrr::map(train, \(df) lm(log(bmi) ~ freq_fast_food, data = df) ),
+    model_fast_adjusted = purrr::map(train, \(df) lm(log(bmi) ~ freq_fast_food+age+gender+marital_status+ race+education+income_to_poverty, data = df)),
+    model_fast_inter = purrr::map(train, \(df) lm(log(bmi) ~ freq_fast_food*education+freq_fast_food*income_to_poverty+freq_fast_food+age+gender+marital_status+ race+education+income_to_poverty, data = df))
+  ) |> 
+  mutate(
+    rmse_fast_crude = map2_dbl(model_fast_crude, test, \(mod, df) rmse(mod, df)),
+    rmse_fast_adjusted = map2_dbl(model_fast_adjusted, test, \(mod, df) rmse(mod, df)),
+    rmse_fast_inter = map2_dbl(model_fast_inter, test, \(mod, df) rmse(mod, df))
+  )
+```
+
+```{r model comparison}
+cv_results |> 
+  select(starts_with("rmse")) |> 
+  pivot_longer(
+    everything(),
+    names_to = "model_type",
+    values_to = "rmse",
+    names_prefix = "rmse_"
+  ) |> 
+  group_by(model_type) |> 
+  summarize(m_rmse = mean(rmse))
+
+cv_results |> 
+  select(starts_with("rmse")) |> 
+  pivot_longer(
+    everything(),
+    names_to = "model_type",
+    values_to = "rmse",
+    names_prefix = "rmse_"
+  ) |> 
+  ggplot(aes(x = model_type, y = rmse)) +
+  geom_violin()
+```
 Analysis of the relationship between fast food consumption and BMI:
 First, we used the crossv_mc function to create 100  Monte Carlo cross-validation splits of the obesity dataset. This approach helps in assessing the model's performance more robustly by training and testing it on different subsets of the data. Then, we constructed three different models including a fast-food variable as the predictor and log(bmi) as the outcome for each training set to decide which model was best fit.
 
@@ -93,29 +479,82 @@ model_fast_crude: A simple linear regression model with log(bmi) as the response
 model_fast_adjusted: An adjusted linear regression model including freq_fast_food and other covariates like age, gender, marital status, race, education, and income_to_poverty.
 model_fast_inter: An interaction model considering interactions between freq_fast_food and variables such as education and income_to_poverty, along with the main effects of these predictors.
 
-
 ## Model Performance Evaluation
 After the computation of the RMSE for each model on their test dataset, the violin plot was made for visualization purposes. This plot helps in comparing the distribution of RMSEs across the model. Furthermore, we look at the summary of the Best-Fitting Model. We extracted and printed the summary of the adjusted model, which is the best model from the previous step. This summary includes beta coefficients and p-values.
 Then, we do the residual analysis for the adjusted Model. A plot of residuals versus fitted values for the best_model_fast (adjusted model) was created. This plot is crucial for diagnosing model fit, as it helps in identifying patterns in the residuals that might suggest problems with the model, such as non-linearity or heteroscedasticity.
 
 `fast_adjusted` model has a lower median with most of its data concentrated at the lower end of the rmse scale, which suggests better predictive performance for most of its predictions compared to the other models. The model `fast_adjusted` seems to be the best model overall due to its concentration of lower rmse values, although `fast_inter` may also perform similarly well for the majority of predictions but has some predictions with high error. 
+
 Best-Fitting Model Analysis
+```{r}
+best_adjusted_model_summary <- cv_results$model_fast_adjusted[[1]] %>% summary()
 
+# Print the summary which includes coefficients, R-squared, p-values...
+print(best_adjusted_model_summary)
+```
 The estimated `log(BMI)` is approximately 3.414 when all predictor variables are held at zero. To interpret this on the original BMI scale, you would calculate exp(3.414). This value represents the estimated BMI for the baseline categories of all categorical predictors (usually the most common or reference category) and zero for continuous predictors. The coefficient for consumption of the number of meals from fast food or pizza place is positive (0.00264) and statistically significant. To interpret the effect on the original BMI scale, consider that a small increase in the `log(BMI)` corresponds to a percentage increase in BMI. Specifically, for each one-unit increase in fast food consumption, the log(BMI) is expected to increase by 0.0026372 kg/m^2. Similarly, for other continuous predictors like age, the coefficient represents the percentage change in log(BMI) for a one-unit increase in that predictor. For categorical predictors like gender, marital status, and race, the coefficients represent the percentage difference in log(BMI) compared to the reference category. The `R-squared` value (0.02777) indicates that about 2.777% of the variability in log-transformed BMI is explained by the model. While this might seem low, it's not uncommon in behavioral and social science research where many unmeasured factors can influence the outcome. The significance of the coefficients suggests that these factors have a statistically significant association with BMI. However, the magnitude of these effects  might be small, especially for variables like age, education and income_to_poverty ratio. The significant predictors in the model, like `freq_fast_food `,`gender`,`race` indicate factors that are associated with `BMI`. However, the small R-squared value suggests that many other factors not included in the model also influence `BMI`. Given that the response variable is log-transformed, the interpretation is in terms of percentage change (for continuous predictors) or relative percentage difference (for categorical predictors) in BMI.
-
-
-## Residual Analysis
-
-The variance of residuals increasing with the fitted values suggests that the model might benefit from a transformation of variables or the inclusion of additional predictors to stabilize the variance across the range of predictions. The curvature in the LOESS line could imply that the model is missing some complexity of the relationship, which might be addressed with non-linear terms or interaction terms in the model.
-
-## Conclusion
-Overall, this residual plot indicates that while the model might be performing adequately, there is room for improvement in terms of accounting for non-constant variance and potentially non-linear relationships.
-
-Analysis of the relationship between sedentary activity and BMI:
-This model's aim is to understand how sedentary activity potentially influences BMI when controlling for demographic and socioeconomic factors. 
 
 ## Histogram for Sedentary Activity
 
+```{r distribution, warning=FALSE}
+# Histogram and Density Plot for Sedentary Activity
+ggplot(obesity, aes(x = sedentary_activity)) +
+  geom_histogram(binwidth = 10, fill = "green", color = "black", alpha = 0.7) + 
+  geom_density(alpha = 0.2, adjust = 1/5) + 
+  labs(title = "Distribution of Sedentary Activity", x = "Sedentary Activity", y = "Density") +
+  theme_minimal()
+```
+
+Sedentary lifestyle is a key focus of our study. This histogram showcases the sedentary activity levels reported by obese individuals."
+Observation: "Most obese individuals report sedentary activity ranging up to 500 minutes, with the frequency decreasing as activity increases. Notably, very high levels of sedentary activity are rare.
+```{r model building, include= FALSE}
+cv_df_sedentary = 
+  obesity |> 
+  crossv_mc(n = 100) |> 
+  mutate(
+    train = purrr::map(train, as_tibble),
+    test = purrr::map(test, as_tibble)
+  )
+
+cv_results_sedentary =
+  cv_df_sedentary |> 
+  mutate(
+    model_sed_crude = purrr::map(train, \(df) lm(log(bmi) ~ sedentary_activity, data = df)),
+    model_sed_adjusted = purrr::map(train, \(df) lm(log(bmi) ~ sedentary_activity+age+gender+marital_status+race+education+income_to_poverty, data = df)),
+    model_sed_inter = purrr::map(train, \(df) lm(log(bmi) ~ sedentary_activity*education+sedentary_activity*income_to_poverty+sedentary_activity+age+gender+marital_status+race+education+income_to_poverty, data = df))
+  ) |> 
+  mutate(
+    rmse_sed_crude = map2_dbl(model_sed_crude, test, \(mod, df) rmse(mod, df)),
+    rmse_sed_adjusted = map2_dbl(model_sed_adjusted, test, \(mod, df) rmse(mod, df)),
+    rmse_sed_inter = map2_dbl(model_sed_inter, test, \(mod, df) rmse(mod, df))
+  )
+```
+```{r cross validation comparison}
+cv_results_sedentary |> 
+  select(starts_with("rmse_sed")) |> 
+  pivot_longer(
+    everything(),
+    names_to = "model_type",
+    values_to = "rmse",
+    names_prefix = "rmse_sed_"
+  ) |> 
+  ggplot(aes(x = model_type, y = rmse)) +
+  geom_violin()
+```
+
+```{r}
+rmse_summary = cv_results_sedentary |> 
+  select(starts_with("rmse_sed")) |> 
+  pivot_longer(
+    everything(),
+    names_to = "model_type",
+    values_to = "rmse",
+    names_prefix = "rmse_sed_"
+  ) |> 
+  group_by(model_type) |> 
+  summarize(m_rmse = mean(rmse))
+kable(rmse_summary, format = "markdown", caption = "Summary of RMSE for Sedentary Models")
+```
 Sedentary activity with log(BMI) - Cross-validation Results
 In the context of these models, a lower RMSE indicates a more accurate prediction of BMI from the predictors used in the model.
 
@@ -126,6 +565,30 @@ A valid reason we chose the adjusted model over the inter-model, despite having 
 Moreover, while interaction terms in the inter-model may capture the combined effects of sedentary activity with other variables, they can make the model more complex and harder to interpret. We proceed the model statistics in the adjusted model for sedentary activity.
 
 ## Interpretation of the Adjusted model (Sedentary Ativity)
+```{r model plot for adjusted model}
+# Step 1: Generate new data for plotting
+new_data <- with(obesity, expand.grid(
+  sedentary_activity = seq(min(sedentary_activity, na.rm = TRUE), max(sedentary_activity, na.rm = TRUE), length.out = 100),
+  age = mean(age, na.rm = TRUE),
+  gender = "Female", 
+  marital_status = "Married", 
+  race = "White", 
+  education = "Less than 9th grade", 
+  income_to_poverty = mean(income_to_poverty, na.rm = TRUE)
+))
+
+# Step 2: Predict log(BMI) using the adjusted model and the new data
+adjusted_model <- cv_results_sedentary$model_sed_adjusted[[1]]
+new_data$log_bmi_pred <- predict(adjusted_model, newdata = new_data)
+
+# Step 3: Create the plot
+ggplot(new_data, aes(x = sedentary_activity, y = log_bmi_pred)) +
+  geom_line(color = "blue") +
+  labs(title = "Predicted Log BMI vs Sedentary Activity",
+       x = "Sedentary Activity",
+       y = "Predicted Log BMI") +
+  theme_minimal()
+```
 Coefficients Interpretation on Log Scale: Intercept: The estimated log(BMI) is approximately 3.366 when all predictor variables are held at zero. To interpret this on the original BMI scale, you would calculate exp(3.366). This value represents the estimated BMI for the baseline categories of all categorical predictors (usually the most common or reference category) and zero for continuous predictors.
 
 Sedentary Activity: The coefficient for sedentary activity is positive (0.0001905) and statistically significant. This suggests that for each unit increase in sedentary activity, the log(BMI) increases by this amount. To interpret the effect on the original BMI scale, consider that a small increase in the log(BMI) corresponds to a percentage increase in BMI. Specifically, a one-unit increase in sedentary activity is associated with approximately a 0.01905% increase in BMI.
@@ -138,11 +601,31 @@ Model Fit and R-squared: The R-squared value (0.06851) indicates that about 6.85
 
 Statistical Significance: The significance of the coefficients suggests that these factors have a statistically significant association with BMI. However, the magnitude of these effects might be small, especially for variables like age and income_to_poverty ratio.
 
-## Residuals vs Fitted values plot
-
 Overall Interpretation: The significant predictors in the model, like sedentary activity and gender, indicate factors that are associated with BMI. However, the small R-squared value suggests that many other factors not included in the model also influence BMI. Given that the response variable is log-transformed, the interpretation is in terms of percentage change (for continuous predictors) or relative percentage difference (for categorical predictors) in BMI.
 
 # Analysis of the relationship between frozen food consumption and BMI:
+```{r, include=FALSE}
+cv_df_frozen = 
+  obesity |> 
+  crossv_mc(n = 100) |> 
+  mutate(
+    train = purrr::map(train, as_tibble),
+    test = purrr::map(test, as_tibble)
+  )
+
+cv_results_frozen =
+  cv_df_frozen |> 
+  mutate(
+    model_frozen_crude = purrr::map(train, \(df) lm(log(bmi) ~ freq_frozen, data = df)),
+    model_frozen_adjusted = purrr::map(train, \(df) lm(log(bmi) ~ freq_frozen + age + gender + marital_status + race + education + income_to_poverty, data = df)),
+    model_frozen_inter = purrr::map(train, \(df) lm(log(bmi) ~ freq_frozen * education + freq_frozen * income_to_poverty + freq_frozen + age + gender + marital_status + race + education + income_to_poverty, data = df))
+  ) |> 
+  mutate(
+    rmse_frozen_crude = map2_dbl(model_frozen_crude, test, \(mod, df) rmse(mod, df)),
+    rmse_frozen_adjusted = map2_dbl(model_frozen_adjusted, test, \(mod, df) rmse(mod, df)),
+    rmse_frozen_inter = map2_dbl(model_frozen_inter, test, \(mod, df) rmse(mod, df))
+  )
+```
 This model's aim is to understand how frozen food consumption potentially influences BMI when controlling for demographic and socioeconomic factors. I first started generating 100 Monte Carlo cross-validation splits of the obesity dataset. By doing so, I was able to evaluate the model's predictive performance across various subsets of the data, thereby providing a more reliable assessment of its predictive capabilities.
 Three linear regression models were then used for comparison and analysis
 
@@ -151,10 +634,70 @@ Adjusted Model: ‘model_frozen_adjusted’ adjusts for additional covariates, i
 Interaction Model: ‘model_frozen_inter’ includes interaction terms between frozen fast food frequency and socioeconomic factors such as education and income-to-poverty ratio, alongside the main effects.
 
 ## Model Performance Evaluation
+```{r}
+cv_results_frozen |> 
+  select(starts_with("rmse_frozen")) |> 
+  pivot_longer(
+    everything(),
+    names_to = "model_type",
+    values_to = "rmse",
+    names_prefix = "rmse_frozen_"
+  ) |> 
+  ggplot(aes(x = model_type, y = rmse)) +
+  geom_violin()
+```
+```{r}
+cv_results_frozen |> 
+  select(starts_with("rmse_frozen")) |> 
+  pivot_longer(
+    everything(),
+    names_to = "model_type",
+    values_to = "rmse",
+    names_prefix = "rmse_frozen_"
+  ) |> 
+  group_by(model_type) |> 
+  summarize(m_rmse = mean(rmse))
+```
 According to the violin plot of the RMSE distribution for each model, the adjusted model consistently shows a concentrated distribution of lower RMSE values, meaning it has a superior predictive performance relative to the crude and interaction models. This observation is confirmed by the summary of cross-validation results, which indicates that the adjusted model has the lowest mean RMSE of 0.243, compared to 0.309 for the crude model and 0.336 for the interaction model. Since lower values mean better model performance, the adjusted model has the best model performance among these three models.
 
+## Interpretaion of adjusted model
+```{r, include= FALSE}
+obesity$marital_status <- factor(obesity$marital_status)
+obesity$race <- factor(obesity$race)
+obesity$education <- factor(obesity$education)
 
-## Cross-Validation Results
+new_data_frozen <- expand.grid(
+  freq_frozen = seq(min(obesity$freq_frozen, na.rm = TRUE), max(obesity$freq_frozen, na.rm = TRUE), length.out = 100),
+  age = mean(obesity$age, na.rm = TRUE),
+  gender = levels(obesity$gender)[1],
+  marital_status = levels(obesity$marital_status)[1],
+  race = levels(obesity$race)[1],
+  education = levels(obesity$education)[1],
+  income_to_poverty = mean(obesity$income_to_poverty, na.rm = TRUE)
+)
+
+str(new_data_frozen)
+```
+
+```{r}
+
+adjusted_model_frozen <- cv_results_frozen$model_frozen_adjusted[[1]]
+new_data_frozen$log_bmi_pred <- predict(adjusted_model_frozen, newdata = new_data_frozen)
+
+# Plot the predicted values
+ggplot(new_data_frozen, aes(x = freq_frozen, y = log_bmi_pred)) +
+  geom_line(color = "purple") +
+  labs(title = "Predicted Log BMI vs Frozen Fast Food Frequency",
+       x = "Frozen Fast Food Frequency",
+       y = "Predicted Log BMI") +
+  theme_minimal()
+```
+```{r}
+best_adjusted_model_summary <- cv_results_frozen$model_frozen_adjusted[[1]] %>% summary()
+
+# Print the summary which includes coefficients, R-squared, p-values...
+print(best_adjusted_model_summary)
+```
 Best-Fitting Model Analysis
 The best-fitting model, based on the cross-validation results, is the adjusted model. Thus, a detailed examination was conducted, and its summary statistics indicate that:
 The Intercept is estimated at 3.409 on the log scale. 
@@ -162,9 +705,6 @@ The coefficient for frozen fast food frequency is -4.291e-06 with a p-value of 0
 
 Other covariates, such as gender and race, show significant associations with BMI, with gender (Male) and race (Other) showing a strong negative association with BMI.
 The R-squared value of 0.03455 indicates that approximately 3.455% of the variability in the log-transformed BMI is explained by the model.
-
-## Residual Analysis
-The residuals plot against fitted values provides insight into the adequacy of the model fit. The presence of a random scatter of residuals around the horizontal line at zero suggests no obvious issues with non-linearity or heteroscedasticity. However, the slight curvature in the LOESS line and the increasing spread of residuals at higher fitted values could imply potential model misspecification or the need for a variable transformation to address heteroscedasticity.
 
 # Conclusion
 Overall, our analysis suggests that while frozen fast food consumption frequency does not significantly predict BMI, other factors such as gender and race do have significant associations. The small R-squared value implies that other unmeasured factors also play a role in influencing BMI, which are not captured by this model.
@@ -236,4 +776,3 @@ In conclusion, our research contributes valuable insights into the factors assoc
 # References
 1.	Obesity Statistics. Forbes Health. Published January 17, 2023. Accessed December 8, 2023. https://www.forbes.com/health/body/obesity-statistics/
 2.	Tiwari A, Balasundaram P. Public Health Considerations Regarding Obesity. In: StatPearls. StatPearls Publishing; 2023. Accessed December 8, 2023. http://www.ncbi.nlm.nih.gov/books/NBK572122/
-

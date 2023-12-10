@@ -13,7 +13,7 @@
 
 <title>Final report</title>
 
-<script src="site_libs/header-attrs-2.24/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
@@ -526,46 +526,649 @@ analysis or visualization.</p>
 </div>
 <div id="exploratory-analysis" class="section level1">
 <h1>Exploratory Analysis</h1>
-<p>Interpretation: The bar chart displays the prevalence of obesity
-across different racial categories, differentiated by gender. It shows
-that the White population has the highest count of obesity cases, with a
-notable number of cases in both genders. The Black population follows,
-with females being higher than males, whereas the “Other Hispanic”
-categories have the lowest count of obesity cases.</p>
-<p>Interpretation: The histogram indicates that obesity is present
-across all age groups, with a relatively uniform distribution from young
+<pre class="r"><code>obesity_race_filtered = obesity |&gt;  
+  filter(!is.na(race) &amp; race != &quot;NA&quot;)
+
+ggplot(obesity_race_filtered, aes(x = race, fill = gender)) +
+  geom_bar(position = &quot;dodge&quot;) +
+  scale_fill_manual(values = c(&quot;pink&quot;, &quot;lightblue&quot;)) +
+  labs(title = &quot;Obesity Prevalence by Race and Gender&quot;,
+       x = &quot;Race&quot;,
+       y = &quot;Count&quot;) +
+  theme_minimal()</code></pre>
+<p><img src="Report_files/figure-html/unnamed-chunk-2-1.png" width="672" />
+Interpretation: The bar chart displays the prevalence of obesity across
+different racial categories, differentiated by gender. It shows that the
+White population has the highest count of obesity cases, with a notable
+number of cases in both genders. The Black population follows, with
+females being higher than males, whereas the “Other Hispanic” categories
+have the lowest count of obesity cases.</p>
+<pre class="r"><code>ggplot(subset(obesity, bmi == &quot;obese&quot;), aes(x = age)) +
+  geom_histogram(binwidth = 1, fill = &quot;pink&quot;, color = &quot;lightblue&quot;) +
+  labs(title = &quot;Age Distribution Among Obese Individuals&quot;,
+       x = &quot;Age&quot;,
+       y = &quot;Count&quot;) +
+  theme_minimal()</code></pre>
+<p><img src="Report_files/figure-html/unnamed-chunk-3-1.png" width="672" />
+Interpretation: The histogram indicates that obesity is present across
+all age groups, with a relatively uniform distribution from young
 adulthood to late middle age. There’s a significant peak in obesity
 cases among individuals in their late 50s to early 60s. After this peak,
 the number of obese individuals declines sharply for those in the older
 age groups.</p>
-<p>Interpretation: The box plot shows the distribution of the income to
+<pre class="r"><code>ggplot(subset(obesity, bmi == &quot;obese&quot;), aes(y = income_to_poverty, x = &quot;&quot;, fill = bmi)) +
+  geom_boxplot() +
+  scale_fill_manual(values = c(&quot;pink&quot;)) +
+  labs(title = &quot;Income to Poverty Ratio Among Obese Individuals&quot;,
+       x = &quot;&quot;,
+       y = &quot;Income to Poverty Ratio&quot;) +
+  theme_minimal()</code></pre>
+<p><img src="Report_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+Interpretation: The box plot shows the distribution of the income to
 poverty ratio among obese individuals. The data is spread across a range
 of ratios, mostly concentrated between 1 and 4, with the median around
 2. This suggests that individuals with obesity come from a range of
 economic backgrounds, but there’s a tendency towards lower income to
 poverty ratios.</p>
-<p>Interpretation: The majority of recorded sedentary activity times for
-both normal and obese BMI categories are clustered around the lower end
-of the activity scale. This suggests that shorter periods of sedentary
-activity are more common among the participants regardless of BMI
-category.</p>
-<p>The normal BMI category (red bars) generally has a higher count
-across most bins of sedentary activity compared to the obese category
-(cyan bars), indicating that there are more instances of people with
-normal BMI in the dataset. Both normal and obese categories show a
-decrease in count as the minutes of sedentary activity increase.
-However, this decrease appears to be more gradual for the normal BMI
-category and more pronounced for the obese BMI category, especially
-after around 500 minutes of sedentary activity where the counts are very
-low.</p>
-<p>There are very few instances of extremely high sedentary activity
-(approaching 1000 minutes) for either BMI category. These observations
-could suggest several things, such as a possible correlation between
-lower amounts of sedentary activity and normal BMI, and vice versa.</p>
+<pre class="r"><code>obesity_sedentary_activity_filtered = obesity |&gt; 
+  filter(!is.na(sedentary_activity))
+
+ggplot(obesity_sedentary_activity_filtered, aes(x = sedentary_activity)) +
+  geom_histogram(binwidth = 1, fill = &quot;pink&quot;, color = &quot;lightblue&quot;) +
+  labs(title = &quot;Sedentary Activity Distribution Among Obese Individuals&quot;,
+       x = &quot;Sedentary Activity&quot;,
+       y = &quot;Count&quot;) +
+  theme_minimal()</code></pre>
+<p><img src="Report_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+The majority of obese individuals report sedentary activity levels
+between 0 to around 500 minutes, with frequency decreasing as the amount
+of sedentary activity increases. There are notable peaks at certain
+intervals which may indicate common reporting increments (～250
+minutes). Very few individuals report very high levels of sedentary
+activity, as seen by the low counts past 1000 minutes.</p>
 </div>
-<div id="statistical-analysis" class="section level1">
-<h1>Statistical Analysis</h1>
-<p>Analysis of the relationship between fast food consumption and BMI:
+<div id="baseline-analysis" class="section level1">
+<h1>baseline Analysis</h1>
+<pre class="r"><code>gender_summary &lt;- obesity %&gt;%
+  count(gender) %&gt;%
+  mutate(Percentage = n / sum(n) * 100)
+
+kable(gender_summary, format = &quot;markdown&quot;, caption = &quot;Gender Summary&quot;)</code></pre>
+<table>
+<caption>Gender Summary</caption>
+<thead>
+<tr class="header">
+<th align="left">gender</th>
+<th align="right">n</th>
+<th align="right">Percentage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Female</td>
+<td align="right">5800</td>
+<td align="right">50.9308</td>
+</tr>
+<tr class="even">
+<td align="left">Male</td>
+<td align="right">5588</td>
+<td align="right">49.0692</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>marital_status_summary &lt;- obesity %&gt;%
+  count(marital_status) %&gt;%
+  mutate(Percentage = n / sum(n) * 100)
+
+kable(marital_status_summary, format = &quot;markdown&quot;, caption = &quot;Marital Status Summary&quot;)</code></pre>
+<table>
+<caption>Marital Status Summary</caption>
+<thead>
+<tr class="header">
+<th align="left">marital_status</th>
+<th align="right">n</th>
+<th align="right">Percentage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Married</td>
+<td align="right">4216</td>
+<td align="right">37.02143</td>
+</tr>
+<tr class="even">
+<td align="left">Never married</td>
+<td align="right">1360</td>
+<td align="right">11.94240</td>
+</tr>
+<tr class="odd">
+<td align="left">Widowed/Divorced/Separated</td>
+<td align="right">1599</td>
+<td align="right">14.04110</td>
+</tr>
+<tr class="even">
+<td align="left">NA</td>
+<td align="right">4213</td>
+<td align="right">36.99508</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>age_summary &lt;- obesity %&gt;%
+  summarise(
+    Count = n(),
+    Unique = n_distinct(age),
+    Mean = mean(age, na.rm = TRUE),
+    Std_Dev = sd(age, na.rm = TRUE),
+    Min = min(age, na.rm = TRUE),
+    `25th_Pctl` = quantile(age, 0.25, na.rm = TRUE),
+    Median = median(age, na.rm = TRUE),
+    `75th_Pctl` = quantile(age, 0.75, na.rm = TRUE),
+    Max = max(age, na.rm = TRUE)
+  )
+
+kable(age_summary, format = &quot;markdown&quot;, caption = &quot;Age Summary&quot;)</code></pre>
+<table>
+<caption>Age Summary</caption>
+<colgroup>
+<col width="9%" />
+<col width="10%" />
+<col width="13%" />
+<col width="13%" />
+<col width="6%" />
+<col width="15%" />
+<col width="10%" />
+<col width="15%" />
+<col width="6%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">Count</th>
+<th align="right">Unique</th>
+<th align="right">Mean</th>
+<th align="right">Std_Dev</th>
+<th align="right">Min</th>
+<th align="right">25th_Pctl</th>
+<th align="right">Median</th>
+<th align="right">75th_Pctl</th>
+<th align="right">Max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">11388</td>
+<td align="right">79</td>
+<td align="right">35.62302</td>
+<td align="right">24.24121</td>
+<td align="right">2</td>
+<td align="right">13</td>
+<td align="right">33</td>
+<td align="right">57</td>
+<td align="right">80</td>
+</tr>
+</tbody>
+</table>
+<p>In our study, we found a near-equal distribution of obesity across
+genders, with varying prevalence across different marital statuses and a
+wide age range.</p>
+<pre class="r"><code>income_to_poverty_summary &lt;- obesity %&gt;%
+  summarise(
+    Count = n(),
+    Unique = n_distinct(income_to_poverty),
+    Mean = mean(income_to_poverty, na.rm = TRUE),
+    Std_Dev = sd(income_to_poverty, na.rm = TRUE),
+    Min = min(income_to_poverty, na.rm = TRUE),
+    `25th_Pctl` = quantile(income_to_poverty, 0.25, na.rm = TRUE),
+    Median = median(income_to_poverty, na.rm = TRUE),
+    `75th_Pctl` = quantile(income_to_poverty, 0.75, na.rm = TRUE),
+    Max = max(income_to_poverty, na.rm = TRUE)
+  )
+
+kable(income_to_poverty_summary, format = &quot;markdown&quot;, caption = &quot;Income to Poverty Summary&quot;)</code></pre>
+<table>
+<caption>Income to Poverty Summary</caption>
+<colgroup>
+<col width="9%" />
+<col width="10%" />
+<col width="12%" />
+<col width="12%" />
+<col width="6%" />
+<col width="15%" />
+<col width="10%" />
+<col width="15%" />
+<col width="6%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">Count</th>
+<th align="right">Unique</th>
+<th align="right">Mean</th>
+<th align="right">Std_Dev</th>
+<th align="right">Min</th>
+<th align="right">25th_Pctl</th>
+<th align="right">Median</th>
+<th align="right">75th_Pctl</th>
+<th align="right">Max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">11388</td>
+<td align="right">472</td>
+<td align="right">2.42299</td>
+<td align="right">1.62789</td>
+<td align="right">0</td>
+<td align="right">1.04</td>
+<td align="right">1.99</td>
+<td align="right">3.9025</td>
+<td align="right">5</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>education_summary &lt;- obesity %&gt;%
+  count(education) %&gt;%
+  mutate(Percentage = n / sum(n) * 100)
+
+kable(education_summary, format = &quot;markdown&quot;, caption = &quot;Education Summary&quot;)</code></pre>
+<table>
+<caption>Education Summary</caption>
+<thead>
+<tr class="header">
+<th align="left">education</th>
+<th align="right">n</th>
+<th align="right">Percentage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">9-11th grade</td>
+<td align="right">763</td>
+<td align="right">6.700035</td>
+</tr>
+<tr class="even">
+<td align="left">High school graduate</td>
+<td align="right">1722</td>
+<td align="right">15.121180</td>
+</tr>
+<tr class="odd">
+<td align="left">Less than 9th grade</td>
+<td align="right">475</td>
+<td align="right">4.171057</td>
+</tr>
+<tr class="even">
+<td align="left">Some college or AA degree</td>
+<td align="right">2406</td>
+<td align="right">21.127503</td>
+</tr>
+<tr class="odd">
+<td align="left">NA</td>
+<td align="right">6022</td>
+<td align="right">52.880225</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>race_summary &lt;- obesity %&gt;%
+  count(race) %&gt;%
+  mutate(Percentage = n / sum(n) * 100)
+
+kable(race_summary, format = &quot;markdown&quot;, caption = &quot;Race Summary&quot;)</code></pre>
+<table>
+<caption>Race Summary</caption>
+<thead>
+<tr class="header">
+<th align="left">race</th>
+<th align="right">n</th>
+<th align="right">Percentage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Black</td>
+<td align="right">2970</td>
+<td align="right">26.080084</td>
+</tr>
+<tr class="even">
+<td align="left">Mexican American</td>
+<td align="right">1397</td>
+<td align="right">12.267299</td>
+</tr>
+<tr class="odd">
+<td align="left">Other</td>
+<td align="right">1217</td>
+<td align="right">10.686688</td>
+</tr>
+<tr class="even">
+<td align="left">Other Hispanic</td>
+<td align="right">1050</td>
+<td align="right">9.220232</td>
+</tr>
+<tr class="odd">
+<td align="left">White</td>
+<td align="right">3995</td>
+<td align="right">35.080787</td>
+</tr>
+<tr class="even">
+<td align="left">NA</td>
+<td align="right">759</td>
+<td align="right">6.664910</td>
+</tr>
+</tbody>
+</table>
+<p>The economic and educational backgrounds of our study group varied,
+with significant representation across different races.”</p>
+<table>
+<caption>Sedentary Activity Summary</caption>
+<thead>
+<tr class="header">
+<th align="right">Count</th>
+<th align="right">Mean</th>
+<th align="right">Std_Dev</th>
+<th align="right">Min</th>
+<th align="right">25th_Pctl</th>
+<th align="right">Median</th>
+<th align="right">75th_Pctl</th>
+<th align="right">Max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">11388</td>
+<td align="right">338.351</td>
+<td align="right">202.96</td>
+<td align="right">0</td>
+<td align="right">180</td>
+<td align="right">300</td>
+<td align="right">480</td>
+<td align="right">1320</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>bmi_summary &lt;- obesity %&gt;%
+  count(bmi) %&gt;%
+  mutate(Percentage = n / sum(n) * 100) %&gt;%
+  ungroup() 
+
+kable(bmi_summary, format = &quot;markdown&quot;, caption = &quot;BMI Summary&quot;)</code></pre>
+<table>
+<caption>BMI Summary</caption>
+<thead>
+<tr class="header">
+<th align="left">bmi</th>
+<th align="right">n</th>
+<th align="right">Percentage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">normal</td>
+<td align="right">7922</td>
+<td align="right">69.56445</td>
+</tr>
+<tr class="even">
+<td align="left">obese</td>
+<td align="right">3466</td>
+<td align="right">30.43555</td>
+</tr>
+</tbody>
+</table>
+<p>Sedentary activity averages around 338 minutes, and approximately 30%
+of our study population is categorized as obese.</p>
+<pre class="r"><code># Create age groups
+obesity &lt;- obesity %&gt;%
+  mutate(age_group = case_when(
+    age &gt;= 18 &amp; age &lt;= 25 ~ &quot;18-25&quot;,
+    age &gt; 25 &amp; age &lt;= 35 ~ &quot;26-35&quot;,
+    age &gt; 35 &amp; age &lt;= 45 ~ &quot;36-45&quot;,
+    age &gt; 45 &amp; age &lt;= 55 ~ &quot;46-55&quot;,
+    age &gt; 55 &amp; age &lt;= 65 ~ &quot;56-65&quot;,
+    age &gt; 65 ~ &quot;66+&quot;,
+    TRUE ~ &quot;Unknown&quot;
+  ))
+
+fast_food_summary &lt;- obesity %&gt;%
+  group_by(gender, age_group) %&gt;%
+  summarise(Avg_Fast_Food = mean(freq_fast_food, na.rm = TRUE))</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;gender&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre class="r"><code>kable(fast_food_summary, format = &quot;markdown&quot;, caption = &quot;Fast Food Frequency Summary by Age Group and Gender&quot;)</code></pre>
+<table>
+<caption>Fast Food Frequency Summary by Age Group and Gender</caption>
+<thead>
+<tr class="header">
+<th align="left">gender</th>
+<th align="left">age_group</th>
+<th align="right">Avg_Fast_Food</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Female</td>
+<td align="left">18-25</td>
+<td align="right">15.024719</td>
+</tr>
+<tr class="even">
+<td align="left">Female</td>
+<td align="left">26-35</td>
+<td align="right">2.330855</td>
+</tr>
+<tr class="odd">
+<td align="left">Female</td>
+<td align="left">36-45</td>
+<td align="right">2.029762</td>
+</tr>
+<tr class="even">
+<td align="left">Female</td>
+<td align="left">46-55</td>
+<td align="right">2.000000</td>
+</tr>
+<tr class="odd">
+<td align="left">Female</td>
+<td align="left">56-65</td>
+<td align="right">1.620079</td>
+</tr>
+<tr class="even">
+<td align="left">Female</td>
+<td align="left">66+</td>
+<td align="right">1.125214</td>
+</tr>
+<tr class="odd">
+<td align="left">Female</td>
+<td align="left">Unknown</td>
+<td align="right">1.794655</td>
+</tr>
+<tr class="even">
+<td align="left">Male</td>
+<td align="left">18-25</td>
+<td align="right">2.997696</td>
+</tr>
+<tr class="odd">
+<td align="left">Male</td>
+<td align="left">26-35</td>
+<td align="right">2.915767</td>
+</tr>
+<tr class="even">
+<td align="left">Male</td>
+<td align="left">36-45</td>
+<td align="right">2.457589</td>
+</tr>
+<tr class="odd">
+<td align="left">Male</td>
+<td align="left">46-55</td>
+<td align="right">2.215190</td>
+</tr>
+<tr class="even">
+<td align="left">Male</td>
+<td align="left">56-65</td>
+<td align="right">2.247582</td>
+</tr>
+<tr class="odd">
+<td align="left">Male</td>
+<td align="left">66+</td>
+<td align="right">1.482982</td>
+</tr>
+<tr class="even">
+<td align="left">Male</td>
+<td align="left">Unknown</td>
+<td align="right">1.894737</td>
+</tr>
+</tbody>
+</table>
+<p>Our analysis of fast food consumption by age and gender shows that
+younger females and males aged 18-25 report the highest average
+frequency, with a general decline in older age groups.</p>
+<pre class="r"><code># Summarize by gender and age group
+frozen_food_summary &lt;- obesity %&gt;%
+  group_by(gender, age_group) %&gt;%
+  summarise(Avg_Frozen_Food = mean(freq_frozen, na.rm = TRUE)) </code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;gender&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre class="r"><code>kable(frozen_food_summary, format = &quot;markdown&quot;, caption = &quot;Frozen Food Frequency Summary by Age Group and Gender&quot;)</code></pre>
+<table>
+<caption>Frozen Food Frequency Summary by Age Group and Gender</caption>
+<thead>
+<tr class="header">
+<th align="left">gender</th>
+<th align="left">age_group</th>
+<th align="right">Avg_Frozen_Food</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Female</td>
+<td align="left">18-25</td>
+<td align="right">2.543260</td>
+</tr>
+<tr class="even">
+<td align="left">Female</td>
+<td align="left">26-35</td>
+<td align="right">2.370732</td>
+</tr>
+<tr class="odd">
+<td align="left">Female</td>
+<td align="left">36-45</td>
+<td align="right">2.268489</td>
+</tr>
+<tr class="even">
+<td align="left">Female</td>
+<td align="left">46-55</td>
+<td align="right">1.764228</td>
+</tr>
+<tr class="odd">
+<td align="left">Female</td>
+<td align="left">56-65</td>
+<td align="right">1.976257</td>
+</tr>
+<tr class="even">
+<td align="left">Female</td>
+<td align="left">66+</td>
+<td align="right">1.856436</td>
+</tr>
+<tr class="odd">
+<td align="left">Female</td>
+<td align="left">Unknown</td>
+<td align="right">6.257710</td>
+</tr>
+<tr class="even">
+<td align="left">Male</td>
+<td align="left">18-25</td>
+<td align="right">17.747917</td>
+</tr>
+<tr class="odd">
+<td align="left">Male</td>
+<td align="left">26-35</td>
+<td align="right">15.932170</td>
+</tr>
+<tr class="even">
+<td align="left">Male</td>
+<td align="left">36-45</td>
+<td align="right">15.051625</td>
+</tr>
+<tr class="odd">
+<td align="left">Male</td>
+<td align="left">46-55</td>
+<td align="right">2.060449</td>
+</tr>
+<tr class="even">
+<td align="left">Male</td>
+<td align="left">56-65</td>
+<td align="right">2.177396</td>
+</tr>
+<tr class="odd">
+<td align="left">Male</td>
+<td align="left">66+</td>
+<td align="right">2.253538</td>
+</tr>
+<tr class="even">
+<td align="left">Male</td>
+<td align="left">Unknown</td>
+<td align="right">17.288692</td>
+</tr>
+</tbody>
+</table>
+<p>Similarly, for frozen food, the highest consumption is noted in
+younger males, with a notable decrease in older age groups.</p>
+<pre class="r"><code># Histogram for BMI
+ggplot(obesity, aes(x = bmi)) + 
+  geom_histogram(binwidth = 1, fill = &quot;blue&quot;, color = &quot;black&quot;) + 
+  labs(title = &quot;Distribution of BMI&quot;, x = &quot;BMI&quot;, y = &quot;Count&quot;) + 
+  theme_minimal()</code></pre>
+<p><img src="Report_files/figure-html/data%20distribution%20plots-1.png" width="672" /></p>
+<pre class="r"><code># Density plot for BMI
+ggplot(obesity, aes(x = bmi)) + 
+  geom_density(fill = &quot;blue&quot;, alpha = 0.5) + 
+  labs(title = &quot;Density Plot for BMI&quot;, x = &quot;BMI&quot;, y = &quot;Density&quot;) + 
+  theme_minimal()</code></pre>
+<p><img src="Report_files/figure-html/data%20distribution%20plots-2.png" width="672" /></p>
+<pre class="r"><code># Boxplot for BMI
+ggplot(obesity, aes(y = bmi, x = 1)) + 
+  geom_boxplot(fill = &quot;blue&quot;, alpha = 0.5) + 
+  labs(title = &quot;Boxplot for BMI&quot;, x = &quot;&quot;, y = &quot;BMI&quot;) + 
+  theme_minimal()</code></pre>
+<p><img src="Report_files/figure-html/data%20distribution%20plots-3.png" width="672" />
+The histogram and density plot indicate that the distribution of
+<code>BMI</code> is right-skewed, which is a common observation in
+health-related data.</p>
+<p>When the response variable in a regression model, BMI, in our case,
+is not normally distributed, we took a common approach is to apply a
+transformation to achieve normality. The logarithmic transformation is
+particularly useful because it is a monotonic transformation that can
+handle positive skewness by compressing the long tail and expanding the
+lower end of the distribution. This can make the distribution more
+symmetric and more closely approximate the normal distribution, which
+meets the assumptions of linear regression.</p>
+<p>By transforming <code>BMI</code> using the natural logarithm, we can
+stabilize the variance (homoscedasticity) and make the relationship
+between the predictors and the response variable more linear. This is
+beneficial because linear regression assumes a linear relationship
+between the predictors and the outcome variable. # Statistical
+Analysis</p>
+<pre class="r"><code>cv_results |&gt; 
+  select(starts_with(&quot;rmse&quot;)) |&gt; 
+  pivot_longer(
+    everything(),
+    names_to = &quot;model_type&quot;,
+    values_to = &quot;rmse&quot;,
+    names_prefix = &quot;rmse_&quot;
+  ) |&gt; 
+  group_by(model_type) |&gt; 
+  summarize(m_rmse = mean(rmse))</code></pre>
+<pre><code>## # A tibble: 3 × 2
+##   model_type    m_rmse
+##   &lt;chr&gt;          &lt;dbl&gt;
+## 1 fast_adjusted  0.328
+## 2 fast_crude     0.501
+## 3 fast_inter     0.371</code></pre>
+<pre class="r"><code>cv_results |&gt; 
+  select(starts_with(&quot;rmse&quot;)) |&gt; 
+  pivot_longer(
+    everything(),
+    names_to = &quot;model_type&quot;,
+    values_to = &quot;rmse&quot;,
+    names_prefix = &quot;rmse_&quot;
+  ) |&gt; 
+  ggplot(aes(x = model_type, y = rmse)) +
+  geom_violin()</code></pre>
+<p><img src="Report_files/figure-html/model%20comparison-1.png" width="672" />
+Analysis of the relationship between fast food consumption and BMI:
 First, we used the crossv_mc function to create 100 Monte Carlo
 cross-validation splits of the obesity dataset. This approach helps in
 assessing the model’s performance more robustly by training and testing
@@ -601,8 +1204,59 @@ better predictive performance for most of its predictions compared to
 the other models. The model <code>fast_adjusted</code> seems to be the
 best model overall due to its concentration of lower rmse values,
 although <code>fast_inter</code> may also perform similarly well for the
-majority of predictions but has some predictions with high error.
-Best-Fitting Model Analysis</p>
+majority of predictions but has some predictions with high error.</p>
+<p>Best-Fitting Model Analysis</p>
+<pre class="r"><code>best_adjusted_model_summary &lt;- cv_results$model_fast_adjusted[[1]] %&gt;% summary()
+
+# Print the summary which includes coefficients, R-squared, p-values...
+print(best_adjusted_model_summary)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = log(bmi) ~ freq_fast_food + age + gender + marital_status + 
+##     race + education + income_to_poverty, data = df)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.70885 -0.16328 -0.00819  0.14872  0.98211 
+## 
+## Coefficients:
+##                                            Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)                               3.398e+00  2.106e-02 161.335  &lt; 2e-16
+## freq_fast_food                           -9.593e-05  4.303e-05  -2.230   0.0258
+## age                                       4.499e-04  2.826e-04   1.592   0.1115
+## genderMale                               -4.135e-02  8.639e-03  -4.787 1.77e-06
+## marital_statusNever married              -2.144e-02  1.214e-02  -1.765   0.0776
+## marital_statusWidowed/Divorced/Separated -1.654e-02  1.116e-02  -1.482   0.1383
+## raceMexican American                      2.544e-05  1.449e-02   0.002   0.9986
+## raceOther                                -1.590e-01  1.846e-02  -8.614  &lt; 2e-16
+## raceOther Hispanic                       -1.141e-02  1.566e-02  -0.729   0.4662
+## raceWhite                                -2.153e-02  1.070e-02  -2.013   0.0442
+## educationHigh school graduate             1.443e-02  1.389e-02   1.039   0.2991
+## educationLess than 9th grade              5.612e-03  2.051e-02   0.274   0.7844
+## educationSome college or AA degree        2.277e-02  1.360e-02   1.674   0.0942
+## income_to_poverty                         2.403e-03  3.096e-03   0.776   0.4378
+##                                             
+## (Intercept)                              ***
+## freq_fast_food                           *  
+## age                                         
+## genderMale                               ***
+## marital_statusNever married              .  
+## marital_statusWidowed/Divorced/Separated    
+## raceMexican American                        
+## raceOther                                ***
+## raceOther Hispanic                          
+## raceWhite                                *  
+## educationHigh school graduate               
+## educationLess than 9th grade                
+## educationSome college or AA degree       .  
+## income_to_poverty                           
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.2386 on 3138 degrees of freedom
+##   (5958 observations deleted due to missingness)
+## Multiple R-squared:  0.03556,    Adjusted R-squared:  0.03156 
+## F-statistic: 8.899 on 13 and 3138 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>The estimated <code>log(BMI)</code> is approximately 3.414 when all
 predictor variables are held at zero. To interpret this on the original
 BMI scale, you would calculate exp(3.414). This value represents the
@@ -636,28 +1290,65 @@ variable is log-transformed, the interpretation is in terms of
 percentage change (for continuous predictors) or relative percentage
 difference (for categorical predictors) in BMI.</p>
 </div>
-<div id="residual-analysis" class="section level2">
-<h2>Residual Analysis</h2>
-<p>The variance of residuals increasing with the fitted values suggests
-that the model might benefit from a transformation of variables or the
-inclusion of additional predictors to stabilize the variance across the
-range of predictions. The curvature in the LOESS line could imply that
-the model is missing some complexity of the relationship, which might be
-addressed with non-linear terms or interaction terms in the model.</p>
-</div>
-<div id="conclusion" class="section level2">
-<h2>Conclusion</h2>
-<p>Overall, this residual plot indicates that while the model might be
-performing adequately, there is room for improvement in terms of
-accounting for non-constant variance and potentially non-linear
-relationships.</p>
-<p>Analysis of the relationship between sedentary activity and BMI: This
-model’s aim is to understand how sedentary activity potentially
-influences BMI when controlling for demographic and socioeconomic
-factors.</p>
-</div>
 <div id="histogram-for-sedentary-activity" class="section level2">
 <h2>Histogram for Sedentary Activity</h2>
+<pre class="r"><code># Histogram and Density Plot for Sedentary Activity
+ggplot(obesity, aes(x = sedentary_activity)) +
+  geom_histogram(binwidth = 10, fill = &quot;green&quot;, color = &quot;black&quot;, alpha = 0.7) + 
+  geom_density(alpha = 0.2, adjust = 1/5) + 
+  labs(title = &quot;Distribution of Sedentary Activity&quot;, x = &quot;Sedentary Activity&quot;, y = &quot;Density&quot;) +
+  theme_minimal()</code></pre>
+<p><img src="Report_files/figure-html/distribution-1.png" width="672" /></p>
+<p>Sedentary lifestyle is a key focus of our study. This histogram
+showcases the sedentary activity levels reported by obese individuals.”
+Observation: “Most obese individuals report sedentary activity ranging
+up to 500 minutes, with the frequency decreasing as activity increases.
+Notably, very high levels of sedentary activity are rare.</p>
+<pre class="r"><code>cv_results_sedentary |&gt; 
+  select(starts_with(&quot;rmse_sed&quot;)) |&gt; 
+  pivot_longer(
+    everything(),
+    names_to = &quot;model_type&quot;,
+    values_to = &quot;rmse&quot;,
+    names_prefix = &quot;rmse_sed_&quot;
+  ) |&gt; 
+  ggplot(aes(x = model_type, y = rmse)) +
+  geom_violin()</code></pre>
+<p><img src="Report_files/figure-html/cross%20validation%20comparison-1.png" width="672" /></p>
+<pre class="r"><code>rmse_summary = cv_results_sedentary |&gt; 
+  select(starts_with(&quot;rmse_sed&quot;)) |&gt; 
+  pivot_longer(
+    everything(),
+    names_to = &quot;model_type&quot;,
+    values_to = &quot;rmse&quot;,
+    names_prefix = &quot;rmse_sed_&quot;
+  ) |&gt; 
+  group_by(model_type) |&gt; 
+  summarize(m_rmse = mean(rmse))
+kable(rmse_summary, format = &quot;markdown&quot;, caption = &quot;Summary of RMSE for Sedentary Models&quot;)</code></pre>
+<table>
+<caption>Summary of RMSE for Sedentary Models</caption>
+<thead>
+<tr class="header">
+<th align="left">model_type</th>
+<th align="right">m_rmse</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">adjusted</td>
+<td align="right">0.2353225</td>
+</tr>
+<tr class="even">
+<td align="left">crude</td>
+<td align="right">0.2375522</td>
+</tr>
+<tr class="odd">
+<td align="left">inter</td>
+<td align="right">0.2353025</td>
+</tr>
+</tbody>
+</table>
 <p>Sedentary activity with log(BMI) - Cross-validation Results In the
 context of these models, a lower RMSE indicates a more accurate
 prediction of BMI from the predictors used in the model.</p>
@@ -683,7 +1374,30 @@ model statistics in the adjusted model for sedentary activity.</p>
 <div id="interpretation-of-the-adjusted-model-sedentary-ativity"
 class="section level2">
 <h2>Interpretation of the Adjusted model (Sedentary Ativity)</h2>
-<p>Coefficients Interpretation on Log Scale: Intercept: The estimated
+<pre class="r"><code># Step 1: Generate new data for plotting
+new_data &lt;- with(obesity, expand.grid(
+  sedentary_activity = seq(min(sedentary_activity, na.rm = TRUE), max(sedentary_activity, na.rm = TRUE), length.out = 100),
+  age = mean(age, na.rm = TRUE),
+  gender = &quot;Female&quot;, 
+  marital_status = &quot;Married&quot;, 
+  race = &quot;White&quot;, 
+  education = &quot;Less than 9th grade&quot;, 
+  income_to_poverty = mean(income_to_poverty, na.rm = TRUE)
+))
+
+# Step 2: Predict log(BMI) using the adjusted model and the new data
+adjusted_model &lt;- cv_results_sedentary$model_sed_adjusted[[1]]
+new_data$log_bmi_pred &lt;- predict(adjusted_model, newdata = new_data)
+
+# Step 3: Create the plot
+ggplot(new_data, aes(x = sedentary_activity, y = log_bmi_pred)) +
+  geom_line(color = &quot;blue&quot;) +
+  labs(title = &quot;Predicted Log BMI vs Sedentary Activity&quot;,
+       x = &quot;Sedentary Activity&quot;,
+       y = &quot;Predicted Log BMI&quot;) +
+  theme_minimal()</code></pre>
+<p><img src="Report_files/figure-html/model%20plot%20for%20adjusted%20model-1.png" width="672" />
+Coefficients Interpretation on Log Scale: Intercept: The estimated
 log(BMI) is approximately 3.366 when all predictor variables are held at
 zero. To interpret this on the original BMI scale, you would calculate
 exp(3.366). This value represents the estimated BMI for the baseline
@@ -714,9 +1428,6 @@ the outcome.</p>
 suggests that these factors have a statistically significant association
 with BMI. However, the magnitude of these effects might be small,
 especially for variables like age and income_to_poverty ratio.</p>
-</div>
-<div id="residuals-vs-fitted-values-plot" class="section level2">
-<h2>Residuals vs Fitted values plot</h2>
 <p>Overall Interpretation: The significant predictors in the model, like
 sedentary activity and gender, indicate factors that are associated with
 BMI. However, the small R-squared value suggests that many other factors
@@ -749,6 +1460,33 @@ socioeconomic factors such as education and income-to-poverty ratio,
 alongside the main effects.</p>
 <div id="model-performance-evaluation-1" class="section level2">
 <h2>Model Performance Evaluation</h2>
+<pre class="r"><code>cv_results_frozen |&gt; 
+  select(starts_with(&quot;rmse_frozen&quot;)) |&gt; 
+  pivot_longer(
+    everything(),
+    names_to = &quot;model_type&quot;,
+    values_to = &quot;rmse&quot;,
+    names_prefix = &quot;rmse_frozen_&quot;
+  ) |&gt; 
+  ggplot(aes(x = model_type, y = rmse)) +
+  geom_violin()</code></pre>
+<p><img src="Report_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<pre class="r"><code>cv_results_frozen |&gt; 
+  select(starts_with(&quot;rmse_frozen&quot;)) |&gt; 
+  pivot_longer(
+    everything(),
+    names_to = &quot;model_type&quot;,
+    values_to = &quot;rmse&quot;,
+    names_prefix = &quot;rmse_frozen_&quot;
+  ) |&gt; 
+  group_by(model_type) |&gt; 
+  summarize(m_rmse = mean(rmse))</code></pre>
+<pre><code>## # A tibble: 3 × 2
+##   model_type m_rmse
+##   &lt;chr&gt;       &lt;dbl&gt;
+## 1 adjusted    0.254
+## 2 crude       0.309
+## 3 inter       0.356</code></pre>
 <p>According to the violin plot of the RMSE distribution for each model,
 the adjusted model consistently shows a concentrated distribution of
 lower RMSE values, meaning it has a superior predictive performance
@@ -759,8 +1497,70 @@ that the adjusted model has the lowest mean RMSE of 0.243, compared to
 lower values mean better model performance, the adjusted model has the
 best model performance among these three models.</p>
 </div>
-<div id="cross-validation-results" class="section level2">
-<h2>Cross-Validation Results</h2>
+<div id="interpretaion-of-adjusted-model" class="section level2">
+<h2>Interpretaion of adjusted model</h2>
+<pre class="r"><code>adjusted_model_frozen &lt;- cv_results_frozen$model_frozen_adjusted[[1]]
+new_data_frozen$log_bmi_pred &lt;- predict(adjusted_model_frozen, newdata = new_data_frozen)
+
+# Plot the predicted values
+ggplot(new_data_frozen, aes(x = freq_frozen, y = log_bmi_pred)) +
+  geom_line(color = &quot;purple&quot;) +
+  labs(title = &quot;Predicted Log BMI vs Frozen Fast Food Frequency&quot;,
+       x = &quot;Frozen Fast Food Frequency&quot;,
+       y = &quot;Predicted Log BMI&quot;) +
+  theme_minimal()</code></pre>
+<p><img src="Report_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<pre class="r"><code>best_adjusted_model_summary &lt;- cv_results_frozen$model_frozen_adjusted[[1]] %&gt;% summary()
+
+# Print the summary which includes coefficients, R-squared, p-values...
+print(best_adjusted_model_summary)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = log(bmi) ~ freq_frozen + age + gender + marital_status + 
+##     race + education + income_to_poverty, data = df)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.76581 -0.15707 -0.00805  0.14687  1.09974 
+## 
+## Coefficients:
+##                                            Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)                               3.421e+00  1.846e-02 185.351  &lt; 2e-16
+## freq_frozen                               4.410e-05  3.548e-05   1.243 0.214031
+## age                                       3.284e-04  2.448e-04   1.342 0.179831
+## genderMale                               -4.453e-02  7.549e-03  -5.898 3.97e-09
+## marital_statusNever married              -2.314e-02  1.064e-02  -2.174 0.029773
+## marital_statusWidowed/Divorced/Separated -3.310e-02  9.601e-03  -3.448 0.000571
+## raceMexican American                     -1.174e-02  1.282e-02  -0.916 0.359875
+## raceOther                                -1.875e-01  1.531e-02 -12.248  &lt; 2e-16
+## raceOther Hispanic                       -2.308e-02  1.325e-02  -1.742 0.081556
+## raceWhite                                -3.500e-02  9.409e-03  -3.720 0.000202
+## educationHigh school graduate             1.046e-02  1.192e-02   0.878 0.380183
+## educationLess than 9th grade             -4.893e-03  1.627e-02  -0.301 0.763639
+## educationSome college or AA degree        1.592e-02  1.172e-02   1.359 0.174359
+## income_to_poverty                         1.357e-03  2.735e-03   0.496 0.619809
+##                                             
+## (Intercept)                              ***
+## freq_frozen                                 
+## age                                         
+## genderMale                               ***
+## marital_statusNever married              *  
+## marital_statusWidowed/Divorced/Separated ***
+## raceMexican American                        
+## raceOther                                ***
+## raceOther Hispanic                       .  
+## raceWhite                                ***
+## educationHigh school graduate               
+## educationLess than 9th grade                
+## educationSome college or AA degree          
+## income_to_poverty                           
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.2364 on 4046 degrees of freedom
+##   (5050 observations deleted due to missingness)
+## Multiple R-squared:  0.04755,    Adjusted R-squared:  0.04449 
+## F-statistic: 15.54 on 13 and 4046 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>Best-Fitting Model Analysis The best-fitting model, based on the
 cross-validation results, is the adjusted model. Thus, a detailed
 examination was conducted, and its summary statistics indicate that: The
@@ -774,18 +1574,8 @@ strong negative association with BMI. The R-squared value of 0.03455
 indicates that approximately 3.455% of the variability in the
 log-transformed BMI is explained by the model.</p>
 </div>
-<div id="residual-analysis-1" class="section level2">
-<h2>Residual Analysis</h2>
-<p>The residuals plot against fitted values provides insight into the
-adequacy of the model fit. The presence of a random scatter of residuals
-around the horizontal line at zero suggests no obvious issues with
-non-linearity or heteroscedasticity. However, the slight curvature in
-the LOESS line and the increasing spread of residuals at higher fitted
-values could imply potential model misspecification or the need for a
-variable transformation to address heteroscedasticity.</p>
 </div>
-</div>
-<div id="conclusion-1" class="section level1">
+<div id="conclusion" class="section level1">
 <h1>Conclusion</h1>
 <p>Overall, our analysis suggests that while frozen fast food
 consumption frequency does not significantly predict BMI, other factors
