@@ -169,8 +169,13 @@ cv_results |>
 
 Considering this, `fast_adjusted` seems to be the best model overall due to its concentration of lower rmse values, although `fast_inter` may also perform similarly well for the majority of predictions but has some predictions with high error. 
 
-Interpretaion: For one unit increase in number of meals from fast food or pizza place, the bmi will decrease by 0.0026 kg/m^2, while adjusting for all other covariate in the model.
+```{r}
+best_adjusted_model_summary <- cv_results$model_fast_adjusted[[1]] %>% summary()
 
+# Print the summary which includes coefficients, R-squared, p-values...
+print(best_adjusted_model_summary)
+```
+The estimated `log(BMI)` is approximately 3.414 when all predictor variables are held at zero. To interpret this on the original BMI scale, you would calculate exp(3.414). This value represents the estimated BMI for the baseline categories of all categorical predictors (usually the most common or reference category) and zero for continuous predictors. The coefficient for consumption of the number of meals from fast food or pizza place is positive (0.00264) and statistically significant. To interpret the effect on the original BMI scale, consider that a small increase in the `log(BMI)` corresponds to a percentage increase in BMI. Specifically, for each one-unit increase in fast food consumption, the log(BMI) is expected to increase by 0.0026372 kg/m^2. Similarly, for other continuous predictors like age, the coefficient represents the percentage change in log(BMI) for a one-unit increase in that predictor. For categorical predictors like gender, marital status, and race, the coefficients represent the percentage difference in log(BMI) compared to the reference category. The `R-squared` value (0.02777) indicates that about 2.777% of the variability in log-transformed BMI is explained by the model. While this might seem low, it's not uncommon in behavioral and social science research where many unmeasured factors can influence the outcome. The significance of the coefficients suggests that these factors have a statistically significant association with BMI. However, the magnitude of these effects  might be small, especially for variables like age, education and income_to_poverty ratio. The significant predictors in the model, like `freq_fast_food `,`gender`,`race` indicate factors that are associated with `BMI`. However, the small R-squared value suggests that many other factors not included in the model also influence `BMI`. Given that the response variable is log-transformed, the interpretation is in terms of percentage change (for continuous predictors) or relative percentage difference (for categorical predictors) in BMI.
 
 # Section 2: Cross-Validation and Model Comparison for Predicting BMI Based on Sendendary Activity
 ```{r distribution, warning=FALSE}
@@ -270,31 +275,6 @@ ggplot(new_data, aes(x = sedentary_activity, y = log_bmi_pred)) +
        x = "Sedentary Activity",
        y = "Predicted Log BMI") +
   theme_minimal()
-```
-
-```{r}
-best_model_summary <- cv_results_sedentary$model_sed_adjusted[[1]] %>% summary()
-
-# Summary of Adjusted Model
-print(best_model_summary)
-```
-
-## Residual Plot for Adjusted Model - Sedentary Activity
-```{r residual plot for activity}
-best_model <- cv_results_sedentary$model_sed_adjusted[[1]]
-best_model_residuals <- resid(best_model)
-best_model_fitted <- fitted(best_model)
-
-residual_plot <- ggplot() +
-  geom_point(aes(x = best_model_fitted, y = best_model_residuals)) +
-  geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
-  labs(title = "Residuals vs Fitted Values for Interaction Model",
-       x = "Fitted Values",
-       y = "Residuals") +
-  theme_minimal() +
-  geom_smooth(aes(x = best_model_fitted, y = best_model_residuals), method = "loess", se = FALSE)
-
-print(residual_plot)
 ```
 
 **Coefficients Interpretation on Log Scale**
@@ -414,29 +394,6 @@ print(best_adjusted_model_summary)
 
 The best-fitting model, based on the cross-validation results, is the adjusted model. Thus, a detailed examination was conducted, and its summary statistics indicate that: The Intercept is estimated at 3.409 on the log scale. The coefficient for frozen fast food frequency is -4.291e-06 with a p-value of 0.86427, this suggests that the number of frozen fast food meals consumed does not have a statistically significant effect on BMI in this model. Other covariates, such as gender and race show significant associations with BMI, with gender (Male) and race (Other) showing a strong negative association with BMI. The R-squared value of 0.03455 indicates that approximately 3.455% of the variability in the log-transformed BMI is explained by the model.
 
-## Residuals Plot of Frozen Fast Food Frequency
-```{r}
-adjusted_model <- cv_results_frozen$model_frozen_adjusted[[1]]
-adjusted_model_residuals <- resid(adjusted_model)
-adjusted_model_fitted <- fitted(adjusted_model)
-
-# Plot the residuals against the fitted values
-residual_plot <- ggplot() +
-  geom_point(aes(x = adjusted_model_fitted, y = adjusted_model_residuals)) +
-  geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
-  labs(title = "Residuals vs Fitted Values for Adjusted Model",
-       x = "Fitted Values",
-       y = "Residuals") +
-  theme_minimal() +
-  geom_smooth(aes(x = adjusted_model_fitted, y = adjusted_model_residuals), method = "loess", se = FALSE)
-
-# Print the residual plot
-print(residual_plot)
-
-```
-
-The residuals plot against fitted values provides insight into the adequacy of the model fit. The presence of a random scatter of residuals around the horizontal line at zero suggests no obvious issues with non-linearity or heteroscedasticity. However, the slight curvature in the LOESS line and the increasing spread of residuals at higher fitted values could imply potential model misspecification or the need for a variable transformation to address heteroscedasticity.
-
 ## Conclusion of frozen food consumption on BMI
 
 Overall, our analysis suggests that while frozen fast food consumption frequency does not significantly predict BMI, other factors such as gender and race do have significant associations. The small R-squared value implies that other unmeasured factors also play a role in influencing BMI, which are not captured by this model.
@@ -475,4 +432,16 @@ obesity |> modelr::add_residuals(freq_frozen_crude) |>
   ggplot(aes(sample = resid))+stat_qq()+stat_qq_line()
 
 ```
+
+Combined Interpretation:
+When looking at these models collectively, it is apparent that each of the predictors—fast food frequency, 
+sedentary activity, and frozen food consumption—may have a relationship with BMI, as evidenced by the residual 
+plots trending along the expected line of best fit. However, the exclusions due to non-finite values are a 
+significant concern across all three models. This suggests that while the models can provide insights, 
+they may not fully capture the complexity of the relationship between these behaviors and BMI, 
+or the data may not meet the necessary assumptions for linear regression. Further investigation 
+and possibly alternative modeling approaches, such as transformations or non-linear models, 
+may be required to fully understand these relationships.
+
+
 
