@@ -433,15 +433,3 @@ obesity |> modelr::add_residuals(freq_frozen_crude) |>
 
 ```
 
-Combined Interpretation:
-When looking at these models collectively, it is apparent that each of the predictors—fast food frequency, 
-sedentary activity, and frozen food consumption—may have a relationship with BMI, as evidenced by the residual 
-plots trending along the expected line of best fit. However, the exclusions due to non-finite values are a 
-significant concern across all three models. This suggests that while the models can provide insights, 
-they may not fully capture the complexity of the relationship between these behaviors and BMI, 
-or the data may not meet the necessary assumptions for linear regression. Further investigation 
-and possibly alternative modeling approaches, such as transformations or non-linear models, 
-may be required to fully understand these relationships.
-
-
-
