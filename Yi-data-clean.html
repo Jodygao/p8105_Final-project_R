@@ -11,7 +11,7 @@
 
 
 
-<title>Yi-data-clean</title>
+<title>P8105 Fall 2023 Final Project Proposal</title>
 
 <script src="site_libs/header-attrs-2.24/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -29,9 +29,15 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -216,7 +222,73 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
 
 
 
@@ -226,6 +298,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -279,97 +361,25 @@ $(document).ready(function () {
 
 <div id="header">
 
-
-
-
-</div>
-
-
-<div id="p8105-fall-2023-final-project-proposal" class="section level1">
-<h1>P8105 Fall 2023 Final Project Proposal</h1>
-<p>All Group Member Collaboration 2023-11-10</p>
-<div id="group-members" class="section level3">
-<h3>Group Members</h3>
-<ul>
-<li>Yuandi Gao (yg2907)</li>
-<li>Yi Li (yl5214)</li>
-<li>Yingting Zhang (yz4434)</li>
-<li>Ruohan Hong (rh3132)</li>
-<li>Shiqi Wu (sw3737)</li>
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
 </ul>
 </div>
-<div id="import-data-from-nhanes" class="section level2">
-<h2>Import data from NHANES</h2>
-<pre class="r"><code>import_df= function(path){
-  read_xpt(path)
-}
-obesity=
-  import_df(path=&#39;data/P_BMX.XPT&#39;) |&gt; 
-  full_join((import_df(path=&#39;data/P_DEMO.XPT&#39;)), by=&#39;SEQN&#39;) |&gt;
-  full_join((import_df(path=&#39;data/P_PAQ.XPT&#39;)), by=&#39;SEQN&#39;)|&gt;
-  full_join ((import_df(path=&#39;data/P_DBQ.XPT&#39;)), by=&#39;SEQN&#39;) |&gt; 
-  select (SEQN,RIAGENDR,RIDAGEYR,DMDMARTZ,INDFMPIR,RIDRETH3,DMDEDUC2,PAD680,BMXBMI,DBD900,DBD910) |&gt; 
-  filter(
-    !(DMDMARTZ %in% c(&#39;77&#39;,&#39;99&#39;,&#39;.&#39;) ),
-    !(INDFMPIR == &#39;.&#39;),
-    !(DMDEDUC2 %in% c(&#39;7&#39;,&#39;9&#39;,&#39;.&#39;) ),
-    !(PAD680 %in% c(&#39;7777&#39;, &#39;9999&#39;, &#39;.&#39;)),
-    !(BMXBMI ==&#39;.&#39;),
-    !(DBD900 %in% c(&#39;7777&#39;, &#39;9999&#39;, &#39;.&#39;)),
-    !(DBD910 %in% c(&#39;7777&#39;, &#39;9999&#39;, &#39;.&#39;))
-  ) |&gt; 
-  rename(
-    gender=RIAGENDR,
-    age=RIDAGEYR,
-    marital_status=DMDMARTZ,
-    income_to_poverty=INDFMPIR,
-    race=RIDRETH3,
-    education=DMDEDUC2,
-    sedentary_activity=PAD680,
-    bmi=BMXBMI,
-    freq_fast_food=DBD900,
-    freq_frozen=DBD910
-  ) |&gt; 
-  mutate(
-    gender = case_match(
-      gender,
-      1~&quot;Male&quot;,
-      2~&quot;Female&quot;),
-    gender = as.factor(gender),
-  marital_status= case_match(
-    marital_status,
-      1~&quot;Married&quot;,
-      2~&quot;Widowed/Divorced/Separated&quot;,
-      3~&quot;Never married&quot;
-  ),
-    race= case_match(
-    race,
-      1~&quot;Mexican American&quot;,
-      2~&quot;Other Hispanic&quot;,
-      3~&quot;White&quot;,
-      4~&quot;Black&quot;,
-      5~&quot;Asian&quot;,
-      6~&quot;Other&quot;
-     ),
-      education= case_match(
-    education,
-      1~&quot;Less than 9th grade&quot;,
-      2~&quot;9-11th grade&quot;,
-      3~&quot;High school graduate&quot; ,
-      4~&quot;Some college or AA degree&quot;,
-      6~&quot;College graduate or above&quot;
-     ),
-   bmi =case_when(
-    bmi&lt;30 ~ &#39;normal&#39;,
-    bmi&gt;=30 ~&#39;obese&#39;
-  )
-  )</code></pre>
+
+
+
+<h1 class="title toc-ignore">P8105 Fall 2023 Final Project Proposal</h1>
+
 </div>
+
+
 <div id="graphs" class="section level2">
 <h2>Graphs</h2>
-<div id="bar-chart-of-obesity-prevalence-by-race-and-gender"
-class="section level3">
-<h3>Bar Chart of Obesity Prevalence by Race and Gender</h3>
+<div id="obesity-prevalence-by-race-and-gender" class="section level3">
+<h3>Obesity Prevalence by Race and Gender</h3>
 <pre class="r"><code>obesity_race_filtered = obesity |&gt;  
   filter(!is.na(race) &amp; race != &quot;NA&quot;)
 
@@ -380,36 +390,34 @@ ggplot(obesity_race_filtered, aes(x = race, fill = gender)) +
        x = &quot;Race&quot;,
        y = &quot;Count&quot;) +
   theme_minimal()</code></pre>
-<p><img
-src="Yi-data-clean_files/figure-gfm/unnamed-chunk-2-1.png" /><!-- --></p>
-<p>Interpretation: The bar chart displays the prevalence of obesity
-across different racial categories, differentiated by gender. It shows
-that the White population has the highest count of obesity cases, with a
-notable number of cases in both genders. The Black population follows,
-with females being higher than males, whereas the “Other Hispanic”
-categories have the lowest count of obesity cases.</p>
+<p><img src="Yi-data-clean_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>The bar chart displays the prevalence of obesity across different
+racial categories, differentiated by gender. It shows that the White
+population has the highest count of obesity cases, with a notable number
+of cases in both genders. The Black population follows, with females
+being higher than males, whereas the “Other Hispanic” categories have
+the lowest count of obesity cases.</p>
 </div>
-<div id="histogram-of-age-distribution-among-obese-individuals"
+<div id="age-distribution-among-obese-individuals"
 class="section level3">
-<h3>Histogram of Age Distribution Among Obese Individuals</h3>
+<h3>Age Distribution Among Obese Individuals</h3>
 <pre class="r"><code>ggplot(subset(obesity, bmi == &quot;obese&quot;), aes(x = age)) +
   geom_histogram(binwidth = 1, fill = &quot;pink&quot;, color = &quot;lightblue&quot;) +
-  labs(title = &quot;Age Distribution of Obese Individuals&quot;,
+  labs(title = &quot;Age Distribution Among Obese Individuals&quot;,
        x = &quot;Age&quot;,
        y = &quot;Count&quot;) +
   theme_minimal()</code></pre>
-<p><img
-src="Yi-data-clean_files/figure-gfm/unnamed-chunk-3-1.png" /><!-- --></p>
-<p>Interpretation: The histogram indicates that obesity is present
-across all age groups, with a relatively uniform distribution from young
-adulthood to late middle age. There’s a significant peak in obesity
-cases among individuals in their late 50s to early 60s. After this peak,
-the number of obese individuals declines sharply for those in the older
-age groups.</p>
+<p><img src="Yi-data-clean_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>The histogram indicates that obesity is present across all age
+groups, with a relatively uniform distribution from young adulthood to
+late middle age. There’s a significant peak in obesity cases among
+individuals in their late 50s to early 60s. After this peak, the number
+of obese individuals declines sharply for those in the older age
+groups.</p>
 </div>
-<div id="box-plot-of-income-to-poverty-ratio-for-obese-individuals"
+<div id="income-to-poverty-ratio-among-obese-individuals"
 class="section level3">
-<h3>Box Plot of Income to Poverty Ratio for Obese Individuals</h3>
+<h3>Income to Poverty Ratio Among Obese Individuals</h3>
 <pre class="r"><code>ggplot(subset(obesity, bmi == &quot;obese&quot;), aes(y = income_to_poverty, x = &quot;&quot;, fill = bmi)) +
   geom_boxplot() +
   scale_fill_manual(values = c(&quot;pink&quot;)) +
@@ -417,92 +425,102 @@ class="section level3">
        x = &quot;&quot;,
        y = &quot;Income to Poverty Ratio&quot;) +
   theme_minimal()</code></pre>
-<p><img
-src="Yi-data-clean_files/figure-gfm/unnamed-chunk-4-1.png" /><!-- --></p>
-<p>Interpretation: The box plot shows the distribution of the income to
-poverty ratio among obese individuals. The data is spread across a range
-of ratios, mostly concentrated between 1 and 4, with the median around
-2. This suggests that individuals with obesity come from a range of
-economic backgrounds, but there’s a tendency towards lower income to
-poverty ratios.</p>
+<p><img src="Yi-data-clean_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>The box plot shows the distribution of the income to poverty ratio
+among obese individuals. The data is spread across a range of ratios,
+mostly concentrated between 1 and 4, with the median around 2. This
+suggests that individuals with obesity come from a range of economic
+backgrounds, but there’s a tendency towards lower income to poverty
+ratios.</p>
 </div>
-<div id="scatter-plot-of-bmi-vs.-sedentary-activity"
-class="section level3">
-<h3>Scatter Plot of BMI vs. Sedentary Activity</h3>
+<div id="histogram-of-sedentary-activity" class="section level3">
+<h3>Histogram of Sedentary Activity</h3>
 <pre class="r"><code>obesity_sedentary_activity_filtered = obesity |&gt; 
   filter(!is.na(sedentary_activity))
 
-ggplot(obesity_sedentary_activity_filtered, aes(x = sedentary_activity, y = bmi, color = bmi)) +
-  geom_point() +
-  scale_color_manual(values = c(&quot;normal&quot; = &quot;lightblue&quot;, &quot;obese&quot; = &quot;pink&quot;)) +
-  labs(title = &quot;BMI vs. Sedentary Activity&quot;,
-       x = &quot;Sedentary Activity (minutes)&quot;,
-       y = &quot;BMI&quot;) +
+ggplot(obesity_sedentary_activity_filtered, aes(x = sedentary_activity)) +
+  geom_histogram(binwidth = 1, fill = &quot;pink&quot;, color = &quot;lightblue&quot;) +
+  labs(title = &quot;Sedentary Activity Distribution Among Obese Individuals&quot;,
+       x = &quot;Sedentary Activity&quot;,
+       y = &quot;Count&quot;) +
   theme_minimal()</code></pre>
-<p><img
-src="Yi-data-clean_files/figure-gfm/unnamed-chunk-5-1.png" /><!-- --></p>
-<p>Interpretation: The scatter plot presents a comparison of sedentary
-activity (in minutes) with BMI categories (normal and obese). Points are
-relatively evenly distributed across the range of sedentary activity for
-both BMI categories, suggesting no clear or immediate correlation
-between the amount of sedentary activity and BMI category within this
-dataset. It indicates that individuals classified as obese and those
-with a normal BMI report similar patterns of sedentary behavior.</p>
+<p><img src="Yi-data-clean_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>The majority of obese individuals report sedentary activity levels
+between 0 to around 500 minutes, with frequency decreasing as the amount
+of sedentary activity increases. There are notable peaks at certain
+intervals which may indicate common reporting increments (～250
+minutes). Very few individuals report very high levels of sedentary
+activity, as seen by the low counts past 1000 minutes.</p>
 </div>
-<div id="heat-map-of-fast-food-and-frozen-meal-consumption"
-class="section level3">
-<h3>Heat Map of Fast Food and Frozen Meal Consumption</h3>
-<pre class="r"><code>aggregated_data = obesity |&gt; 
-  group_by(age, gender) |&gt; 
-  summarize(avg_fast_food = mean(freq_fast_food, na.rm = TRUE),
-            avg_frozen_food = mean(freq_frozen, na.rm = TRUE))</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;age&#39;. You can override using the `.groups`
-## argument.</code></pre>
-<pre class="r"><code>melted_data = melt(aggregated_data, id.vars = c(&quot;age&quot;, &quot;gender&quot;))
-
-ggplot(melted_data, aes(x = age, y = variable, fill = value)) +
-  geom_tile() +
-  scale_fill_gradient(low = &quot;lightblue&quot;, high = &quot;pink&quot;) +
-  labs(title = &quot;Heat Map of Fast Food and Frozen Meal Consumption&quot;,
-       x = &quot;Age&quot;,
-       y = &quot;Food Type&quot;,
-       fill = &quot;Average Consumption&quot;) +
-  theme_minimal()</code></pre>
-<p><img
-src="Yi-data-clean_files/figure-gfm/unnamed-chunk-6-1.png" /><!-- --></p>
-<p>Interpretation：The heat map shows the average consumption of fast
-food and frozen meals across different ages. Consumption levels are
-indicated by the color intensity, with darker shades of pink
-representing higher consumption. From the visualization, it appears that
-there are specific age groups that consume fast food and frozen meals
-more frequently, as indicated by the vertical pink bars, which suggest
-peaks in consumption at those ages.</p>
 </div>
-<div id="baseline-characterics" class="section level3">
-<h3>Baseline characterics</h3>
+<div id="baseline-characterics" class="section level2">
+<h2>Baseline characterics</h2>
 <pre class="r"><code>library(dplyr)
 library(readxl)</code></pre>
 <pre class="r"><code>gender_summary &lt;- obesity %&gt;%
   count(gender) %&gt;%
   mutate(Percentage = n / sum(n) * 100)
 
-print(gender_summary)</code></pre>
-<pre><code>## # A tibble: 2 × 3
-##   gender     n Percentage
-##   &lt;fct&gt;  &lt;int&gt;      &lt;dbl&gt;
-## 1 Female  5800       50.9
-## 2 Male    5588       49.1</code></pre>
+kable(gender_summary, format = &quot;markdown&quot;, caption = &quot;Gender Summary&quot;)</code></pre>
+<table>
+<caption>Gender Summary</caption>
+<thead>
+<tr class="header">
+<th align="left">gender</th>
+<th align="right">n</th>
+<th align="right">Percentage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Female</td>
+<td align="right">5800</td>
+<td align="right">50.9308</td>
+</tr>
+<tr class="even">
+<td align="left">Male</td>
+<td align="right">5588</td>
+<td align="right">49.0692</td>
+</tr>
+</tbody>
+</table>
 <pre class="r"><code>marital_status_summary &lt;- obesity %&gt;%
   count(marital_status) %&gt;%
   mutate(Percentage = n / sum(n) * 100)
-print(marital_status_summary)</code></pre>
-<pre><code>## # A tibble: 4 × 3
-##   marital_status                 n Percentage
-##   &lt;chr&gt;                      &lt;int&gt;      &lt;dbl&gt;
-## 1 Married                     4216       37.0
-## 2 Never married               1360       11.9
-## 3 Widowed/Divorced/Separated  1599       14.0
-## 4 &lt;NA&gt;                        4213       37.0</code></pre>
+
+kable(marital_status_summary, format = &quot;markdown&quot;, caption = &quot;Marital Status Summary&quot;)</code></pre>
+<table>
+<caption>Marital Status Summary</caption>
+<thead>
+<tr class="header">
+<th align="left">marital_status</th>
+<th align="right">n</th>
+<th align="right">Percentage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Married</td>
+<td align="right">4216</td>
+<td align="right">37.02143</td>
+</tr>
+<tr class="even">
+<td align="left">Never married</td>
+<td align="right">1360</td>
+<td align="right">11.94240</td>
+</tr>
+<tr class="odd">
+<td align="left">Widowed/Divorced/Separated</td>
+<td align="right">1599</td>
+<td align="right">14.04110</td>
+</tr>
+<tr class="even">
+<td align="left">NA</td>
+<td align="right">4213</td>
+<td align="right">36.99508</td>
+</tr>
+</tbody>
+</table>
 <pre class="r"><code>age_summary &lt;- obesity %&gt;%
   summarise(
     Count = n(),
@@ -516,11 +534,47 @@ print(marital_status_summary)</code></pre>
     Max = max(age, na.rm = TRUE)
   )
 
-print(age_summary)</code></pre>
-<pre><code>## # A tibble: 1 × 9
-##   Count Unique  Mean Std_Dev   Min `25th_Pctl` Median `75th_Pctl`   Max
-##   &lt;int&gt;  &lt;int&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;       &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;
-## 1 11388     79  35.6    24.2     2          13     33          57    80</code></pre>
+kable(age_summary, format = &quot;markdown&quot;, caption = &quot;Age Summary&quot;)</code></pre>
+<table>
+<caption>Age Summary</caption>
+<colgroup>
+<col width="9%" />
+<col width="10%" />
+<col width="13%" />
+<col width="13%" />
+<col width="6%" />
+<col width="15%" />
+<col width="10%" />
+<col width="15%" />
+<col width="6%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">Count</th>
+<th align="right">Unique</th>
+<th align="right">Mean</th>
+<th align="right">Std_Dev</th>
+<th align="right">Min</th>
+<th align="right">25th_Pctl</th>
+<th align="right">Median</th>
+<th align="right">75th_Pctl</th>
+<th align="right">Max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">11388</td>
+<td align="right">79</td>
+<td align="right">35.62302</td>
+<td align="right">24.24121</td>
+<td align="right">2</td>
+<td align="right">13</td>
+<td align="right">33</td>
+<td align="right">57</td>
+<td align="right">80</td>
+</tr>
+</tbody>
+</table>
 <pre class="r"><code>income_to_poverty_summary &lt;- obesity %&gt;%
   summarise(
     Count = n(),
@@ -534,113 +588,386 @@ print(age_summary)</code></pre>
     Max = max(income_to_poverty, na.rm = TRUE)
   )
 
-print(income_to_poverty_summary)</code></pre>
-<pre><code>## # A tibble: 1 × 9
-##   Count Unique  Mean Std_Dev   Min `25th_Pctl` Median `75th_Pctl`   Max
-##   &lt;int&gt;  &lt;int&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;       &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;
-## 1 11388    472  2.42    1.63     0        1.04   1.99        3.90     5</code></pre>
+kable(income_to_poverty_summary, format = &quot;markdown&quot;, caption = &quot;Income to Poverty Summary&quot;)</code></pre>
+<table>
+<caption>Income to Poverty Summary</caption>
+<colgroup>
+<col width="9%" />
+<col width="10%" />
+<col width="12%" />
+<col width="12%" />
+<col width="6%" />
+<col width="15%" />
+<col width="10%" />
+<col width="15%" />
+<col width="6%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">Count</th>
+<th align="right">Unique</th>
+<th align="right">Mean</th>
+<th align="right">Std_Dev</th>
+<th align="right">Min</th>
+<th align="right">25th_Pctl</th>
+<th align="right">Median</th>
+<th align="right">75th_Pctl</th>
+<th align="right">Max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">11388</td>
+<td align="right">472</td>
+<td align="right">2.42299</td>
+<td align="right">1.62789</td>
+<td align="right">0</td>
+<td align="right">1.04</td>
+<td align="right">1.99</td>
+<td align="right">3.9025</td>
+<td align="right">5</td>
+</tr>
+</tbody>
+</table>
 <pre class="r"><code>education_summary &lt;- obesity %&gt;%
   count(education) %&gt;%
   mutate(Percentage = n / sum(n) * 100)
 
-print(education_summary)</code></pre>
-<pre><code>## # A tibble: 5 × 3
-##   education                     n Percentage
-##   &lt;chr&gt;                     &lt;int&gt;      &lt;dbl&gt;
-## 1 9-11th grade                763       6.70
-## 2 High school graduate       1722      15.1 
-## 3 Less than 9th grade         475       4.17
-## 4 Some college or AA degree  2406      21.1 
-## 5 &lt;NA&gt;                       6022      52.9</code></pre>
+kable(education_summary, format = &quot;markdown&quot;, caption = &quot;Education Summary&quot;)</code></pre>
+<table>
+<caption>Education Summary</caption>
+<thead>
+<tr class="header">
+<th align="left">education</th>
+<th align="right">n</th>
+<th align="right">Percentage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">9-11th grade</td>
+<td align="right">763</td>
+<td align="right">6.700035</td>
+</tr>
+<tr class="even">
+<td align="left">High school graduate</td>
+<td align="right">1722</td>
+<td align="right">15.121180</td>
+</tr>
+<tr class="odd">
+<td align="left">Less than 9th grade</td>
+<td align="right">475</td>
+<td align="right">4.171057</td>
+</tr>
+<tr class="even">
+<td align="left">Some college or AA degree</td>
+<td align="right">2406</td>
+<td align="right">21.127503</td>
+</tr>
+<tr class="odd">
+<td align="left">NA</td>
+<td align="right">6022</td>
+<td align="right">52.880225</td>
+</tr>
+</tbody>
+</table>
 <pre class="r"><code>race_summary &lt;- obesity %&gt;%
   count(race) %&gt;%
   mutate(Percentage = n / sum(n) * 100)
 
-print(race_summary)</code></pre>
-<pre><code>## # A tibble: 6 × 3
-##   race                 n Percentage
-##   &lt;chr&gt;            &lt;int&gt;      &lt;dbl&gt;
-## 1 Black             2970      26.1 
-## 2 Mexican American  1397      12.3 
-## 3 Other             1217      10.7 
-## 4 Other Hispanic    1050       9.22
-## 5 White             3995      35.1 
-## 6 &lt;NA&gt;               759       6.66</code></pre>
-<p>What’s left for baseline: sedentary_activit, BMI, freq_fast_food,
-freq_frozen</p>
-<pre class="r"><code>sedentary_activity_summary &lt;- obesity %&gt;%
-  summarise(
-    Count = n(),
-    Mean = mean(sedentary_activity, na.rm = TRUE),
-    Std_Dev = sd(sedentary_activity, na.rm = TRUE),
-    Min = min(sedentary_activity, na.rm = TRUE),
-    `25th_Pctl` = quantile(sedentary_activity, 0.25, na.rm = TRUE),
-    Median = median(sedentary_activity, na.rm = TRUE),
-    `75th_Pctl` = quantile(sedentary_activity, 0.75, na.rm = TRUE),
-    Max = max(sedentary_activity, na.rm = TRUE)
-  )
-print(sedentary_activity_summary)</code></pre>
-<pre><code>## # A tibble: 1 × 8
-##   Count  Mean Std_Dev   Min `25th_Pctl` Median `75th_Pctl`   Max
-##   &lt;int&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;       &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;
-## 1 11388  338.    203.     0         180    300         480  1320</code></pre>
+kable(race_summary, format = &quot;markdown&quot;, caption = &quot;Race Summary&quot;)</code></pre>
+<table>
+<caption>Race Summary</caption>
+<thead>
+<tr class="header">
+<th align="left">race</th>
+<th align="right">n</th>
+<th align="right">Percentage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Black</td>
+<td align="right">2970</td>
+<td align="right">26.080084</td>
+</tr>
+<tr class="even">
+<td align="left">Mexican American</td>
+<td align="right">1397</td>
+<td align="right">12.267299</td>
+</tr>
+<tr class="odd">
+<td align="left">Other</td>
+<td align="right">1217</td>
+<td align="right">10.686688</td>
+</tr>
+<tr class="even">
+<td align="left">Other Hispanic</td>
+<td align="right">1050</td>
+<td align="right">9.220232</td>
+</tr>
+<tr class="odd">
+<td align="left">White</td>
+<td align="right">3995</td>
+<td align="right">35.080787</td>
+</tr>
+<tr class="even">
+<td align="left">NA</td>
+<td align="right">759</td>
+<td align="right">6.664910</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>Sedentary Activity Summary</caption>
+<thead>
+<tr class="header">
+<th align="right">Count</th>
+<th align="right">Mean</th>
+<th align="right">Std_Dev</th>
+<th align="right">Min</th>
+<th align="right">25th_Pctl</th>
+<th align="right">Median</th>
+<th align="right">75th_Pctl</th>
+<th align="right">Max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">11388</td>
+<td align="right">338.351</td>
+<td align="right">202.96</td>
+<td align="right">0</td>
+<td align="right">180</td>
+<td align="right">300</td>
+<td align="right">480</td>
+<td align="right">1320</td>
+</tr>
+</tbody>
+</table>
 <pre class="r"><code>bmi_summary &lt;- obesity %&gt;%
   count(bmi) %&gt;%
-  mutate(Percentage = n / sum(n) * 100)
-print(bmi_summary)</code></pre>
-<pre><code>## # A tibble: 2 × 3
-##   bmi        n Percentage
-##   &lt;chr&gt;  &lt;int&gt;      &lt;dbl&gt;
-## 1 normal  7922       69.6
-## 2 obese   3466       30.4</code></pre>
-<pre class="r"><code>fast_food_summary &lt;- obesity %&gt;%
-  group_by(gender, age) %&gt;%
+  mutate(Percentage = n / sum(n) * 100) %&gt;%
+  ungroup() 
+
+kable(bmi_summary, format = &quot;markdown&quot;, caption = &quot;BMI Summary&quot;)</code></pre>
+<table>
+<caption>BMI Summary</caption>
+<thead>
+<tr class="header">
+<th align="left">bmi</th>
+<th align="right">n</th>
+<th align="right">Percentage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">normal</td>
+<td align="right">7922</td>
+<td align="right">69.56445</td>
+</tr>
+<tr class="even">
+<td align="left">obese</td>
+<td align="right">3466</td>
+<td align="right">30.43555</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Create age groups
+obesity &lt;- obesity %&gt;%
+  mutate(age_group = case_when(
+    age &gt;= 18 &amp; age &lt;= 25 ~ &quot;18-25&quot;,
+    age &gt; 25 &amp; age &lt;= 35 ~ &quot;26-35&quot;,
+    age &gt; 35 &amp; age &lt;= 45 ~ &quot;36-45&quot;,
+    age &gt; 45 &amp; age &lt;= 55 ~ &quot;46-55&quot;,
+    age &gt; 55 &amp; age &lt;= 65 ~ &quot;56-65&quot;,
+    age &gt; 65 ~ &quot;66+&quot;,
+    TRUE ~ &quot;Unknown&quot;
+  ))
+
+fast_food_summary &lt;- obesity %&gt;%
+  group_by(gender, age_group) %&gt;%
   summarise(Avg_Fast_Food = mean(freq_fast_food, na.rm = TRUE))</code></pre>
 <pre><code>## `summarise()` has grouped output by &#39;gender&#39;. You can override using the
 ## `.groups` argument.</code></pre>
-<pre class="r"><code>print(fast_food_summary)</code></pre>
-<pre><code>## # A tibble: 158 × 3
-## # Groups:   gender [2]
-##    gender   age Avg_Fast_Food
-##    &lt;fct&gt;  &lt;dbl&gt;         &lt;dbl&gt;
-##  1 Female     2          1.66
-##  2 Female     3          1.78
-##  3 Female     4          1.40
-##  4 Female     5          1.42
-##  5 Female     6          1.79
-##  6 Female     7          1.67
-##  7 Female     8          1.77
-##  8 Female     9          1.81
-##  9 Female    10          2.01
-## 10 Female    11          1.70
-## # ℹ 148 more rows</code></pre>
-<pre class="r"><code>frozen_food_summary &lt;- obesity %&gt;%
-  group_by(gender, age) %&gt;%
-  summarise(Avg_Frozen_Food = mean(freq_frozen, na.rm = TRUE))</code></pre>
+<pre class="r"><code>kable(fast_food_summary, format = &quot;markdown&quot;, caption = &quot;Fast Food Frequency Summary by Age Group and Gender&quot;)</code></pre>
+<table>
+<caption>Fast Food Frequency Summary by Age Group and Gender</caption>
+<thead>
+<tr class="header">
+<th align="left">gender</th>
+<th align="left">age_group</th>
+<th align="right">Avg_Fast_Food</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Female</td>
+<td align="left">18-25</td>
+<td align="right">15.024719</td>
+</tr>
+<tr class="even">
+<td align="left">Female</td>
+<td align="left">26-35</td>
+<td align="right">2.330855</td>
+</tr>
+<tr class="odd">
+<td align="left">Female</td>
+<td align="left">36-45</td>
+<td align="right">2.029762</td>
+</tr>
+<tr class="even">
+<td align="left">Female</td>
+<td align="left">46-55</td>
+<td align="right">2.000000</td>
+</tr>
+<tr class="odd">
+<td align="left">Female</td>
+<td align="left">56-65</td>
+<td align="right">1.620079</td>
+</tr>
+<tr class="even">
+<td align="left">Female</td>
+<td align="left">66+</td>
+<td align="right">1.125214</td>
+</tr>
+<tr class="odd">
+<td align="left">Female</td>
+<td align="left">Unknown</td>
+<td align="right">1.794655</td>
+</tr>
+<tr class="even">
+<td align="left">Male</td>
+<td align="left">18-25</td>
+<td align="right">2.997696</td>
+</tr>
+<tr class="odd">
+<td align="left">Male</td>
+<td align="left">26-35</td>
+<td align="right">2.915767</td>
+</tr>
+<tr class="even">
+<td align="left">Male</td>
+<td align="left">36-45</td>
+<td align="right">2.457589</td>
+</tr>
+<tr class="odd">
+<td align="left">Male</td>
+<td align="left">46-55</td>
+<td align="right">2.215190</td>
+</tr>
+<tr class="even">
+<td align="left">Male</td>
+<td align="left">56-65</td>
+<td align="right">2.247582</td>
+</tr>
+<tr class="odd">
+<td align="left">Male</td>
+<td align="left">66+</td>
+<td align="right">1.482982</td>
+</tr>
+<tr class="even">
+<td align="left">Male</td>
+<td align="left">Unknown</td>
+<td align="right">1.894737</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Summarize by gender and age group
+frozen_food_summary &lt;- obesity %&gt;%
+  group_by(gender, age_group) %&gt;%
+  summarise(Avg_Frozen_Food = mean(freq_frozen, na.rm = TRUE)) </code></pre>
 <pre><code>## `summarise()` has grouped output by &#39;gender&#39;. You can override using the
 ## `.groups` argument.</code></pre>
-<pre class="r"><code>print(frozen_food_summary)</code></pre>
-<pre><code>## # A tibble: 158 × 3
-## # Groups:   gender [2]
-##    gender   age Avg_Frozen_Food
-##    &lt;fct&gt;  &lt;dbl&gt;           &lt;dbl&gt;
-##  1 Female     2            2.48
-##  2 Female     3            2.32
-##  3 Female     4            2.70
-##  4 Female     5            2.96
-##  5 Female     6            2.44
-##  6 Female     7            2.37
-##  7 Female     8            2.51
-##  8 Female     9           52.0 
-##  9 Female    10            2.08
-## 10 Female    11            3.02
-## # ℹ 148 more rows</code></pre>
-</div>
-</div>
+<pre class="r"><code>kable(frozen_food_summary, format = &quot;markdown&quot;, caption = &quot;Frozen Food Frequency Summary by Age Group and Gender&quot;)</code></pre>
+<table>
+<caption>Frozen Food Frequency Summary by Age Group and Gender</caption>
+<thead>
+<tr class="header">
+<th align="left">gender</th>
+<th align="left">age_group</th>
+<th align="right">Avg_Frozen_Food</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Female</td>
+<td align="left">18-25</td>
+<td align="right">2.543260</td>
+</tr>
+<tr class="even">
+<td align="left">Female</td>
+<td align="left">26-35</td>
+<td align="right">2.370732</td>
+</tr>
+<tr class="odd">
+<td align="left">Female</td>
+<td align="left">36-45</td>
+<td align="right">2.268489</td>
+</tr>
+<tr class="even">
+<td align="left">Female</td>
+<td align="left">46-55</td>
+<td align="right">1.764228</td>
+</tr>
+<tr class="odd">
+<td align="left">Female</td>
+<td align="left">56-65</td>
+<td align="right">1.976257</td>
+</tr>
+<tr class="even">
+<td align="left">Female</td>
+<td align="left">66+</td>
+<td align="right">1.856436</td>
+</tr>
+<tr class="odd">
+<td align="left">Female</td>
+<td align="left">Unknown</td>
+<td align="right">6.257710</td>
+</tr>
+<tr class="even">
+<td align="left">Male</td>
+<td align="left">18-25</td>
+<td align="right">17.747917</td>
+</tr>
+<tr class="odd">
+<td align="left">Male</td>
+<td align="left">26-35</td>
+<td align="right">15.932170</td>
+</tr>
+<tr class="even">
+<td align="left">Male</td>
+<td align="left">36-45</td>
+<td align="right">15.051625</td>
+</tr>
+<tr class="odd">
+<td align="left">Male</td>
+<td align="left">46-55</td>
+<td align="right">2.060449</td>
+</tr>
+<tr class="even">
+<td align="left">Male</td>
+<td align="left">56-65</td>
+<td align="right">2.177396</td>
+</tr>
+<tr class="odd">
+<td align="left">Male</td>
+<td align="left">66+</td>
+<td align="right">2.253538</td>
+</tr>
+<tr class="even">
+<td align="left">Male</td>
+<td align="left">Unknown</td>
+<td align="right">17.288692</td>
+</tr>
+</tbody>
+</table>
 </div>
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -672,7 +999,41 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
