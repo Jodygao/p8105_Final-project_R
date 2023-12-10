@@ -5,9 +5,9 @@ account: 8105final
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 10763456
-bundleId: 8030081
+bundleId: 8030090
 url: https://8105final.shinyapps.io/shiny/
 version: 1
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: _site.yml|BRFSS Analysis.Rmd|BRFSS-Analysis.html|BRFSS-Analysis.md|Conclusion.html|Conclusion.Rmd|Data Sources.Rmd|Data-Sources.html|home.html|index.html|p8105 Final model analysis.Rmd|p8105_Final-project_R.html|p8105_Final-project_R.md|p8105_Final-project_R.Rmd|p8105-Final-model-analysis.html|p8105-Final-model-analysis.md|Report.html|Report.Rmd|Resource/obesity.webp|Yi-data clean.Rmd|Yi-data-clean.html|Yi-data-clean.md|assets|BRFSS-Analysis_files|data|Overview|p8105-Final-model-analysis_files|site_libs|Yi-data-clean_files
+ignoredFiles: _site.yml|2022-american-indian.csv|BRFSS Analysis.Rmd|BRFSS-Analysis.html|BRFSS-Analysis.md|Conclusion.html|Conclusion.Rmd|Data Sources.Rmd|Data-Sources.html|home.html|index.html|p8105 Final model analysis.Rmd|p8105_Final-project_R.html|p8105_Final-project_R.md|p8105_Final-project_R.Rmd|p8105-Final-model-analysis.html|p8105-Final-model-analysis.md|Report.html|Report.Rmd|Resource/obesity.webp|Yi-data clean.Rmd|Yi-data-clean.html|Yi-data-clean.md|assets|BRFSS-Analysis_files|data|p8105-Final-model-analysis_files|site_libs|Yi-data-clean_files
