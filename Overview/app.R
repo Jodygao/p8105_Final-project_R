@@ -5,11 +5,11 @@ library(maps)
 library(readr)
 library(ggiraph)
 
-overall <- read_csv("/Users/olivia/Desktop/Columbia/Semester 3/Data Science/Final/p8105_Final-project_R/data/BRFSS/2022-overall-prevalence.csv", show_col_types = FALSE)
-asian <- read_csv("/Users/olivia/Desktop/Columbia/Semester 3/Data Science/Final/p8105_Final-project_R/data/BRFSS/2022-asian.csv", show_col_types = FALSE)
-black <- read_csv("/Users/olivia/Desktop/Columbia/Semester 3/Data Science/Final/p8105_Final-project_R/data/BRFSS/2022-black.csv", show_col_types = FALSE)
-white <- read_csv("/Users/olivia/Desktop/Columbia/Semester 3/Data Science/Final/p8105_Final-project_R/data/BRFSS/2022-white.csv", show_col_types = FALSE)
-hispanic <- read_csv("/Users/olivia/Desktop/Columbia/Semester 3/Data Science/Final/p8105_Final-project_R/data/BRFSS/2022-hispanic.csv", show_col_types = FALSE)
+overall <- read_csv("Overview/Shiny data/2022-overall-prevalence.csv", show_col_types = FALSE)
+asian <- read_csv("Overview/Shiny data/2022-asian.csv", show_col_types = FALSE)
+black <- read_csv("Overview/Shiny data/2022-black.csv", show_col_types = FALSE)
+white <- read_csv("Overview/Shiny data/2022-white.csv", show_col_types = FALSE)
+hispanic <- read_csv("Overview/Shiny data/2022-hispanic.csv", show_col_types = FALSE)
 
 states_map <- map_data("state")
 
