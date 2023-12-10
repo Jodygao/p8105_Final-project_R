@@ -1151,9 +1151,9 @@ Analysis</p>
 <pre><code>## # A tibble: 3 × 2
 ##   model_type    m_rmse
 ##   &lt;chr&gt;          &lt;dbl&gt;
-## 1 fast_adjusted  0.320
-## 2 fast_crude     0.477
-## 3 fast_inter     0.363</code></pre>
+## 1 fast_adjusted  0.317
+## 2 fast_crude     0.478
+## 3 fast_inter     0.356</code></pre>
 <pre class="r"><code>cv_results |&gt; 
   select(starts_with(&quot;rmse&quot;)) |&gt; 
   pivot_longer(
@@ -1213,36 +1213,36 @@ print(best_adjusted_model_summary)</code></pre>
 ##     race + education + income_to_poverty, data = df)
 ## 
 ## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -0.72949 -0.15992 -0.01134  0.15076  0.93870 
+##     Min      1Q  Median      3Q     Max 
+## -0.7158 -0.1619 -0.0068  0.1515  0.9514 
 ## 
 ## Coefficients:
 ##                                            Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)                               3.432e+00  2.053e-02 167.189  &lt; 2e-16
-## freq_fast_food                           -9.807e-05  4.278e-05  -2.292   0.0219
-## age                                       3.743e-04  2.763e-04   1.355   0.1756
-## genderMale                               -4.479e-02  8.588e-03  -5.216 1.95e-07
-## marital_statusNever married              -2.141e-02  1.208e-02  -1.773   0.0764
-## marital_statusWidowed/Divorced/Separated -2.121e-02  1.109e-02  -1.913   0.0559
-## raceMexican American                     -9.082e-03  1.420e-02  -0.639   0.5226
-## raceOther                                -1.714e-01  1.875e-02  -9.140  &lt; 2e-16
-## raceOther Hispanic                       -2.224e-02  1.555e-02  -1.431   0.1526
-## raceWhite                                -2.832e-02  1.064e-02  -2.662   0.0078
-## educationHigh school graduate            -6.437e-03  1.382e-02  -0.466   0.6414
-## educationLess than 9th grade             -1.885e-03  2.041e-02  -0.092   0.9264
-## educationSome college or AA degree       -3.254e-03  1.355e-02  -0.240   0.8102
-## income_to_poverty                         2.728e-03  3.104e-03   0.879   0.3795
+## (Intercept)                               3.418e+00  2.116e-02 161.536  &lt; 2e-16
+## freq_fast_food                           -9.831e-05  4.296e-05  -2.289   0.0222
+## age                                       1.722e-04  2.814e-04   0.612   0.5405
+## genderMale                               -3.984e-02  8.595e-03  -4.636  3.7e-06
+## marital_statusNever married              -2.847e-02  1.202e-02  -2.369   0.0179
+## marital_statusWidowed/Divorced/Separated -2.160e-02  1.120e-02  -1.929   0.0538
+## raceMexican American                     -2.399e-03  1.446e-02  -0.166   0.8683
+## raceOther                                -1.680e-01  1.843e-02  -9.116  &lt; 2e-16
+## raceOther Hispanic                       -2.358e-02  1.547e-02  -1.524   0.1276
+## raceWhite                                -2.646e-02  1.066e-02  -2.483   0.0131
+## educationHigh school graduate             1.295e-02  1.414e-02   0.916   0.3597
+## educationLess than 9th grade              2.143e-03  2.055e-02   0.104   0.9169
+## educationSome college or AA degree        2.278e-02  1.393e-02   1.635   0.1022
+## income_to_poverty                         2.059e-03  3.097e-03   0.665   0.5062
 ##                                             
 ## (Intercept)                              ***
 ## freq_fast_food                           *  
 ## age                                         
 ## genderMale                               ***
-## marital_statusNever married              .  
+## marital_statusNever married              *  
 ## marital_statusWidowed/Divorced/Separated .  
 ## raceMexican American                        
 ## raceOther                                ***
 ## raceOther Hispanic                          
-## raceWhite                                ** 
+## raceWhite                                *  
 ## educationHigh school graduate               
 ## educationLess than 9th grade                
 ## educationSome college or AA degree          
@@ -1250,10 +1250,10 @@ print(best_adjusted_model_summary)</code></pre>
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.2372 on 3159 degrees of freedom
-##   (5937 observations deleted due to missingness)
-## Multiple R-squared:  0.0362, Adjusted R-squared:  0.03223 
-## F-statistic: 9.126 on 13 and 3159 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 0.2382 on 3163 degrees of freedom
+##   (5933 observations deleted due to missingness)
+## Multiple R-squared:  0.0367, Adjusted R-squared:  0.03274 
+## F-statistic:  9.27 on 13 and 3163 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>The estimated <code>log(BMI)</code> is approximately 3.414 when all
 predictor variables are held at zero. To interpret this on the original
 BMI scale, you would calculate exp(3.414). This value represents the
@@ -1334,15 +1334,15 @@ kable(rmse_summary, format = &quot;markdown&quot;, caption = &quot;Summary of RM
 <tbody>
 <tr class="odd">
 <td align="left">adjusted</td>
-<td align="right">0.2350185</td>
+<td align="right">0.2351379</td>
 </tr>
 <tr class="even">
 <td align="left">crude</td>
-<td align="right">0.2370175</td>
+<td align="right">0.2371011</td>
 </tr>
 <tr class="odd">
 <td align="left">inter</td>
-<td align="right">0.2350270</td>
+<td align="right">0.2350856</td>
 </tr>
 </tbody>
 </table>
@@ -1481,9 +1481,9 @@ alongside the main effects.</p>
 <pre><code>## # A tibble: 3 × 2
 ##   model_type m_rmse
 ##   &lt;chr&gt;       &lt;dbl&gt;
-## 1 adjusted    0.246
+## 1 adjusted    0.252
 ## 2 crude       0.308
-## 3 inter       0.314</code></pre>
+## 3 inter       0.341</code></pre>
 <p>According to the violin plot of the RMSE distribution for each model,
 the adjusted model consistently shows a concentrated distribution of
 lower RMSE values, meaning it has a superior predictive performance
@@ -1518,24 +1518,24 @@ print(best_adjusted_model_summary)</code></pre>
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -0.78970 -0.15881 -0.01053  0.14912  1.09502 
+## -0.76832 -0.15757 -0.01111  0.14784  1.09316 
 ## 
 ## Coefficients:
 ##                                            Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)                               3.422e+00  1.840e-02 185.913  &lt; 2e-16
-## freq_frozen                              -5.845e-05  3.573e-05  -1.636 0.101979
-## age                                       2.630e-04  2.462e-04   1.068 0.285465
-## genderMale                               -4.409e-02  7.577e-03  -5.819 6.38e-09
-## marital_statusNever married              -2.560e-02  1.075e-02  -2.382 0.017280
-## marital_statusWidowed/Divorced/Separated -2.170e-02  9.634e-03  -2.252 0.024365
-## raceMexican American                     -3.020e-03  1.279e-02  -0.236 0.813283
-## raceOther                                -1.751e-01  1.574e-02 -11.121  &lt; 2e-16
-## raceOther Hispanic                       -2.595e-02  1.337e-02  -1.941 0.052354
-## raceWhite                                -3.229e-02  9.436e-03  -3.422 0.000628
-## educationHigh school graduate             1.254e-02  1.191e-02   1.053 0.292502
-## educationLess than 9th grade              2.251e-03  1.622e-02   0.139 0.889620
-## educationSome college or AA degree        2.544e-02  1.176e-02   2.164 0.030530
-## income_to_poverty                        -5.737e-04  2.766e-03  -0.207 0.835727
+## (Intercept)                               3.429e+00  1.820e-02 188.393  &lt; 2e-16
+## freq_frozen                              -5.445e-06  2.507e-05  -0.217   0.8281
+## age                                       2.081e-04  2.432e-04   0.856   0.3923
+## genderMale                               -3.860e-02  7.521e-03  -5.132 2.99e-07
+## marital_statusNever married              -2.261e-02  1.063e-02  -2.126   0.0335
+## marital_statusWidowed/Divorced/Separated -2.417e-02  9.630e-03  -2.510   0.0121
+## raceMexican American                     -1.881e-02  1.272e-02  -1.479   0.1393
+## raceOther                                -1.822e-01  1.577e-02 -11.555  &lt; 2e-16
+## raceOther Hispanic                       -3.068e-02  1.339e-02  -2.292   0.0220
+## raceWhite                                -4.004e-02  9.365e-03  -4.276 1.95e-05
+## educationHigh school graduate             6.321e-03  1.185e-02   0.534   0.5936
+## educationLess than 9th grade              1.210e-03  1.613e-02   0.075   0.9402
+## educationSome college or AA degree        1.804e-02  1.170e-02   1.541   0.1233
+## income_to_poverty                         1.442e-03  2.726e-03   0.529   0.5970
 ##                                             
 ## (Intercept)                              ***
 ## freq_frozen                                 
@@ -1545,19 +1545,19 @@ print(best_adjusted_model_summary)</code></pre>
 ## marital_statusWidowed/Divorced/Separated *  
 ## raceMexican American                        
 ## raceOther                                ***
-## raceOther Hispanic                       .  
+## raceOther Hispanic                       *  
 ## raceWhite                                ***
 ## educationHigh school graduate               
 ## educationLess than 9th grade                
-## educationSome college or AA degree       *  
+## educationSome college or AA degree          
 ## income_to_poverty                           
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.2381 on 4079 degrees of freedom
-##   (5017 observations deleted due to missingness)
-## Multiple R-squared:  0.04143,    Adjusted R-squared:  0.03837 
-## F-statistic: 13.56 on 13 and 4079 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 0.236 on 4044 degrees of freedom
+##   (5052 observations deleted due to missingness)
+## Multiple R-squared:  0.04014,    Adjusted R-squared:  0.03706 
+## F-statistic: 13.01 on 13 and 4044 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>Best-Fitting Model Analysis The best-fitting model, based on the
 cross-validation results, is the adjusted model. Thus, a detailed
 examination was conducted, and its summary statistics indicate that: The
