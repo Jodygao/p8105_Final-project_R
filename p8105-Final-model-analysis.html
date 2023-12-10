@@ -11,7 +11,7 @@
 
 
 
-<title>P8105 Fall 2023 Final Project Proposal</title>
+<title>p8105-Final-model-analysis</title>
 
 <script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -29,15 +29,9 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
-<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -222,73 +216,7 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
-<style type="text/css">
-.code-folding-btn { margin-bottom: 4px; }
-</style>
 
-
-
-<style type="text/css">
-
-#TOC {
-  margin: 25px 0px 20px 0px;
-}
-@media (max-width: 768px) {
-#TOC {
-  position: relative;
-  width: 100%;
-}
-}
-
-@media print {
-.toc-content {
-  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
-  float: right;
-}
-}
-
-.toc-content {
-  padding-left: 30px;
-  padding-right: 40px;
-}
-
-div.main-container {
-  max-width: 1200px;
-}
-
-div.tocify {
-  width: 20%;
-  max-width: 260px;
-  max-height: 85%;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  div.tocify {
-    width: 25%;
-  }
-}
-
-@media (max-width: 767px) {
-  div.tocify {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-.tocify ul, .tocify li {
-  line-height: 20px;
-}
-
-.tocify-subheader .tocify-item {
-  font-size: 0.90em;
-}
-
-.tocify .list-group-item {
-  border-radius: 0px;
-}
-
-
-</style>
 
 
 
@@ -298,16 +226,6 @@ div.tocify {
 
 
 <div class="container-fluid main-container">
-
-
-<!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row">
-<div class="col-xs-12 col-sm-4 col-md-3">
-<div id="TOC" class="tocify">
-</div>
-</div>
-
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -328,12 +246,6 @@ div.tocify {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="BRFSS-Analysis.html">US Overview</a>
-</li>
-<li>
-  <a href="Report.html">Final report</a>
-</li>
-<li>
   <a href="Data-Sources.html">Data Sources</a>
 </li>
 <li>
@@ -341,6 +253,9 @@ div.tocify {
 </li>
 <li>
   <a href="p8105-Final-model-analysis.html">Exploratory Analysis</a>
+</li>
+<li>
+  <a href="https://8105final.shinyapps.io/shiny/">Shiny App</a>
 </li>
 <li>
   <a href="Conclusion.html">Conclusion</a>
@@ -361,41 +276,112 @@ div.tocify {
 
 <div id="header">
 
-<div class="btn-group pull-right float-right">
-<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
-<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
-<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
-<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+
+
+
+</div>
+
+
+<div id="p8105-fall-2023-final-project-proposal" class="section level1">
+<h1>P8105 Fall 2023 Final Project Proposal</h1>
+<p>All Group Member Collaboration 2023-12-07</p>
+<div id="group-members" class="section level3">
+<h3>Group Members</h3>
+<ul>
+<li>Yuandi Gao (yg2907)</li>
+<li>Yi Li (yl5214)</li>
+<li>Yingting Zhang (yz4434)</li>
+<li>Ruohan Hong (rh3132)</li>
+<li>Shiqi Wu (sw3737)</li>
 </ul>
 </div>
-
-
-
-<h1 class="title toc-ignore">P8105 Fall 2023 Final Project Proposal</h1>
-
-</div>
-
-
-<div id="distribution-plot-of-bmi" class="section level2">
-<h2>Distribution Plot of BMI</h2>
+<div id="import-data-from-nhanes" class="section level2">
+<h2>Import data from NHANES</h2>
+<pre class="r"><code>import_df= function(path){
+  read_xpt(path)
+}
+obesity=
+  import_df(path=&#39;data/P_BMX.XPT&#39;) |&gt; 
+  full_join((import_df(path=&#39;data/P_DEMO.XPT&#39;)), by=&#39;SEQN&#39;) |&gt;
+  full_join((import_df(path=&#39;data/P_PAQ.XPT&#39;)), by=&#39;SEQN&#39;)|&gt;
+  full_join ((import_df(path=&#39;data/P_DBQ.XPT&#39;)), by=&#39;SEQN&#39;) |&gt; 
+  select (SEQN,RIAGENDR,RIDAGEYR,DMDMARTZ,INDFMPIR,RIDRETH3,DMDEDUC2,PAD680,BMXBMI,DBD900,DBD910) |&gt; 
+  filter(
+    !(DMDMARTZ %in% c(&#39;77&#39;,&#39;99&#39;,&#39;.&#39;) ),
+    !(INDFMPIR == &#39;.&#39;),
+    !(DMDEDUC2 %in% c(&#39;7&#39;,&#39;9&#39;,&#39;.&#39;) ),
+    !(PAD680 %in% c(&#39;7777&#39;, &#39;9999&#39;, &#39;.&#39;)),
+    !(BMXBMI ==&#39;.&#39;),
+    !(DBD900 %in% c(&#39;7777&#39;, &#39;9999&#39;, &#39;.&#39;)),
+    !(DBD910 %in% c(&#39;7777&#39;, &#39;9999&#39;, &#39;.&#39;))
+  ) |&gt; 
+  rename(
+    gender=RIAGENDR,
+    age=RIDAGEYR,
+    marital_status=DMDMARTZ,
+    income_to_poverty=INDFMPIR,
+    race=RIDRETH3,
+    education=DMDEDUC2,
+    sedentary_activity=PAD680,
+    bmi=BMXBMI,
+    freq_fast_food=DBD900,
+    freq_frozen=DBD910
+  ) |&gt; 
+  mutate(
+    gender = case_match(
+      gender,
+      1~&quot;Male&quot;,
+      2~&quot;Female&quot;),
+    gender = as.factor(gender),
+  marital_status= case_match(
+    marital_status,
+      1~&quot;Married&quot;,
+      2~&quot;Widowed/Divorced/Separated&quot;,
+      3~&quot;Never married&quot;
+  ),
+    race= case_match(
+    race,
+      1~&quot;Mexican American&quot;,
+      2~&quot;Other Hispanic&quot;,
+      3~&quot;White&quot;,
+      4~&quot;Black&quot;,
+      5~&quot;Asian&quot;,
+      6~&quot;Other&quot;
+     ),
+      education= case_match(
+    education,
+      1~&quot;Less than 9th grade&quot;,
+      2~&quot;9-11th grade&quot;,
+      3~&quot;High school graduate&quot; ,
+      4~&quot;Some college or AA degree&quot;,
+      6~&quot;College graduate or above&quot;
+     ),
+   obese =case_when(
+    bmi&lt;30 ~ &#39;normal&#39;,
+    bmi&gt;=30 ~&#39;obese&#39;
+  )
+  )</code></pre>
 <pre class="r"><code># Histogram for BMI
 ggplot(obesity, aes(x = bmi)) + 
   geom_histogram(binwidth = 1, fill = &quot;blue&quot;, color = &quot;black&quot;) + 
   labs(title = &quot;Distribution of BMI&quot;, x = &quot;BMI&quot;, y = &quot;Count&quot;) + 
   theme_minimal()</code></pre>
-<p><img src="p8105-Final-model-analysis_files/figure-html/data%20distribution%20plots-1.png" width="672" /></p>
+<p><img
+src="p8105-Final-model-analysis_files/figure-gfm/data%20distribution%20plots-1.png" /><!-- --></p>
 <pre class="r"><code># Density plot for BMI
 ggplot(obesity, aes(x = bmi)) + 
   geom_density(fill = &quot;blue&quot;, alpha = 0.5) + 
   labs(title = &quot;Density Plot for BMI&quot;, x = &quot;BMI&quot;, y = &quot;Density&quot;) + 
   theme_minimal()</code></pre>
-<p><img src="p8105-Final-model-analysis_files/figure-html/data%20distribution%20plots-2.png" width="672" /></p>
+<p><img
+src="p8105-Final-model-analysis_files/figure-gfm/data%20distribution%20plots-2.png" /><!-- --></p>
 <pre class="r"><code># Boxplot for BMI
 ggplot(obesity, aes(y = bmi, x = 1)) + 
   geom_boxplot(fill = &quot;blue&quot;, alpha = 0.5) + 
   labs(title = &quot;Boxplot for BMI&quot;, x = &quot;&quot;, y = &quot;BMI&quot;) + 
   theme_minimal()</code></pre>
-<p><img src="p8105-Final-model-analysis_files/figure-html/data%20distribution%20plots-3.png" width="672" /></p>
+<p><img
+src="p8105-Final-model-analysis_files/figure-gfm/data%20distribution%20plots-3.png" /><!-- --></p>
 <p>The histogram and density plot indicate that the distribution of
 <code>BMI</code> is right-skewed, which is a common observation in
 health-related data.</p>
@@ -414,34 +400,36 @@ beneficial because linear regression assumes a linear relationship
 between the predictors and the outcome variable.</p>
 </div>
 <div
-id="section-1-cross-validation-and-model-comparison-for-predicting-bmi-based-on-fast-food-frequency"
-class="section level1">
-<h1>Section 1: Cross-Validation and Model Comparison for Predicting BMI
-Based on Fast Food Frequency</h1>
+id="cross-validation-and-model-comparison-for-predicting-bmi-based-on-fast-food-frequency"
+class="section level2">
+<h2>Cross-Validation and Model Comparison for Predicting BMI Based on
+Fast Food Frequency</h2>
 <p>First, we compare the three models for predictor fast food
 frequency</p>
 <pre class="r"><code>cv_df = 
   obesity |&gt; 
   crossv_mc(n = 100) |&gt; 
   mutate(
-    train = purrr::map(train, as_tibble),
-    test = purrr::map(test, as_tibble)
+    train = map(train, as_tibble),
+    test = map(test, as_tibble)
   )
 cv_results =
   cv_df |&gt; 
   mutate(
-    model_fast_crude = purrr::map(train, \(df) lm(log(bmi) ~ freq_fast_food, data = df) ),
-    model_fast_adjusted = purrr::map(train, \(df) lm(log(bmi) ~ freq_fast_food+age+gender+marital_status+ race+education+income_to_poverty, data = df)),
-    model_fast_inter = purrr::map(train, \(df) lm(log(bmi) ~ freq_fast_food*education+freq_fast_food*income_to_poverty+freq_fast_food+age+gender+marital_status+ race+education+income_to_poverty, data = df))
+    model_fast_crude = map(train, \(df) lm(log(bmi) ~ freq_fast_food, data = df) ),
+    model_fast_adjusted = map(train, \(df) lm(log(bmi) ~ freq_fast_food+age+gender+marital_status+ race+education+income_to_poverty, data = df)),
+    model_fast_inter = map(train, \(df) lm(log(bmi) ~ freq_fast_food*education+freq_fast_food*income_to_poverty+freq_fast_food+age+gender+marital_status+ race+education+income_to_poverty, data = df))
   ) |&gt; 
   mutate(
     rmse_fast_crude = map2_dbl(model_fast_crude, test, \(mod, df) rmse(mod, df)),
     rmse_fast_adjusted = map2_dbl(model_fast_adjusted, test, \(mod, df) rmse(mod, df)),
     rmse_fast_inter = map2_dbl(model_fast_inter, test, \(mod, df) rmse(mod, df))
   )</code></pre>
+</div>
+</div>
 <div id="plot-of-model-comparison-of-fast-food-frequency"
-class="section level2">
-<h2>Plot of Model Comparison of Fast Food Frequency</h2>
+class="section level1">
+<h1>Plot of model comparison of fast food frequency</h1>
 <pre class="r"><code>cv_results |&gt; 
   select(starts_with(&quot;rmse&quot;)) |&gt; 
   pivot_longer(
@@ -455,9 +443,9 @@ class="section level2">
 <pre><code>## # A tibble: 3 × 2
 ##   model_type    m_rmse
 ##   &lt;chr&gt;          &lt;dbl&gt;
-## 1 fast_adjusted  0.332
-## 2 fast_crude     0.509
-## 3 fast_inter     0.373</code></pre>
+## 1 fast_adjusted  0.323
+## 2 fast_crude     0.498
+## 3 fast_inter     0.344</code></pre>
 <pre class="r"><code>cv_results |&gt; 
   select(starts_with(&quot;rmse&quot;)) |&gt; 
   pivot_longer(
@@ -468,148 +456,71 @@ class="section level2">
   ) |&gt; 
   ggplot(aes(x = model_type, y = rmse)) +
   geom_violin()</code></pre>
-<p><img src="p8105-Final-model-analysis_files/figure-html/model%20comparison-1.png" width="672" /></p>
-<ul>
-<li><code>fast_adjusted</code> model has a lower median with most of its
+<p><img
+src="p8105-Final-model-analysis_files/figure-gfm/model%20comparison-1.png" /><!-- --></p>
+<div id="interpretion-of-the-fast-food-frequncy-in-terms-of-bmi"
+class="section level2">
+<h2>Interpretion of the fast food frequncy in terms of BMI:</h2>
+<p><code>fast_adjusted</code> model has a lower median with most of its
 data concentrated at the lower end of the rmse scale, which suggests
 better predictive performance for most of its predictions compared to
-the other models.</li>
-<li><code>fast_crude</code> model has a wider spread of values,
-indicating less consistency in predictive performance.</li>
-<li><code>fast_inter</code> has most of its data concentrated at the low
-end like fast_adjusted, but the long tail indicates there are also quite
-a few cases where its predictions are much worse.</li>
-</ul>
-<p>Considering this, <code>fast_adjusted</code> seems to be the best
-model overall due to its concentration of lower rmse values, although
-<code>fast_inter</code> may also perform similarly well for the majority
-of predictions but has some predictions with high error.</p>
-<pre class="r"><code>best_adjusted_model_summary &lt;- cv_results$model_fast_adjusted[[1]] %&gt;% summary()
-
-# Print the summary which includes coefficients, R-squared, p-values...
-print(best_adjusted_model_summary)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = log(bmi) ~ freq_fast_food + age + gender + marital_status + 
-##     race + education + income_to_poverty, data = df)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -0.72972 -0.16096 -0.00614  0.15074  1.06332 
-## 
-## Coefficients:
-##                                            Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)                               3.410e+00  2.120e-02 160.877  &lt; 2e-16
-## freq_fast_food                           -9.846e-05  4.324e-05  -2.277   0.0228
-## age                                       6.462e-04  2.844e-04   2.272   0.0231
-## genderMale                               -4.547e-02  8.683e-03  -5.236 1.75e-07
-## marital_statusNever married              -1.166e-02  1.221e-02  -0.955   0.3397
-## marital_statusWidowed/Divorced/Separated -2.127e-02  1.120e-02  -1.899   0.0577
-## raceMexican American                     -1.932e-03  1.449e-02  -0.133   0.8940
-## raceOther                                -1.783e-01  1.879e-02  -9.485  &lt; 2e-16
-## raceOther Hispanic                       -2.597e-02  1.566e-02  -1.658   0.0974
-## raceWhite                                -2.448e-02  1.071e-02  -2.286   0.0223
-## educationHigh school graduate             6.496e-03  1.413e-02   0.460   0.6457
-## educationLess than 9th grade             -4.134e-03  2.056e-02  -0.201   0.8406
-## educationSome college or AA degree        1.945e-02  1.393e-02   1.396   0.1627
-## income_to_poverty                        -6.035e-04  3.123e-03  -0.193   0.8468
-##                                             
-## (Intercept)                              ***
-## freq_fast_food                           *  
-## age                                      *  
-## genderMale                               ***
-## marital_statusNever married                 
-## marital_statusWidowed/Divorced/Separated .  
-## raceMexican American                        
-## raceOther                                ***
-## raceOther Hispanic                       .  
-## raceWhite                                *  
-## educationHigh school graduate               
-## educationLess than 9th grade                
-## educationSome college or AA degree          
-## income_to_poverty                           
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 0.2397 on 3151 degrees of freedom
-##   (5945 observations deleted due to missingness)
-## Multiple R-squared:  0.0409, Adjusted R-squared:  0.03695 
-## F-statistic: 10.34 on 13 and 3151 DF,  p-value: &lt; 2.2e-16</code></pre>
-<p>The estimated <code>log(BMI)</code> is approximately 3.414 when all
-predictor variables are held at zero. To interpret this on the original
-BMI scale, you would calculate exp(3.414). This value represents the
-estimated BMI for the baseline categories of all categorical predictors
-(usually the most common or reference category) and zero for continuous
-predictors. The coefficient for consumption of the number of meals from
-fast food or pizza place is positive (0.00264) and statistically
-significant. To interpret the effect on the original BMI scale, consider
-that a small increase in the <code>log(BMI)</code> corresponds to a
-percentage increase in BMI. Specifically, for each one-unit increase in
-fast food consumption, the log(BMI) is expected to increase by 0.0026372
-kg/m^2. Similarly, for other continuous predictors like age, the
-coefficient represents the percentage change in log(BMI) for a one-unit
-increase in that predictor. For categorical predictors like gender,
-marital status, and race, the coefficients represent the percentage
-difference in log(BMI) compared to the reference category. The
-<code>R-squared</code> value (0.02777) indicates that about 2.777% of
-the variability in log-transformed BMI is explained by the model. While
-this might seem low, it’s not uncommon in behavioral and social science
-research where many unmeasured factors can influence the outcome. The
-significance of the coefficients suggests that these factors have a
-statistically significant association with BMI. However, the magnitude
-of these effects might be small, especially for variables like age,
-education and income_to_poverty ratio. The significant predictors in the
-model, like
-<code>freq_fast_food</code>,<code>gender</code>,<code>race</code>
-indicate factors that are associated with <code>BMI</code>. However, the
-small R-squared value suggests that many other factors not included in
-the model also influence <code>BMI</code>. Given that the response
-variable is log-transformed, the interpretation is in terms of
-percentage change (for continuous predictors) or relative percentage
-difference (for categorical predictors) in BMI.</p>
+the other models. <code>fast_crude</code> model has a wider spread of
+values, indicating less consistency in predictive performance.
+<code>fast_inter</code> has most of its data concentrated at the low end
+like fast_adjusted, but the long tail indicates there are also quite a
+few cases where its predictions are much worse. Considering this,
+<code>fast_adjusted</code> seems to be the best model overall due to its
+concentration of lower rmse values, although <code>fast_inter</code> may
+also perform similarly well for the majority of predictions but has some
+predictions with high error.</p>
 </div>
+<div id="interpretation-of-fast-food-variable" class="section level2">
+<h2>Interpretation of fast food variable:</h2>
+<p>For one unit increase in number of meals from fast food or pizza
+place, the bmi will decrease by 0.0026 kg/m^2, while adjusting for all
+other covariate in the model.</p>
 </div>
 <div
-id="section-2-cross-validation-and-model-comparison-for-predicting-bmi-based-on-sendendary-activity"
-class="section level1">
-<h1>Section 2: Cross-Validation and Model Comparison for Predicting BMI
-Based on Sendendary Activity</h1>
+id="cross-validation-and-model-comparison-for-predicting-bmi-based-on-fast-food-frequencybmi-and-predictor-sendendary-activity"
+class="section level2">
+<h2>Cross-Validation and Model Comparison for Predicting BMI Based on
+Fast Food FrequencyBMI and predictor sendendary activity</h2>
 <pre class="r"><code># Histogram and Density Plot for Sedentary Activity
 ggplot(obesity, aes(x = sedentary_activity)) +
   geom_histogram(binwidth = 10, fill = &quot;green&quot;, color = &quot;black&quot;, alpha = 0.7) + 
   geom_density(alpha = 0.2, adjust = 1/5) + 
   labs(title = &quot;Distribution of Sedentary Activity&quot;, x = &quot;Sedentary Activity&quot;, y = &quot;Density&quot;) +
   theme_minimal()</code></pre>
-<p><img src="p8105-Final-model-analysis_files/figure-html/distribution-1.png" width="672" /></p>
-<div id="model-building-for-sedentary-activity-with-logbmi"
-class="section level2">
-<h2>Model building for sedentary activity with log(BMI)</h2>
+<pre><code>## Warning: Removed 3879 rows containing non-finite values (`stat_bin()`).
+
+## Warning: Removed 3879 rows containing non-finite values (`stat_density()`).</code></pre>
+<p><img
+src="p8105-Final-model-analysis_files/figure-gfm/distribution-1.png" /><!-- --></p>
+</div>
+</div>
+<div id="step-1-model-building-for-sedentary-activity-with-logbmi"
+class="section level1">
+<h1>Step 1: Model building for sedentary activity with log(BMI)</h1>
 <pre class="r"><code>cv_df_sedentary = 
   obesity |&gt; 
   crossv_mc(n = 100) |&gt; 
   mutate(
-    train = purrr::map(train, as_tibble),
-    test = purrr::map(test, as_tibble)
+    train = map(train, as_tibble),
+    test = map(test, as_tibble)
   )
 
 cv_results_sedentary =
   cv_df_sedentary |&gt; 
   mutate(
-    model_sed_crude = purrr::map(train, \(df) lm(log(bmi) ~ sedentary_activity, data = df)),
-    model_sed_adjusted = purrr::map(train, \(df) lm(log(bmi) ~ sedentary_activity+age+gender+marital_status+race+education+income_to_poverty, data = df)),
-    model_sed_inter = purrr::map(train, \(df) lm(log(bmi) ~ sedentary_activity*education+sedentary_activity*income_to_poverty+sedentary_activity+age+gender+marital_status+race+education+income_to_poverty, data = df))
+    model_sed_crude = map(train, \(df) lm(log(bmi) ~ sedentary_activity, data = df)),
+    model_sed_adjusted = map(train, \(df) lm(log(bmi) ~ sedentary_activity+age+gender+marital_status+race+education+income_to_poverty, data = df)),
+    model_sed_inter = map(train, \(df) lm(log(bmi) ~ sedentary_activity*education+sedentary_activity*income_to_poverty+sedentary_activity+age+gender+marital_status+race+education+income_to_poverty, data = df))
   ) |&gt; 
   mutate(
     rmse_sed_crude = map2_dbl(model_sed_crude, test, \(mod, df) rmse(mod, df)),
     rmse_sed_adjusted = map2_dbl(model_sed_adjusted, test, \(mod, df) rmse(mod, df)),
     rmse_sed_inter = map2_dbl(model_sed_inter, test, \(mod, df) rmse(mod, df))
   )</code></pre>
-</div>
-<div
-id="cross-validation-comparision-for-sedentary-activity-with-logbmi"
-class="section level2">
-<h2>Cross validation comparision for sedentary activity with
-log(BMI)</h2>
 <pre class="r"><code>cv_results_sedentary |&gt; 
   select(starts_with(&quot;rmse_sed&quot;)) |&gt; 
   pivot_longer(
@@ -620,12 +531,13 @@ log(BMI)</h2>
   ) |&gt; 
   ggplot(aes(x = model_type, y = rmse)) +
   geom_violin()</code></pre>
-<p><img src="p8105-Final-model-analysis_files/figure-html/cross%20validation%20comparison-1.png" width="672" /></p>
+<p><img
+src="p8105-Final-model-analysis_files/figure-gfm/cross%20validation%20comparison-1.png" /><!-- --></p>
 </div>
 <div id="summary-of-cross-validation-results--sendendary-activity"
-class="section level2">
-<h2>Summary of Cross validation Results- Sendendary Activity</h2>
-<pre class="r"><code>rmse_summary = cv_results_sedentary |&gt; 
+class="section level1">
+<h1>Summary of Cross validation Results- sendendary activity</h1>
+<pre class="r"><code>cv_results_sedentary |&gt; 
   select(starts_with(&quot;rmse_sed&quot;)) |&gt; 
   pivot_longer(
     everything(),
@@ -634,31 +546,13 @@ class="section level2">
     names_prefix = &quot;rmse_sed_&quot;
   ) |&gt; 
   group_by(model_type) |&gt; 
-  summarize(m_rmse = mean(rmse))
-kable(rmse_summary, format = &quot;markdown&quot;, caption = &quot;Summary of RMSE for Sedentary Models&quot;)</code></pre>
-<table>
-<caption>Summary of RMSE for Sedentary Models</caption>
-<thead>
-<tr class="header">
-<th align="left">model_type</th>
-<th align="right">m_rmse</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">adjusted</td>
-<td align="right">0.2353450</td>
-</tr>
-<tr class="even">
-<td align="left">crude</td>
-<td align="right">0.2374266</td>
-</tr>
-<tr class="odd">
-<td align="left">inter</td>
-<td align="right">0.2352558</td>
-</tr>
-</tbody>
-</table>
+  summarize(m_rmse = mean(rmse))</code></pre>
+<pre><code>## # A tibble: 3 × 2
+##   model_type m_rmse
+##   &lt;chr&gt;       &lt;dbl&gt;
+## 1 adjusted    0.235
+## 2 crude       0.237
+## 3 inter       0.235</code></pre>
 <p>In the context of these models, a lower RMSE indicates a more
 accurate prediction of BMI from the predictors used in the model.</p>
 <p>The cross-validation results show that the mean RMSE for the adjusted
@@ -677,13 +571,8 @@ model to account for more variability in BMI that is explained by these
 factors.</p>
 <p>Moreover, while interaction terms in the inter model may capture the
 combined effects of sedentary activity with other variables, they can
-make the model more complex and harder to interpret.</p>
-<p>We proceed the model statistics in adjusted model for sedentary
-activity.</p>
-</div>
-<div id="adjusted-model-plot-for-adjusted-model-sendendary-activity"
-class="section level2">
-<h2>Adjusted Model plot for adjusted model Sendendary Activity</h2>
+make the model more complex and harder to interpret. We proceed the
+model statitics in adjusted model for sedentary activity.</p>
 <pre class="r"><code># Step 1: Generate new data for plotting
 new_data &lt;- with(obesity, expand.grid(
   sedentary_activity = seq(min(sedentary_activity, na.rm = TRUE), max(sedentary_activity, na.rm = TRUE), length.out = 100),
@@ -706,71 +595,146 @@ ggplot(new_data, aes(x = sedentary_activity, y = log_bmi_pred)) +
        x = &quot;Sedentary Activity&quot;,
        y = &quot;Predicted Log BMI&quot;) +
   theme_minimal()</code></pre>
-<p><img src="p8105-Final-model-analysis_files/figure-html/model%20plot%20for%20adjusted%20model-1.png" width="672" /></p>
-<p><strong>Coefficients Interpretation on Log Scale</strong> -
+<p><img
+src="p8105-Final-model-analysis_files/figure-gfm/model%20plot%20for%20adjusted%20model-1.png" /><!-- --></p>
+<pre class="r"><code># Extract the summary of the &#39;adjusted&#39; model
+best_model_summary &lt;- cv_results_sedentary$model_sed_adjusted[[1]] %&gt;% summary()
+
+# Print the summary which includes beta coefficients, p-values, etc.
+print(best_model_summary)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = log(bmi) ~ sedentary_activity + age + gender + marital_status + 
+##     race + education + income_to_poverty, data = df)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.74286 -0.15466 -0.00925  0.14627  1.12170 
+## 
+## Coefficients:
+##                                            Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)                               3.373e+00  1.875e-02 179.910  &lt; 2e-16
+## sedentary_activity                        1.753e-04  1.902e-05   9.215  &lt; 2e-16
+## age                                       2.542e-04  2.428e-04   1.047 0.295121
+## genderMale                               -4.675e-02  7.506e-03  -6.228 5.19e-10
+## marital_statusNever married              -2.834e-02  1.058e-02  -2.679 0.007423
+## marital_statusWidowed/Divorced/Separated -2.961e-02  9.662e-03  -3.064 0.002195
+## raceMexican American                     -1.085e-02  1.269e-02  -0.855 0.392727
+## raceOther                                -1.664e-01  1.519e-02 -10.953  &lt; 2e-16
+## raceOther Hispanic                       -1.945e-02  1.339e-02  -1.453 0.146268
+## raceWhite                                -3.598e-02  9.357e-03  -3.845 0.000122
+## educationHigh school graduate             1.718e-02  1.191e-02   1.442 0.149283
+## educationLess than 9th grade              5.379e-03  1.608e-02   0.335 0.737935
+## educationSome college or AA degree        2.145e-02  1.173e-02   1.829 0.067442
+## income_to_poverty                        -1.433e-03  2.723e-03  -0.526 0.598765
+##                                             
+## (Intercept)                              ***
+## sedentary_activity                       ***
+## age                                         
+## genderMale                               ***
+## marital_statusNever married              ** 
+## marital_statusWidowed/Divorced/Separated ** 
+## raceMexican American                        
+## raceOther                                ***
+## raceOther Hispanic                          
+## raceWhite                                ***
+## educationHigh school graduate               
+## educationLess than 9th grade                
+## educationSome college or AA degree       .  
+## income_to_poverty                           
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.2347 on 4048 degrees of freedom
+##   (5048 observations deleted due to missingness)
+## Multiple R-squared:  0.06094,    Adjusted R-squared:  0.05793 
+## F-statistic: 20.21 on 13 and 4048 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code># Plotting the &#39;adjusted&#39; model&#39;s fitted values vs. residuals
+best_model &lt;- cv_results_sedentary$model_sed_adjusted[[1]]
+best_model_residuals &lt;- resid(best_model)
+best_model_fitted &lt;- fitted(best_model)
+
+# Create a residuals vs fitted values plot
+residual_plot &lt;- ggplot() +
+  geom_point(aes(x = best_model_fitted, y = best_model_residuals)) +
+  geom_hline(yintercept = 0, linetype = &quot;dashed&quot;, color = &quot;red&quot;) +
+  labs(title = &quot;Residuals vs Fitted Values for Interaction Model&quot;,
+       x = &quot;Fitted Values&quot;,
+       y = &quot;Residuals&quot;) +
+  theme_minimal() +
+  geom_smooth(aes(x = best_model_fitted, y = best_model_residuals), method = &quot;loess&quot;, se = FALSE)
+
+# Print the residual plot
+print(residual_plot)</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img
+src="p8105-Final-model-analysis_files/figure-gfm/residual%20plot%20for%20activity-1.png" /><!-- --></p>
+<div id="interpretation-of-the-adjusted-model-activity"
+class="section level2">
+<h2>Interpretation of the Adjusted model (activity)</h2>
+<p><code>Coefficients Interpretation on Log Scale</code>:
 <code>Intercept</code>: The estimated <code>log(BMI)</code> is
 approximately 3.366 when all predictor variables are held at zero. To
 interpret this on the original BMI scale, you would calculate
 exp(3.366). This value represents the estimated BMI for the baseline
 categories of all categorical predictors (usually the most common or
 reference category) and zero for continuous predictors.</p>
-<ul>
-<li><p><code>Sedentary Activity</code>: The coefficient for sedentary
+<p><code>Sedentary Activity</code>: The coefficient for sedentary
 activity is positive (0.0001905) and statistically significant. This
 suggests that for each unit increase in sedentary activity, the log(BMI)
 increases by this amount. To interpret the effect on the original BMI
 scale, consider that a small increase in the <code>log(BMI)</code>
 corresponds to a percentage increase in BMI. Specifically, a one-unit
 increase in sedentary activity is associated with approximately a
-0.01905% increase in BMI.</p></li>
-<li><p><code>Other Predictors</code>: Similarly, for other continuous
+0.01905% increase in BMI.</p>
+<p><code>Other Predictors</code>: Similarly, for other continuous
 predictors like age, the coefficient represents the percentage change in
 BMI for a one-unit increase in that predictor. For categorical
 predictors like gender, marital status, and race, the coefficients
 represent the percentage difference in BMI compared to the reference
-category.</p></li>
-<li><p><code>Model Fit and R-squared</code>: The <code>R-squared</code>
+category.</p>
+<p><code>Model Fit and R-squared</code>: The <code>R-squared</code>
 value (0.06851) indicates that about 6.851% of the variability in
 log-transformed BMI is explained by the model. While this might seem
 low, it’s not uncommon in behavioral and social science research where
-many unmeasured factors can influence the outcome.</p></li>
-</ul>
-<p><strong>Statistical Significance</strong> The significance of the
-coefficients suggests that these factors have a statistically
-significant association with BMI. However, the magnitude of these
-effects might be small, especially for variables like age and
+many unmeasured factors can influence the outcome. Statistical
+Significance:</p>
+<p>The significance of the coefficients suggests that these factors have
+a statistically significant association with BMI. However, the magnitude
+of these effects might be small, especially for variables like age and
 income_to_poverty ratio.</p>
-<p><strong>Overall Interpretation</strong> The significant predictors in
-the model, like <code>sedentary activity</code> and <code>gender</code>,
-indicate factors that are associated with <code>BMI</code>. However, the
-small R-squared value suggests that many other factors not included in
-the model also influence <code>BMI</code>. Given that the response
-variable is log-transformed, the interpretation is in terms of
-percentage change (for continuous predictors) or relative percentage
-difference (for categorical predictors) in BMI.</p>
+<p>Overall Interpretation: The significant predictors in the model, like
+<code>sedentary activity</code> and <code>gender</code>, indicate
+factors that are associated with <code>BMI</code>. However, the small
+R-squared value suggests that many other factors not included in the
+model also influence <code>BMI</code>. Given that the response variable
+is log-transformed, the interpretation is in terms of percentage change
+(for continuous predictors) or relative percentage difference (for
+categorical predictors) in BMI.</p>
 </div>
 </div>
 <div
-id="section-3cross-validation-and-model-buildup-for-predicting-bmi-based-on-frozen-fast-food-frequency"
+id="cross-validation-and-model-buildup-for-predicting-bmi-based-on-frozen-fast-food-frequency"
 class="section level1">
-<h1>Section 3:Cross-Validation and Model Buildup for Predicting BMI
-Based on Frozen Fast Food Frequency</h1>
+<h1>Cross-Validation and Model Buildup for Predicting BMI Based on
+Frozen Fast Food Frequency</h1>
 <pre class="r"><code>cv_df_frozen = 
   obesity |&gt; 
   crossv_mc(n = 100) |&gt; 
   mutate(
-    train = purrr::map(train, as_tibble),
-    test = purrr::map(test, as_tibble)
+    train = map(train, as_tibble),
+    test = map(test, as_tibble)
   )</code></pre>
-<div id="model-building---logbmi-and-frozen-fast-food-frequency"
-class="section level2">
-<h2>Model building - log(BMI) and Frozen Fast Food Frequency</h2>
+</div>
+<div id="model-building-for-frozen-fast-food-with-logbmi"
+class="section level1">
+<h1>Model building for frozen fast food with log(BMI)</h1>
 <pre class="r"><code>cv_results_frozen =
   cv_df_frozen |&gt; 
   mutate(
-    model_frozen_crude = purrr::map(train, \(df) lm(log(bmi) ~ freq_frozen, data = df)),
-    model_frozen_adjusted = purrr::map(train, \(df) lm(log(bmi) ~ freq_frozen + age + gender + marital_status + race + education + income_to_poverty, data = df)),
-    model_frozen_inter = purrr::map(train, \(df) lm(log(bmi) ~ freq_frozen * education + freq_frozen * income_to_poverty + freq_frozen + age + gender + marital_status + race + education + income_to_poverty, data = df))
+    model_frozen_crude = map(train, \(df) lm(log(bmi) ~ freq_frozen, data = df)),
+    model_frozen_adjusted = map(train, \(df) lm(log(bmi) ~ freq_frozen + age + gender + marital_status + race + education + income_to_poverty, data = df)),
+    model_frozen_inter = map(train, \(df) lm(log(bmi) ~ freq_frozen * education + freq_frozen * income_to_poverty + freq_frozen + age + gender + marital_status + race + education + income_to_poverty, data = df))
   ) |&gt; 
   mutate(
     rmse_frozen_crude = map2_dbl(model_frozen_crude, test, \(mod, df) rmse(mod, df)),
@@ -778,9 +742,8 @@ class="section level2">
     rmse_frozen_inter = map2_dbl(model_frozen_inter, test, \(mod, df) rmse(mod, df))
   )</code></pre>
 </div>
-<div id="cross-validation-comparison-of-frozen-fast-food-frequency"
-class="section level2">
-<h2>Cross-validation Comparison of Frozen Fast Food Frequency</h2>
+<div id="cross-validation-comparison" class="section level1">
+<h1>Cross-validation comparison</h1>
 <pre class="r"><code>cv_results_frozen |&gt; 
   select(starts_with(&quot;rmse_frozen&quot;)) |&gt; 
   pivot_longer(
@@ -791,10 +754,11 @@ class="section level2">
   ) |&gt; 
   ggplot(aes(x = model_type, y = rmse)) +
   geom_violin()</code></pre>
-<p><img src="p8105-Final-model-analysis_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img
+src="p8105-Final-model-analysis_files/figure-gfm/unnamed-chunk-5-1.png" /><!-- --></p>
 </div>
-<div id="results-of-frozen-fast-food-frequency" class="section level2">
-<h2>Results of Frozen Fast Food Frequency</h2>
+<div id="summary-of-cross-validation-results" class="section level1">
+<h1>Summary of Cross-Validation Results</h1>
 <pre class="r"><code>cv_results_frozen |&gt; 
   select(starts_with(&quot;rmse_frozen&quot;)) |&gt; 
   pivot_longer(
@@ -808,22 +772,15 @@ class="section level2">
 <pre><code>## # A tibble: 3 × 2
 ##   model_type m_rmse
 ##   &lt;chr&gt;       &lt;dbl&gt;
-## 1 adjusted    0.244
+## 1 adjusted    0.243
 ## 2 crude       0.309
-## 3 inter       0.335</code></pre>
-<p>According to the violin plot of the RMSE distribution for each model,
-the adjusted model consistently shows a concentrated distribution of
-lower RMSE values, meaning it has a superior predictive performance
-relative to the crude and interaction models. This observation is
-confirmed by the summary of cross-validation results, which indicates
-that the adjusted model has the lowest mean RMSE of 0.243, compared to
-0.309 for the crude model and 0.336 for the interaction model. Since
-lower values mean better model performance, the adjusted model has the
-best model performance among these three models.</p>
+## 3 inter       0.336</code></pre>
 </div>
-<div id="adjusted-model-for-frozen-fast-food-frequency"
-class="section level2">
-<h2>Adjusted Model for Frozen Fast Food Frequency</h2>
+<div id="model-plot-for-adjusted-model" class="section level1">
+<h1>Model Plot for Adjusted Model</h1>
+</div>
+<div id="generate-new-data-for-plotting" class="section level1">
+<h1>Generate new data for plotting</h1>
 <pre class="r"><code>obesity$marital_status &lt;- factor(obesity$marital_status)
 obesity$race &lt;- factor(obesity$race)
 obesity$education &lt;- factor(obesity$education)
@@ -859,9 +816,9 @@ str(new_data_frozen)</code></pre>
 ##   .. ..$ education        : chr &quot;education=9-11th grade&quot;
 ##   .. ..$ income_to_poverty: chr &quot;income_to_poverty=2.42299&quot;</code></pre>
 </div>
-<div id="predict-logbmi-of-frozen-fast-food-frequency"
-class="section level2">
-<h2>Predict log(BMI) of Frozen Fast Food Frequency</h2>
+<div id="predict-logbmi-using-the-adjusted-model-and-the-new-data"
+class="section level1">
+<h1>Predict log(BMI) using the adjusted model and the new data</h1>
 <pre class="r"><code>adjusted_model_frozen &lt;- cv_results_frozen$model_frozen_adjusted[[1]]
 new_data_frozen$log_bmi_pred &lt;- predict(adjusted_model_frozen, newdata = new_data_frozen)
 
@@ -872,13 +829,9 @@ ggplot(new_data_frozen, aes(x = freq_frozen, y = log_bmi_pred)) +
        x = &quot;Frozen Fast Food Frequency&quot;,
        y = &quot;Predicted Log BMI&quot;) +
   theme_minimal()</code></pre>
-<p><img src="p8105-Final-model-analysis_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
-</div>
-<div
-id="best-adjusted-model-from-cross-validation-frozen-fast-food-frequency"
-class="section level2">
-<h2>Best ‘Adjusted’ Model from Cross-validation Frozen Fast Food
-Frequency</h2>
+<p><img
+src="p8105-Final-model-analysis_files/figure-gfm/unnamed-chunk-8-1.png" /><!-- -->
+# Summary of the best ‘adjusted’ model from cross-validation</p>
 <pre class="r"><code>best_adjusted_model_summary &lt;- cv_results_frozen$model_frozen_adjusted[[1]] %&gt;% summary()
 
 # Print the summary which includes coefficients, R-squared, p-values...
@@ -890,125 +843,110 @@ print(best_adjusted_model_summary)</code></pre>
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -0.77877 -0.16116 -0.01005  0.14710  1.08004 
+## -0.77008 -0.15912 -0.00805  0.14561  1.10981 
 ## 
 ## Coefficients:
 ##                                            Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)                               3.421e+00  1.812e-02 188.767  &lt; 2e-16
-## freq_frozen                              -3.987e-06  2.528e-05  -0.158 0.874668
-## age                                       3.499e-04  2.450e-04   1.428 0.153275
-## genderMale                               -4.922e-02  7.573e-03  -6.500 9.01e-11
-## marital_statusNever married              -3.010e-02  1.059e-02  -2.842 0.004503
-## marital_statusWidowed/Divorced/Separated -2.830e-02  9.770e-03  -2.897 0.003792
-## raceMexican American                     -7.650e-03  1.281e-02  -0.597 0.550265
-## raceOther                                -1.762e-01  1.553e-02 -11.343  &lt; 2e-16
-## raceOther Hispanic                       -3.342e-02  1.338e-02  -2.498 0.012516
-## raceWhite                                -3.291e-02  9.383e-03  -3.507 0.000458
-## educationHigh school graduate             8.731e-03  1.183e-02   0.738 0.460446
-## educationLess than 9th grade              4.327e-03  1.617e-02   0.268 0.789078
-## educationSome college or AA degree        1.788e-02  1.171e-02   1.527 0.126814
-## income_to_poverty                         2.111e-03  2.769e-03   0.762 0.445906
+## (Intercept)                               3.409e+00  1.828e-02 186.500  &lt; 2e-16
+## freq_frozen                              -4.291e-06  2.510e-05  -0.171  0.86427
+## age                                       1.858e-04  2.437e-04   0.762  0.44584
+## genderMale                               -3.741e-02  7.543e-03  -4.960 7.34e-07
+## marital_statusNever married              -2.461e-02  1.067e-02  -2.308  0.02106
+## marital_statusWidowed/Divorced/Separated -2.941e-02  9.630e-03  -3.054  0.00227
+## raceMexican American                      3.671e-03  1.288e-02   0.285  0.77574
+## raceOther                                -1.553e-01  1.553e-02  -9.999  &lt; 2e-16
+## raceOther Hispanic                       -2.401e-02  1.316e-02  -1.824  0.06818
+## raceWhite                                -2.382e-02  9.382e-03  -2.539  0.01117
+## educationHigh school graduate             1.253e-02  1.190e-02   1.053  0.29238
+## educationLess than 9th grade              6.078e-03  1.628e-02   0.373  0.70897
+## educationSome college or AA degree        2.402e-02  1.176e-02   2.042  0.04123
+## income_to_poverty                         2.054e-03  2.742e-03   0.749  0.45381
 ##                                             
 ## (Intercept)                              ***
 ## freq_frozen                                 
 ## age                                         
 ## genderMale                               ***
-## marital_statusNever married              ** 
+## marital_statusNever married              *  
 ## marital_statusWidowed/Divorced/Separated ** 
 ## raceMexican American                        
 ## raceOther                                ***
-## raceOther Hispanic                       *  
-## raceWhite                                ***
+## raceOther Hispanic                       .  
+## raceWhite                                *  
 ## educationHigh school graduate               
 ## educationLess than 9th grade                
-## educationSome college or AA degree          
+## educationSome college or AA degree       *  
 ## income_to_poverty                           
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.238 on 4080 degrees of freedom
-##   (5016 observations deleted due to missingness)
-## Multiple R-squared:  0.04283,    Adjusted R-squared:  0.03978 
-## F-statistic: 14.04 on 13 and 4080 DF,  p-value: &lt; 2.2e-16</code></pre>
-<p>The best-fitting model, based on the cross-validation results, is the
-adjusted model. Thus, a detailed examination was conducted, and its
-summary statistics indicate that: The Intercept is estimated at 3.409 on
-the log scale. The coefficient for frozen fast food frequency is
--4.291e-06 with a p-value of 0.86427, this suggests that the number of
-frozen fast food meals consumed does not have a statistically
-significant effect on BMI in this model. Other covariates, such as
-gender and race show significant associations with BMI, with gender
-(Male) and race (Other) showing a strong negative association with BMI.
-The R-squared value of 0.03455 indicates that approximately 3.455% of
-the variability in the log-transformed BMI is explained by the
-model.</p>
+## Residual standard error: 0.2363 on 4049 degrees of freedom
+##   (5047 observations deleted due to missingness)
+## Multiple R-squared:  0.03455,    Adjusted R-squared:  0.03146 
+## F-statistic: 11.15 on 13 and 4049 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
-<div id="conclusion-of-frozen-food-consumption-on-bmi"
-class="section level2">
-<h2>Conclusion of frozen food consumption on BMI</h2>
-<p>Overall, our analysis suggests that while frozen fast food
-consumption frequency does not significantly predict BMI, other factors
-such as gender and race do have significant associations. The small
-R-squared value implies that other unmeasured factors also play a role
-in influencing BMI, which are not captured by this model.</p>
-<p>The relatively stable variance in residuals suggests that the linear
-model is a reasonable fit for the data, although there is room for
-improvement. Future modeling efforts might explore the inclusion of
-non-linear terms, additional interaction terms, or other predictor
-variables to enhance the model’s explanatory power.</p>
-</div>
+<div id="create-a-residuals-plot-for-the-adjusted-model"
+class="section level1">
+<h1>Create a residuals plot for the ‘adjusted’ model</h1>
+<pre class="r"><code>adjusted_model &lt;- cv_results_frozen$model_frozen_adjusted[[1]]
+adjusted_model_residuals &lt;- resid(adjusted_model)
+adjusted_model_fitted &lt;- fitted(adjusted_model)
+
+# Plot the residuals against the fitted values
+residual_plot &lt;- ggplot() +
+  geom_point(aes(x = adjusted_model_fitted, y = adjusted_model_residuals)) +
+  geom_hline(yintercept = 0, linetype = &quot;dashed&quot;, color = &quot;red&quot;) +
+  labs(title = &quot;Residuals vs Fitted Values for Adjusted Model&quot;,
+       x = &quot;Fitted Values&quot;,
+       y = &quot;Residuals&quot;) +
+  theme_minimal() +
+  geom_smooth(aes(x = adjusted_model_fitted, y = adjusted_model_residuals), method = &quot;loess&quot;, se = FALSE)
+
+# Print the residual plot
+print(residual_plot)</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img
+src="p8105-Final-model-analysis_files/figure-gfm/unnamed-chunk-10-1.png" /><!-- --></p>
 </div>
 <div id="regression-models-and-diagnostics" class="section level1">
 <h1>Regression Models and Diagnostics</h1>
-<div id="model1-logbmifreq_fast" class="section level2">
-<h2>Model1: log(BMI)=freq_fast</h2>
-<pre class="r"><code>freq_fast_crude = lm(log(bmi) ~ freq_fast_food, data = obesity)
+<p>Model1: log(BMI)=freq_fast</p>
+<pre class="r"><code># Crude model for freq_fast_food
+freq_fast_crude = lm(log(bmi) ~ freq_fast_food, data = obesity)
 
 obesity |&gt; modelr::add_residuals(freq_fast_crude) |&gt; 
   ggplot(aes(sample = resid))+stat_qq()+stat_qq_line()</code></pre>
-<pre><code>## Warning: Removed 2345 rows containing non-finite values (`stat_qq()`).</code></pre>
-<pre><code>## Warning: Removed 2345 rows containing non-finite values (`stat_qq_line()`).</code></pre>
-<p><img src="p8105-Final-model-analysis_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
-</div>
-<div id="model2-logbmisedentary_activity" class="section level2">
-<h2>Model2: log(BMI)=sedentary_activity</h2>
-<pre class="r"><code>inactivity_crude = lm(log(bmi) ~ sedentary_activity, data = obesity)
+<pre><code>## Warning: Removed 2345 rows containing non-finite values (`stat_qq()`).
+
+## Warning: Removed 2345 rows containing non-finite values (`stat_qq_line()`).</code></pre>
+<p><img
+src="p8105-Final-model-analysis_files/figure-gfm/unnamed-chunk-11-1.png" /><!-- --></p>
+<p>Model2: log(BMI)=sedentary activity</p>
+<pre class="r"><code># Crude model for inactivity
+inactivity_crude = lm(log(bmi) ~ sedentary_activity, data = obesity)
 
 obesity |&gt; modelr::add_residuals(inactivity_crude) |&gt; 
   ggplot(aes(sample = resid))+stat_qq()+stat_qq_line()</code></pre>
-<pre><code>## Warning: Removed 3879 rows containing non-finite values (`stat_qq()`).</code></pre>
-<pre><code>## Warning: Removed 3879 rows containing non-finite values (`stat_qq_line()`).</code></pre>
-<p><img src="p8105-Final-model-analysis_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
-</div>
-<div id="model3-logbmifreqence-of-frozen" class="section level2">
-<h2>Model3: log(BMI)=freqence of frozen</h2>
-<pre class="r"><code>freq_frozen_crude = lm(log(bmi) ~ freq_frozen, data = obesity)
+<pre><code>## Warning: Removed 3879 rows containing non-finite values (`stat_qq()`).
+
+## Warning: Removed 3879 rows containing non-finite values (`stat_qq_line()`).</code></pre>
+<p><img
+src="p8105-Final-model-analysis_files/figure-gfm/unnamed-chunk-12-1.png" /><!-- --></p>
+<p>Model3: log(BMI)=freqence of frozen</p>
+<pre class="r"><code># Crude model for freq_frozen
+freq_frozen_crude = lm(log(bmi) ~ freq_frozen, data = obesity)
 
 
 obesity |&gt; modelr::add_residuals(freq_frozen_crude) |&gt; 
   ggplot(aes(sample = resid))+stat_qq()+stat_qq_line()</code></pre>
-<pre><code>## Warning: Removed 38 rows containing non-finite values (`stat_qq()`).</code></pre>
-<pre><code>## Warning: Removed 38 rows containing non-finite values (`stat_qq_line()`).</code></pre>
-<p><img src="p8105-Final-model-analysis_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
-<p>Combined Interpretation: When looking at these models collectively,
-it is apparent that each of the predictors—fast food frequency,
-sedentary activity, and frozen food consumption—may have a relationship
-with BMI, as evidenced by the residual plots trending along the expected
-line of best fit. However, the exclusions due to non-finite values are a
-significant concern across all three models. This suggests that while
-the models can provide insights, they may not fully capture the
-complexity of the relationship between these behaviors and BMI, or the
-data may not meet the necessary assumptions for linear regression.
-Further investigation and possibly alternative modeling approaches, such
-as transformations or non-linear models, may be required to fully
-understand these relationships.</p>
-</div>
+<pre><code>## Warning: Removed 38 rows containing non-finite values (`stat_qq()`).
+
+## Warning: Removed 38 rows containing non-finite values (`stat_qq_line()`).</code></pre>
+<p><img
+src="p8105-Final-model-analysis_files/figure-gfm/unnamed-chunk-13-1.png" /><!-- --></p>
 </div>
 
 
 
-</div>
-</div>
 
 </div>
 
@@ -1040,41 +978,7 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
-<script>
-$(document).ready(function () {
-  window.initializeCodeFolding("hide" === "show");
-});
-</script>
 
-<script>
-$(document).ready(function ()  {
-
-    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
-    $('.unlisted.unnumbered').addClass('toc-ignore')
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
